@@ -1,0 +1,44 @@
+name: New problem proposal
+description: Propose a new interview problem for the library
+labels: ["problem"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Want to add a problem yourself? See the YAML format in
+        [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md#adding-your-own-problems)
+        and open a pull request. Use this issue to propose one for discussion first.
+  - type: input
+    id: title
+    attributes:
+      label: Problem title
+    validations:
+      required: true
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      options: [Easy, Medium, Hard]
+    validations:
+      required: true
+  - type: input
+    id: category
+    attributes:
+      label: Category
+      description: e.g. stateful, parsing, streaming, graphs, dynamic programming...
+    validations:
+      required: true
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Real-world scenario
+      description: The engineering context that makes this problem come up in practice.
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: What the candidate must build
+      description: A short description of the task and the key skills it exercises.
+    validations:
+      required: true
