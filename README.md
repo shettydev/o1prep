@@ -61,6 +61,7 @@ Open **http://localhost:5000** - that's it.
 - [Keyboard Shortcuts](#keyboard-shortcuts)
 - [FAQ](#faq)
 - [Contributing](CONTRIBUTING.md)
+- [License & Attribution](#license--attribution)
 
 ---
 
@@ -302,6 +303,14 @@ Entirely on your local machine in `user_data/sessions/`. Nothing is sent to exte
 
 **Can I add my own problems?**
 Yes - see [CONTRIBUTING.md](CONTRIBUTING.md) for the full problem YAML format.
+
+---
+
+## License & Attribution
+
+CodePrep is released under the [MIT License](LICENSE).
+
+This project is a fork of [codingprep](https://github.com/amrutha97/codingprep) by [Amrutha Gujjar](https://github.com/amrutha97) (MIT-licensed at the time of forking), with substantial modifications. The original work's copyright notice is preserved in the [LICENSE](LICENSE) file, as required by the MIT license. The upstream project has since been made closed-source; this fork continues independently from the MIT-era snapshot and is not affiliated with or endorsed by the original author.
 
 ---
 
