@@ -17,7 +17,7 @@ You can expect a response within 7 days.
 
 ## API Key Safety
 
-CodePrep runs locally and your OpenAI API key is stored in a `.env` file on your machine. It is never transmitted anywhere except directly to the OpenAI API. Make sure you:
+O(1) Prep runs locally and your OpenAI API key is stored in a `.env` file on your machine. It is never transmitted anywhere except directly to the OpenAI API. Make sure you:
 
 - Never commit your `.env` file to version control (it is gitignored by default)
 - Set API key usage limits in your OpenAI dashboard

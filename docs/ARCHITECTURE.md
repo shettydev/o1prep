@@ -4,7 +4,7 @@
 
 ## Overview
 
-CodePrep is a single-page Flask application that simulates technical coding interviews using OpenAI's GPT-4o. The browser handles all UI through vanilla JavaScript modules, the Flask server provides a JSON/SSE API backed by file-based persistence, and OpenAI powers both the text interviewer (via Chat Completions) and the voice interviewer (via the Realtime API over WebRTC).
+O(1) Prep is a single-page Flask application that simulates technical coding interviews using OpenAI's GPT-4o. The browser handles all UI through vanilla JavaScript modules, the Flask server provides a JSON/SSE API backed by file-based persistence, and OpenAI powers both the text interviewer (via Chat Completions) and the voice interviewer (via the Realtime API over WebRTC).
 
 There is no database — problems are YAML files loaded at request time, and sessions are JSON files written to disk. The entire application runs locally on the user's machine.
 
@@ -232,7 +232,7 @@ User ends interview
 ## Directory Structure
 
 ```
-codingprep/
+o1prep/
 ├── app.py                   # Flask app factory, index route, blueprint registration
 ├── config.py                # All settings, model names, prompt loading
 ├── services/                # Business logic

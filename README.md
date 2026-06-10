@@ -1,4 +1,4 @@
-![CodePrep banner](docs/banner.svg)
+![O(1) Prep banner](docs/banner.svg)
 
 <div align="center">
 
@@ -11,9 +11,9 @@
 
 ---
 
-## Why CodePrep
+## Why O(1) Prep
 
-Most interview platforms are puzzle grinders. CodePrep puts you in a real interview.
+Most interview platforms are puzzle grinders. O(1) Prep puts you in a real interview.
 
 - **A back-and-forth, not a quiz** - the interviewer follows up, pushes back on your reasoning, and adds constraints mid-session just like a real one would
 - **Feedback that actually tells you something** - you get written scores and specific critique on your approach, code quality, communication, and tradeoffs - not just pass/fail
@@ -27,7 +27,7 @@ Most interview platforms are puzzle grinders. CodePrep puts you in a real interv
 
 ```bash
 git clone <repo-url>
-cd codingprep
+cd o1prep
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -308,7 +308,7 @@ Yes - see [CONTRIBUTING.md](CONTRIBUTING.md) for the full problem YAML format.
 
 ## License & Attribution
 
-CodePrep is released under the [MIT License](LICENSE).
+O(1) Prep is released under the [MIT License](LICENSE).
 
 This project is a fork of [codingprep](https://github.com/amrutha97/codingprep) by [Amrutha Gujjar](https://github.com/amrutha97) (MIT-licensed at the time of forking), with substantial modifications. The original work's copyright notice is preserved in the [LICENSE](LICENSE) file, as required by the MIT license. The upstream project has since been made closed-source; this fork continues independently from the MIT-era snapshot and is not affiliated with or endorsed by the original author.
 

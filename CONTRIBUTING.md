@@ -13,7 +13,7 @@
 ### File Structure
 
 ```
-codingprep/
+o1prep/
 ├── app.py                   # Flask app factory (registers blueprints)
 ├── config.py                # Centralized settings (models, paths, timeouts)
 ├── requirements.txt

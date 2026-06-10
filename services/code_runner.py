@@ -234,7 +234,7 @@ def run_class(user_code: str, class_name: str, test_cases: list, timeout: int = 
 def _run_harness(harness: str, timeout: int = config.CODE_TIMEOUT) -> dict:
     """Execute a generated harness file and parse structured results."""
 
-    fd, path = tempfile.mkstemp(suffix='.py', prefix='codeprep_')
+    fd, path = tempfile.mkstemp(suffix='.py', prefix='o1prep_')
     try:
         with os.fdopen(fd, 'w') as f:
             f.write(harness)
@@ -297,7 +297,7 @@ def _clean_traceback(lines: list) -> str:
     """Strip temp file paths from traceback to show cleaner errors."""
     cleaned = []
     for line in lines:
-        if 'codeprep_' in line and 'File "' in line:
+        if 'o1prep_' in line and 'File "' in line:
             line = line.replace(line.split('"')[1], '<your code>')
         cleaned.append(line)
     return '\n'.join(cleaned)

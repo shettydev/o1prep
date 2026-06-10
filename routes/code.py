@@ -17,7 +17,7 @@ def run_code():
     if not user_code.strip():
         return jsonify({'error': 'No code provided'}), 400
 
-    fd, path = tempfile.mkstemp(suffix='.py', prefix='codeprep_run_')
+    fd, path = tempfile.mkstemp(suffix='.py', prefix='o1prep_run_')
     try:
         with os.fdopen(fd, 'w') as f:
             f.write(user_code)
