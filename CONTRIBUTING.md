@@ -48,13 +48,42 @@ o1prep/
 │   ├── logo.png
 │   └── screenshots/         # README screenshots
 ├── prompts/                 # LLM system prompts
-├── problems/                # 132+ YAML problem definitions
+├── problems/                # 150+ YAML problem definitions
 │   ├── 01-lru-cache.yaml
 │   └── ...
 ├── user_data/
 │   └── sessions/            # Saved interview sessions (JSON)
 └── .env                     # API key (git-ignored)
 ```
+
+---
+
+## Development Setup
+
+```bash
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt -r requirements-dev.txt
+```
+
+### Running tests
+
+```bash
+pytest
+```
+
+The suite covers the code-execution sandbox, problem loading, and a schema
+check that validates **every** problem YAML. Adding a malformed problem file
+will fail `pytest` (and CI) with a clear message, so run it before you push.
+
+### Linting
+
+```bash
+ruff check .          # report issues
+ruff check --fix .    # auto-fix import order, etc.
+```
+
+CI (GitHub Actions) runs `ruff check .` and `pytest` on every push and pull
+request across Python 3.8 and 3.12. Please make sure both pass locally first.
 
 ---
 

@@ -19,7 +19,7 @@ Most interview platforms are puzzle grinders. O(1) Prep puts you in a real inter
 - **Feedback that actually tells you something** - you get written scores and specific critique on your approach, code quality, communication, and tradeoffs - not just pass/fail
 - **Everything stays on your machine** - sessions, history, and code are stored locally; nothing goes anywhere except your messages to OpenAI
 - **Practice out loud** - voice mode lets you talk through your solution the way you would in an actual interview
-- **132+ problems grounded in real engineering** - each one has a real-world scenario, not just "given an array..."
+- **150+ problems grounded in real engineering** - each one has a real-world scenario, not just "given an array..."
 
 ---
 
@@ -69,7 +69,7 @@ Open **http://localhost:5000** - that's it.
 
 ![Landing page showing the problem list with filters](docs/screenshots/LandingPage-ProblemList.png)
 
-Browse and filter 132+ problems to find what you want to practice. Filters on the left let you narrow by category, difficulty, or whether you've attempted a problem before. Status dots on each card show how you've done - green for a hire signal, yellow for mixed, red for no hire.
+Browse and filter 150+ problems to find what you want to practice. Filters on the left let you narrow by category, difficulty, or whether you've attempted a problem before. Status dots on each card show how you've done - green for a hire signal, yellow for mixed, red for no hire.
 
 Not sure what to pick? Hit **Surprise Me** to start a random interview from whatever's currently visible.
 
@@ -230,7 +230,7 @@ Each category shows a progress bar and lists the problems you've attempted with 
 
 ## Problem Library
 
-132+ problems across 18+ categories:
+150+ problems across 18+ categories:
 
 | Category                | Focus                                                                       |
 | ----------------------- | --------------------------------------------------------------------------- |

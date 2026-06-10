@@ -105,7 +105,7 @@ Voice interviews bypass the Flask server for audio. The flow:
 
 ### Problems (`problems/*.yaml`)
 
-132+ YAML files, each defining a complete interview problem:
+150+ YAML files, each defining a complete interview problem:
 
 ```yaml
 id: 1
@@ -253,7 +253,7 @@ o1prep/
 │   ├── favicon.*
 │   └── js/                  # Frontend modules (9 files, ~2400 lines total)
 ├── prompts/                 # LLM system prompts (6 files)
-├── problems/                # 132+ YAML problem definitions
+├── problems/                # 150+ YAML problem definitions
 ├── user_data/
 │   └── sessions/            # Persisted interview sessions (JSON)
 ├── docs/                    # Documentation and screenshots
