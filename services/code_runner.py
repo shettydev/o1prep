@@ -1,11 +1,10 @@
 import json
+import os
 import subprocess
 import sys
 import tempfile
-import os
 
 import config
-
 
 HARNESS_TEMPLATE = '''
 import asyncio
@@ -312,7 +311,7 @@ def format_results_for_context(run_result: dict, function_name: str) -> str:
     passed = sum(1 for r in results if r['passed'])
     total = len(results)
 
-    lines = [f"[TEST RESULTS]", f"Executed against {total} test cases: {passed}/{total} passed."]
+    lines = ["[TEST RESULTS]", f"Executed against {total} test cases: {passed}/{total} passed."]
     for r in results:
         label_prefix = f"{r['label']} :: " if r.get('label') else ''
         call = r.get('call') or function_name
