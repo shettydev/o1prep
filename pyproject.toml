@@ -1,0 +1,18 @@
+[tool.pytest.ini_options]
+# Make the project root importable (config, services, routes) without installing.
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-ra -q"
+
+[tool.ruff]
+# Match the existing code style: 4-space indent, generous line length.
+line-length = 120
+target-version = "py38"
+exclude = [".opencode", "user_data", "problems"]
+
+[tool.ruff.lint]
+# Conservative default set; the codebase predates linting, so keep it gentle.
+select = ["E", "F", "W", "I"]
+ignore = [
+    "E501",  # line length is enforced loosely; long prompt/SQL strings are fine
+]
