@@ -3,7 +3,7 @@ import subprocess
 import sys
 import tempfile
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, jsonify, request
 
 import config
 

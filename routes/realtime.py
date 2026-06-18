@@ -2,7 +2,7 @@ import json
 import os
 
 import requests as http_requests
-from flask import Blueprint, request, jsonify, Response
+from flask import Blueprint, Response, jsonify, request
 
 import config
 
