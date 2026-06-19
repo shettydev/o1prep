@@ -3,6 +3,7 @@ venv/
 **/__pycache__/
 *.pyc
 user_data/
+.pgdata/
 .DS_Store
 .tmp
 .pi
