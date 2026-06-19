@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16
+    container_name: o1prep-postgres
+    environment:
+      POSTGRES_USER: o1prep
+      POSTGRES_PASSWORD: o1prep
+      POSTGRES_DB: o1prep
+    ports:
+      # Host 5433 -> container 5432 (5432 is often taken by another local Postgres).
+      - "5433:5432"
+    volumes:
+      - o1prep_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U o1prep -d o1prep"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  o1prep_pgdata:
