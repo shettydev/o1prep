@@ -18,6 +18,7 @@
 | `project-intelligence-management.md` | How to manage | ⭐⭐⭐ | Managing intelligence files |
 | `code-analysis.md` | Analysis approaches | ⭐⭐⭐ | Analyzing code, debugging |
 | `typescript.md` | Universal TypeScript patterns | ⭐⭐⭐⭐ | Writing/reviewing TypeScript code |
+| `python.md` | Universal Python patterns (Flask + SQLAlchemy, Ruff, pytest) | ⭐⭐⭐⭐ | Writing/reviewing Python code |
 | `csharp.md` | Universal C# / .NET patterns | ⭐⭐⭐⭐ | Writing/reviewing C# code |
 | `csharp-project-structure.md` | ASP.NET Core project structure (Minimal APIs, CQRS, EF Core + PostgreSQL) | ⭐⭐⭐⭐ | Starting or structuring a C# API project |
 
@@ -32,6 +33,11 @@
 **For TypeScript code**:
 1. Load `typescript.md` (critical)
 2. Load `code-quality.md` (high)
+
+**For Python code**:
+1. Load `python.md` (critical)
+2. Load `code-quality.md` (high)
+3. Load `security-patterns.md` (high — input validation, SQL)
 
 **For C# / .NET code**:
 1. Load `csharp.md` (critical)
