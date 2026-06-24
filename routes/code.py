@@ -4,6 +4,7 @@ import sys
 import tempfile
 
 from flask import Blueprint, jsonify, request
+from flask_login import login_required
 
 import config
 
@@ -11,6 +12,7 @@ bp = Blueprint('code', __name__)
 
 
 @bp.route('/api/run', methods=['POST'])
+@login_required
 def run_code():
     data = request.json or {}
     user_code = data.get('code', '')

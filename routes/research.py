@@ -1,4 +1,5 @@
 from flask import Blueprint, Response, jsonify, request, stream_with_context
+from flask_login import login_required
 
 import config
 from services import ai, problems
@@ -7,6 +8,7 @@ bp = Blueprint('research', __name__)
 
 
 @bp.route('/api/research/chat', methods=['POST'])
+@login_required
 def research_chat():
     data = request.json or {}
     client = ai.get_client(model=data.get('model'), effort=data.get('effort'))
