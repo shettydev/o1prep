@@ -15,10 +15,18 @@ Please include:
 
 You can expect a response within 7 days.
 
-## API Key Safety
+## Secrets & Data
 
-O(1) Prep runs locally and your OpenAI API key is stored in a `.env` file on your machine. It is never transmitted anywhere except directly to the OpenAI API. Make sure you:
+O(1) Prep is a server application backed by PostgreSQL. Configuration lives in a
+`.env` file (`DATABASE_URL`, `SECRET_KEY`, `OPENAI_API_KEY`). If you self-host:
 
-- Never commit your `.env` file to version control (it is gitignored by default)
-- Set API key usage limits in your OpenAI dashboard
-- Rotate your key if you suspect it has been exposed
+- **Never commit `.env`** to version control (it is gitignored by default).
+- Set a strong, random `SECRET_KEY` — it signs the login session cookies.
+  Generate one with `python -c "import secrets; print(secrets.token_hex(32))"`.
+- Use strong PostgreSQL credentials and don't expose the database publicly.
+- The OpenAI API key is server-side and used only to call the OpenAI API. Set
+  usage limits in your OpenAI dashboard and rotate it if exposed.
+
+User passwords are stored only as salted hashes (`werkzeug.security`). Interview
+sessions and history are scoped per account; never share your `SECRET_KEY` or
+database, as that would expose all users' data.

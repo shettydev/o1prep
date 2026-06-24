@@ -4,9 +4,9 @@
 
 ## Overview
 
-O(1) Prep is a single-page Flask application that simulates technical coding interviews using OpenAI's GPT-4o. The browser handles all UI through vanilla JavaScript modules, the Flask server provides a JSON/SSE API backed by file-based persistence, and OpenAI powers both the text interviewer (via Chat Completions) and the voice interviewer (via the Realtime API over WebRTC).
+O(1) Prep is a single-page Flask application that simulates technical coding interviews using OpenAI's GPT-4o. The browser handles all UI through vanilla JavaScript modules, the Flask server provides a JSON/SSE API backed by PostgreSQL, and OpenAI powers both the text interviewer (via Chat Completions) and the voice interviewer (via the Realtime API over WebRTC).
 
-There is no database — problems are YAML files loaded at request time, and sessions are JSON files written to disk. The entire application runs locally on the user's machine.
+The app is a multi-user web application backed by PostgreSQL (via SQLAlchemy + Flask-Migrate). Problems are seeded into the database from the canonical YAML files in `problems/`; interview sessions and user accounts live in the database, scoped per user. Authentication is email/password via Flask-Login. It can be self-hosted (run Postgres with the included `docker-compose.yml`) or deployed as a hosted service.
 
 ---
 
@@ -62,8 +62,11 @@ Services encapsulate all domain logic and external integrations. Routes import t
 | Service | Responsibility |
 |---------|---------------|
 | `services/ai.py` | OpenAI client singleton, streaming chat completions (`stream_chat`), SSE response generator (`sse_stream`), test case generation from conversation context (`generate_test_cases`) |
-| `services/sessions.py` | JSON file CRUD for interview sessions — `create`, `load`, `save`, `delete`, `list_all`. Each session is a JSON file at `user_data/sessions/{id}.json` |
-| `services/problems.py` | YAML problem loading (`load_all`), lookup by ID, serialization for list/detail views, and context builders for system prompts (`build_problem_block`, `build_study_context`) |
+| `services/sessions.py` | DB CRUD for interview sessions — `create`, `load`, `save`, `delete`, `list_all`, all scoped by `user_id`. Each session is a row with its document in a JSONB column |
+| `services/models.py` | SQLAlchemy models: `Problem`, `ProblemLanguage`, `User`, `Session` |
+| `services/extensions.py` | Flask extension singletons: SQLAlchemy `db`, `login_manager`, `migrate` |
+| `services/problems.py` | Problem access: DB-backed loading (`load_all`, `get_by_id`), YAML seeding (`seed`, `ensure_seeded`), serialization for list/detail views, and context builders for system prompts (`build_problem_block`, `build_study_context`) |
+| `services/db.py` | Pure helpers for the problem agnostic/per-language split used to store and reconstruct problem dicts |
 | `services/code_runner.py` | Python code execution sandbox: builds a temporary test harness embedding user code + test cases, runs it in a subprocess with a configurable timeout, parses structured results. Supports both function-based and class-based problems |
 
 ---
@@ -103,9 +106,9 @@ Voice interviews bypass the Flask server for audio. The flow:
 
 ## Data Model
 
-### Problems (`problems/*.yaml`)
+### Problems (`problems/*.yaml` → PostgreSQL)
 
-150+ YAML files, each defining a complete interview problem:
+The canonical source is 150+ YAML files, each defining a complete interview problem:
 
 ```yaml
 id: 1
@@ -127,17 +130,25 @@ function_name: "lru_cache"   # if function-based
 test_cases: [...]            # pre-written test cases
 ```
 
-Problems are loaded from disk on every request (`load_all()`) with no caching layer.
+At runtime, problems are read from PostgreSQL, not from disk. The YAML files are seeded into the database via `python scripts/seed_problems.py` (after the schema is created with `flask db upgrade`). The schema is split across two tables so additional programming languages can be added without a migration:
 
-### Sessions (`user_data/sessions/*.json`)
+- **`problems`** — language-agnostic fields (title, scenario, constraints, examples, explanation, …) as a JSON blob plus indexed `title`/`category`/`difficulty` columns.
+- **`problem_languages`** — per-language fields (`starter_code`, `test_type`, `class_name`/`function_name`, `test_cases`) keyed by `(problem_id, language)`. Only `python` rows are seeded today.
 
-Each session is a JSON file with this shape:
+A full problem dict is reconstructed by merging the agnostic row with one language row, so `load_all()` / `get_by_id()` return the same shape the rest of the app expects.
+
+### Users (`users` table)
+
+Email/password accounts (passwords hashed with `werkzeug.security`). Flask-Login manages signed session cookies. Sessions and history are scoped to a `user_id`; reads and deletes enforce ownership.
+
+### Sessions (`sessions` table)
+
+Each interview session is a row owned by a user (`user_id` FK), with its mutable document stored in a JSONB `data` column of this shape:
 
 ```json
 {
   "id": "a1b2c3d4",
-  "created_at": "2024-01-15T10:30:00",
-  "updated_at": "2024-01-15T11:00:00",
+  "user_id": 1,
   "focus": "stateful",
   "mode": "text",
   "status": "active",
@@ -238,14 +249,22 @@ o1prep/
 ├── services/                # Business logic
 │   ├── ai.py                # OpenAI client, streaming, test generation
 │   ├── sessions.py          # Session file I/O
-│   ├── problems.py          # YAML problem loading and serialization
+│   ├── problems.py          # DB-backed problem access + YAML seeding
+│   ├── db.py                # Problem agnostic/per-language split helpers
+│   ├── models.py            # SQLAlchemy models (Problem, User, Session, ...)
+│   ├── extensions.py        # db / login_manager / migrate singletons
 │   └── code_runner.py       # Subprocess code execution
 ├── routes/                  # HTTP layer (Flask Blueprints)
+│   ├── auth.py              # Register / login / logout
 │   ├── sessions.py          # Session CRUD, chat, code, transcript endpoints
 │   ├── problems.py          # Problem list and detail endpoints
 │   ├── code.py              # Ad-hoc code execution endpoint
 │   ├── realtime.py          # WebRTC SDP proxy for voice mode
 │   └── research.py          # Study/tutor chat endpoint
+├── migrations/              # Alembic (Flask-Migrate) migrations
+├── docker-compose.yml       # Local PostgreSQL service
+├── scripts/
+│   └── seed_problems.py     # Seed the database from the problem YAMLs
 ├── templates/
 │   └── index.html           # Single-page app shell + CDN library imports
 ├── static/                  # Flask-served app assets
@@ -253,9 +272,8 @@ o1prep/
 │   ├── favicon.*
 │   └── js/                  # Frontend modules (9 files, ~2400 lines total)
 ├── prompts/                 # LLM system prompts (6 files)
-├── problems/                # 150+ YAML problem definitions
-├── user_data/
-│   └── sessions/            # Persisted interview sessions (JSON)
+├── problems/                # 150+ YAML problem definitions (canonical source)
+├── tests/                   # pytest suite (code runner, problems, DB, schema)
 ├── docs/                    # Documentation and screenshots
-└── .env                     # OpenAI API key (git-ignored)
+└── .env                     # DATABASE_URL, SECRET_KEY, OpenAI API key (git-ignored)
 ```
