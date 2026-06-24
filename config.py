@@ -7,11 +7,20 @@ load_dotenv()
 
 BASE_DIR = os.path.dirname(__file__)
 
-SESSIONS_DIR = os.path.join(BASE_DIR, 'user_data', 'sessions')
 PROBLEMS_DIR = os.path.join(BASE_DIR, 'problems')
 PROMPTS_DIR = os.path.join(BASE_DIR, 'prompts')
 
-os.makedirs(SESSIONS_DIR, exist_ok=True)
+# PostgreSQL connection. Problems and sessions both live in the database
+# (problems seeded from the canonical YAML files in PROBLEMS_DIR). Override with
+# DATABASE_URL in the environment; tests point it at a throwaway test database.
+DATABASE_URL = os.environ.get(
+    'DATABASE_URL',
+    'postgresql+psycopg://o1prep:o1prep@localhost:5433/o1prep',
+)
+
+# Secret key for signed session cookies (Flask-Login). MUST be set to a strong
+# random value in any real deployment.
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
 
 # AI provider for text interviews and the tutor: 'claude' drives the locally
 # installed Claude Code CLI using your existing login (no API key); 'openai'

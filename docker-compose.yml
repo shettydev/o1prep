@@ -10,12 +10,10 @@ services:
       # Host 5433 -> container 5432 (5432 is often taken by another local Postgres).
       - "5433:5432"
     volumes:
-      - o1prep_pgdata:/var/lib/postgresql/data
+      # Bind-mount the data into a local, git-ignored directory.
+      - ./.pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U o1prep -d o1prep"]
       interval: 5s
       timeout: 5s
       retries: 5
-
-volumes:
-  o1prep_pgdata:

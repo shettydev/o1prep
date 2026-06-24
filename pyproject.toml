@@ -8,7 +8,7 @@ addopts = "-ra -q"
 # Match the existing code style: 4-space indent, generous line length.
 line-length = 120
 target-version = "py38"
-exclude = [".opencode", "user_data", "problems"]
+exclude = [".opencode", "user_data", "problems", "migrations"]
 
 [tool.ruff.lint]
 # Conservative default set; the codebase predates linting, so keep it gentle.

@@ -2682,3 +2682,80 @@ body {
 @media (max-width: 480px) {
   .top-bar-right { gap: 6px; }
 }
+
+/* ── Auth overlay ─────────────────────────────────────────────────────── */
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  padding: 24px;
+}
+.auth-overlay[hidden] { display: none; }
+
+.auth-card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 36px 32px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+.auth-logo { width: 44px; height: 44px; margin-bottom: 12px; }
+.auth-title {
+  font-family: var(--font-sans);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+.auth-sub { color: var(--text-secondary); font-size: 14px; margin: 0 0 24px; }
+
+#auth-form { display: flex; flex-direction: column; gap: 10px; }
+#auth-form input {
+  width: 100%;
+  padding: 11px 13px;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--bg-input);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  outline: none;
+  box-sizing: border-box;
+}
+#auth-form input:focus { border-color: var(--accent); }
+
+.auth-error {
+  color: var(--red);
+  background: var(--red-bg);
+  border-radius: var(--radius);
+  font-size: 13px;
+  padding: 8px 11px;
+  text-align: left;
+}
+
+.auth-submit {
+  margin-top: 4px;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.auth-submit:hover { background: var(--accent-hover); }
+.auth-submit:disabled { opacity: 0.6; cursor: default; }
+
+.auth-toggle { margin: 20px 0 0; font-size: 13px; color: var(--text-secondary); }
+.auth-toggle a { color: var(--text-primary); font-weight: 600; text-decoration: none; margin-left: 4px; }
+.auth-toggle a:hover { text-decoration: underline; }

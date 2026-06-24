@@ -3,6 +3,7 @@ import os
 
 import requests as http_requests
 from flask import Blueprint, Response, jsonify, request
+from flask_login import login_required
 
 import config
 
@@ -10,6 +11,7 @@ bp = Blueprint('realtime', __name__)
 
 
 @bp.route('/api/realtime/session', methods=['POST'])
+@login_required
 def create_realtime_session():
     api_key = os.environ.get('OPENAI_API_KEY', '')
     if not api_key:

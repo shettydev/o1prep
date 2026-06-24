@@ -1,26 +1,88 @@
+"""Problem access layer (PostgreSQL).
+
+Problems are stored in the database (see ``services.models``) but the canonical
+source of truth is the YAML files in ``problems/``. The DB is seeded from those
+files via ``seed()`` / ``scripts/seed_problems.py``.
+
+``load_all`` and ``get_by_id`` return the same full problem dicts that the rest
+of the app expects, so routes and the code runner are unaffected by storage.
+All functions that touch the database require an active Flask app context.
+"""
+
 import os
 from glob import glob
 
 import yaml
 
 from config import PROBLEMS_DIR
+from services.db import DEFAULT_LANGUAGE, merge_problem, split_problem
+from services.extensions import db
+from services.models import Problem, ProblemLanguage
+
+
+def load_yaml_problems():
+    """Read every problem YAML from disk (the canonical source)."""
+    problems = []
+    for path in sorted(glob(os.path.join(PROBLEMS_DIR, '*.yaml'))):
+        with open(path, encoding='utf-8') as f:
+            problems.append(yaml.safe_load(f))
+    return problems
+
+
+def _to_dict(problem, language=DEFAULT_LANGUAGE):
+    """Merge a Problem row with one language row into a full problem dict."""
+    lang = next((pl for pl in problem.languages if pl.language == language), None)
+    if lang is None:
+        return None
+    return merge_problem(problem.data, lang.data)
+
+
+def seed(force=False):
+    """Load the YAML problems into the database.
+
+    Idempotent: existing rows are updated in place (upsert by primary key). With
+    ``force=True`` the tables are cleared first so problems deleted from disk are
+    also removed. Returns the number of problems seeded.
+    """
+    yaml_problems = load_yaml_problems()
+    if force:
+        db.session.query(ProblemLanguage).delete()
+        db.session.query(Problem).delete()
+        db.session.flush()
+    for problem in yaml_problems:
+        agnostic, language = split_problem(problem)
+        db.session.merge(Problem(
+            id=problem['id'],
+            title=problem.get('title', ''),
+            category=problem.get('category', ''),
+            difficulty=problem.get('difficulty', ''),
+            data=agnostic,
+        ))
+        db.session.merge(ProblemLanguage(
+            problem_id=problem['id'],
+            language=DEFAULT_LANGUAGE,
+            data=language,
+        ))
+    db.session.commit()
+    return len(yaml_problems)
+
+
+def ensure_seeded():
+    """Seed from YAML if the problems table is empty (convenience for dev/tests)."""
+    if db.session.query(Problem.id).first() is None:
+        seed()
 
 
 def load_all():
-    problems = []
-    for path in sorted(glob(os.path.join(PROBLEMS_DIR, '*.yaml'))):
-        with open(path) as f:
-            problems.append(yaml.safe_load(f))
-    return problems
+    rows = db.session.query(Problem).order_by(Problem.id).all()
+    return [d for d in (_to_dict(p) for p in rows) if d is not None]
 
 
 def get_by_id(problem_id):
     if problem_id is None:
         return None
-    for problem in load_all():
-        if problem.get('id') == problem_id:
-            return problem
-    return None
+    problem = db.session.get(Problem, problem_id)
+    return _to_dict(problem) if problem else None
 
 
 def serialize_for_list(problem):

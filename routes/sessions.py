@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 
 from flask import Blueprint, Response, jsonify, request, stream_with_context
+from flask_login import current_user, login_required
 
 import config
 from services import ai, code_runner, problems, sessions
@@ -21,11 +22,13 @@ def get_config():
 
 
 @bp.route('/api/sessions', methods=['GET'])
+@login_required
 def list_all():
-    return jsonify(sessions.list_all())
+    return jsonify(sessions.list_all(current_user.id))
 
 
 @bp.route('/api/sessions', methods=['POST'])
+@login_required
 def create():
     client = ai.get_client()
     if not client:
@@ -51,7 +54,7 @@ def create():
         )
 
     system_message = config.SYSTEM_PROMPT + "\n\n" + config.SESSION_CONFIG + problem_block
-    session = sessions.create(focus, mode, problem_id, problem_title, system_message)
+    session = sessions.create(focus, mode, problem_id, problem_title, system_message, current_user.id)
     session['model'] = data.get('model')
     session['effort'] = data.get('effort')
     sessions.save(session)
@@ -59,8 +62,9 @@ def create():
 
 
 @bp.route('/api/sessions/<session_id>')
+@login_required
 def get(session_id):
-    session = sessions.load(session_id)
+    session = sessions.load(session_id, current_user.id)
     if not session:
         return jsonify({'error': 'Session not found'}), 404
     visible = [m for m in session['messages'] if m['role'] != 'system']
@@ -78,12 +82,13 @@ def get(session_id):
 
 
 @bp.route('/api/sessions/<session_id>/chat', methods=['POST'])
+@login_required
 def chat(session_id):
     client = ai.get_client()
     if not client:
         return jsonify({'error': ai.missing_client_message()}), 400
 
-    session = sessions.load(session_id)
+    session = sessions.load(session_id, current_user.id)
     if not session:
         return jsonify({'error': 'Session not found'}), 404
 
@@ -159,12 +164,13 @@ def chat(session_id):
 
 
 @bp.route('/api/sessions/<session_id>/start', methods=['POST'])
+@login_required
 def start_interview(session_id):
     client = ai.get_client()
     if not client:
         return jsonify({'error': ai.missing_client_message()}), 400
 
-    session = sessions.load(session_id)
+    session = sessions.load(session_id, current_user.id)
     if not session:
         return jsonify({'error': 'Session not found'}), 404
 
@@ -196,8 +202,9 @@ def start_interview(session_id):
 
 
 @bp.route('/api/sessions/<session_id>/run-tests', methods=['POST'])
+@login_required
 def run_tests(session_id):
-    session = sessions.load(session_id)
+    session = sessions.load(session_id, current_user.id)
     if not session:
         return jsonify({'error': 'Session not found'}), 404
 
@@ -220,8 +227,9 @@ def run_tests(session_id):
 
 
 @bp.route('/api/sessions/<session_id>/code', methods=['PUT'])
+@login_required
 def save_code(session_id):
-    session = sessions.load(session_id)
+    session = sessions.load(session_id, current_user.id)
     if not session:
         return jsonify({'error': 'Session not found'}), 404
     data = request.json or {}
@@ -231,8 +239,9 @@ def save_code(session_id):
 
 
 @bp.route('/api/sessions/<session_id>/end', methods=['POST'])
+@login_required
 def end_session(session_id):
-    session = sessions.load(session_id)
+    session = sessions.load(session_id, current_user.id)
     if not session:
         return jsonify({'error': 'Session not found'}), 404
     session['status'] = 'completed'
@@ -242,14 +251,16 @@ def end_session(session_id):
 
 
 @bp.route('/api/sessions/<session_id>', methods=['DELETE'])
+@login_required
 def delete_session(session_id):
-    sessions.delete(session_id)
+    sessions.delete(session_id, current_user.id)
     return jsonify({'success': True})
 
 
 @bp.route('/api/sessions/<session_id>/transcript', methods=['POST'])
+@login_required
 def save_transcript(session_id):
-    session = sessions.load(session_id)
+    session = sessions.load(session_id, current_user.id)
     if not session:
         return jsonify({'error': 'Session not found'}), 404
 

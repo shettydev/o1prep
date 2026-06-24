@@ -2,9 +2,10 @@
 
 <div align="center">
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue?logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![PostgreSQL](https://img.shields.io/badge/postgres-16-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Powered by GPT-4o](https://img.shields.io/badge/powered%20by-GPT--4o-412991?logo=openai&logoColor=white)](https://platform.openai.com/)
-[![Runs locally](https://img.shields.io/badge/runs-locally-brightgreen?logo=homeassistant&logoColor=white)]()
+[![Self-hostable](https://img.shields.io/badge/self--hostable-brightgreen?logo=docker&logoColor=white)]()
 [![Voice support](https://img.shields.io/badge/voice-WebRTC-blueviolet?logo=googlemeet&logoColor=white)]()
 
 </div>
@@ -17,7 +18,7 @@ Most interview platforms are puzzle grinders. O(1) Prep puts you in a real inter
 
 - **A back-and-forth, not a quiz** - the interviewer follows up, pushes back on your reasoning, and adds constraints mid-session just like a real one would
 - **Feedback that actually tells you something** - you get written scores and specific critique on your approach, code quality, communication, and tradeoffs - not just pass/fail
-- **Everything stays on your machine** - sessions, history, and code are stored locally; nothing goes anywhere except your messages to OpenAI
+- **Your own account** - sign in and your sessions, history, and code are saved to your account in the app's database; self-host it and the data stays on infrastructure you control
 - **Practice out loud** - voice mode lets you talk through your solution the way you would in an actual interview
 - **150+ problems grounded in real engineering** - each one has a real-world scenario, not just "given an array..."
 
@@ -32,19 +33,27 @@ python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Create a `.env` file:
+Copy `.env.example` to `.env` and set your values (database URL, a secret key, and your OpenAI key):
 
 ```
+DATABASE_URL=postgresql+psycopg://o1prep:o1prep@localhost:5433/o1prep
+SECRET_KEY=change-me
 OPENAI_API_KEY=sk-your-key-here
 ```
 
+Start PostgreSQL, create the schema, load the problems, and run:
+
 ```bash
+docker compose up -d                  # start PostgreSQL
+export FLASK_APP=app
+flask db upgrade                      # create tables
+python scripts/seed_problems.py       # load the problem library
 python app.py
 ```
 
-Open **http://localhost:5000** - that's it.
+Open **http://localhost:5000**, create an account, and start practicing.
 
-> **Prerequisites:** Python 3.8+, a paid OpenAI API key, and a modern browser (Chrome/Firefox/Safari).
+> **Prerequisites:** Python 3.11+, Docker (for PostgreSQL), a paid OpenAI API key, and a modern browser (Chrome/Firefox/Safari).
 
 ---
 
@@ -299,7 +308,7 @@ Yes. Multiple sessions on the same problem are tracked separately. The status do
 That's what makes it useful. Vague feedback doesn't help you improve. The debrief is written the way a hiring committee would actually talk about your performance.
 
 **Where is my data stored?**
-Entirely on your local machine in `user_data/sessions/`. Nothing is sent to external servers except your messages and code to OpenAI's API.
+In the application's PostgreSQL database, scoped to your account. If you self-host, that database runs on infrastructure you control. Your messages and code are sent to OpenAI's API to power the interviewer.
 
 **Can I add my own problems?**
 Yes - see [CONTRIBUTING.md](CONTRIBUTING.md) for the full problem YAML format.
