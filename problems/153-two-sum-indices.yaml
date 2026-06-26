@@ -40,7 +40,7 @@ test_cases:
     input:
       nums: [1, 5, 3, 7]
       target: 8
-    expected: [1, 3]
+    expected: [1, 2]
 explanation: |-
   This warm-up is meant to build confidence around **hash maps** with a very small surface area.
 
