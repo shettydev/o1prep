@@ -67,3 +67,43 @@ explanation: |-
 references:
 - 'Review the most common array patterns: one pass, two pointers, prefix accumulation, and counting.'
 - 'Treat Rotate Right as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function rotateRight(nums, k) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: rotateRight
+    test_cases:
+    - label: basic
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        k: 2
+      expected:
+      - 4
+      - 5
+      - 1
+      - 2
+      - 3
+    - label: k larger than length
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        k: 4
+      expected:
+      - 3
+      - 1
+      - 2
+    - label: empty
+      input:
+        nums: []
+        k: 3
+      expected: []

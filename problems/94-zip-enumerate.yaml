@@ -63,3 +63,50 @@ explanation: |-
 references:
   - "Python docs: enumerate() — https://docs.python.org/3/library/functions.html#enumerate"
   - "Python docs: zip() — https://docs.python.org/3/library/functions.html#zip"
+languages:
+  javascript:
+    starter_code: |-
+      function formatLeaderboard(names, scores) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: formatLeaderboard
+    test_cases:
+    - label: three players
+      input:
+        names:
+        - Alice
+        - Bob
+        - Carol
+        scores:
+        - 90
+        - 85
+        - 78
+      expected:
+      - '1. Alice: 90'
+      - '2. Bob: 85'
+      - '3. Carol: 78'
+    - label: single player
+      input:
+        names:
+        - Solo
+        scores:
+        - 100
+      expected:
+      - '1. Solo: 100'
+    - label: zero scores
+      input:
+        names:
+        - X
+        - Y
+        scores:
+        - 0
+        - 0
+      expected:
+      - '1. X: 0'
+      - '2. Y: 0'
+    - label: empty lists
+      input:
+        names: []
+        scores: []
+      expected: []

@@ -71,3 +71,42 @@ references:
 - Model which item should be processed next and which data structure answers that question most directly.
 - Keep one eye on tie-breaking rules so your output stays deterministic.
 - After implementing Meeting Room Allocator, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      function allocateMeetingRooms(meetings) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: allocateMeetingRooms
+    test_cases:
+    - label: room reuse
+      input:
+        meetings:
+        - - 0
+          - 30
+        - - 5
+          - 10
+        - - 15
+          - 20
+      expected:
+        room_count: 2
+        assignments:
+        - 0
+        - 1
+        - 1
+    - label: single room
+      input:
+        meetings:
+        - - 1
+          - 2
+        - - 2
+          - 3
+        - - 3
+          - 4
+      expected:
+        room_count: 1
+        assignments:
+        - 0
+        - 0
+        - 0

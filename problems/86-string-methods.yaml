@@ -58,3 +58,28 @@ references:
   - "Python docs: str.split() — https://docs.python.org/3/library/stdtypes.html#str.split"
   - "Python docs: str.join() — https://docs.python.org/3/library/stdtypes.html#str.join"
   - "Python docs: str.title() — https://docs.python.org/3/library/stdtypes.html#str.title"
+languages:
+  javascript:
+    starter_code: |-
+      function normalizeSentence(s) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: normalizeSentence
+    test_cases:
+    - label: leading and trailing spaces with run
+      input:
+        s: '  hello   WORLD  '
+      expected: Hello World
+    - label: mixed casing no extra spaces
+      input:
+        s: python IS great
+      expected: Python Is Great
+    - label: single word
+      input:
+        s: one
+      expected: One
+    - label: single-char words with spaces
+      input:
+        s: '  a  b  c  '
+      expected: A B C

@@ -53,7 +53,7 @@ python app.py
 
 Open **http://localhost:5000**, create an account, and start practicing.
 
-> **Prerequisites:** Python 3.11+, Docker (for PostgreSQL), a paid OpenAI API key, and a modern browser (Chrome/Firefox/Safari).
+> **Prerequisites:** Python 3.11+, Docker (for PostgreSQL), a paid OpenAI API key, and a modern browser (Chrome/Firefox/Safari). Node.js is optional — install it (or set `NODE_BIN`) to run and test solutions in JavaScript.
 
 ---
 
@@ -174,7 +174,7 @@ You can still write and submit code while in voice mode - just click **Submit Co
 
 ## Code Editor & Execution
 
-Python editor with syntax highlighting, auto-closing brackets, line numbers, and smart indentation. Your code is auto-saved every 2 seconds - you won't lose it if you navigate away.
+Multi-language editor (Python or JavaScript, picked from the language selector) with syntax highlighting, auto-closing brackets, line numbers, and smart indentation. Switching language loads that language's starter code and runs against its test suite. Your code is auto-saved every 2 seconds - you won't lose it if you navigate away.
 
 | Button    | What it does                                                       |
 | --------- | ------------------------------------------------------------------ |
@@ -296,7 +296,11 @@ Yes. The interviewer uses GPT-4o, which requires a paid API key. Voice mode addi
 Roughly $0.10-$0.50 per text session depending on length. Voice sessions cost more due to Realtime API audio pricing.
 
 **Can I use other programming languages?**
-Not currently. The code runner and test framework are Python-only.
+Yes. Pick Python or JavaScript from the language selector in the editor; the code
+runner and test harness support both. JavaScript runs through Node.js (install
+it, or set `NODE_BIN`). TypeScript is also wired up (via `tsx`/`TS_CMD`).
+Problems are translated per language, so the selector offers whichever languages
+a given problem has been authored for.
 
 **What happens if I close the browser mid-interview?**
 The session is auto-saved every time you send a message or submit code. Open History to resume from where you left off.

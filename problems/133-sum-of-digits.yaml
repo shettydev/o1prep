@@ -53,3 +53,28 @@ explanation: |-
 references:
   - You can iterate through digits by repeatedly taking n % 10 and n // 10, or by converting to a string.
   - 'Treat Sum of Digits as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function digitSum(n) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: digitSum
+    test_cases:
+      - label: three digits
+        input:
+          n: 123
+        expected: 6
+      - label: single digit
+        input:
+          n: 9
+        expected: 9
+      - label: large number
+        input:
+          n: 9999
+        expected: 36
+      - label: powers of ten
+        input:
+          n: 1000
+        expected: 1

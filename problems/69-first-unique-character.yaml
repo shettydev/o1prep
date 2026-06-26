@@ -49,3 +49,24 @@ references:
 - Use a hash map when you need fast membership checks or counts without rescanning the input.
 - Practice a few small string transforms by hand so indexing, trimming, and reconstruction feel automatic.
 - 'Treat First Unique Character as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function firstUniqueChar(s) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: firstUniqueChar
+    test_cases:
+    - label: first char unique
+      input:
+        s: leetcode
+      expected: 0
+    - label: middle unique
+      input:
+        s: loveleetcode
+      expected: 2
+    - label: none
+      input:
+        s: aabb
+      expected: -1

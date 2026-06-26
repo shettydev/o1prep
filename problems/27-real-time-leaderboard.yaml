@@ -102,3 +102,59 @@ references:
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
 - After implementing Real-Time Leaderboard, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class Leaderboard {
+        constructor() {
+          // Write your solution here
+        }
+
+        update(playerId, score) {
+          // Write your solution here
+        }
+
+        top(k) {
+          // Write your solution here
+        }
+
+        rank(playerId) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: Leaderboard
+    test_cases:
+    - label: top and rank
+      init_args: []
+      ops:
+      - update
+      - update
+      - update
+      - top
+      - rank
+      - update
+      - rank
+      op_args:
+      - - alice
+        - 1500
+      - - bob
+        - 2000
+      - - carol
+        - 1800
+      - - 2
+      - - carol
+      - - alice
+        - 2500
+      - - alice
+      expected:
+      - null
+      - null
+      - null
+      - - - bob
+          - 2000
+        - - carol
+          - 1800
+      - 2
+      - null
+      - 1

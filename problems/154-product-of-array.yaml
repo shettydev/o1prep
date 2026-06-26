@@ -57,3 +57,43 @@ explanation: |-
 references:
   - 'math.prod(nums) is available in Python 3.8+. For earlier versions: functools.reduce(operator.mul, nums, 1).'
   - 'Treat Product of Array as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function arrayProduct(nums) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: arrayProduct
+    test_cases:
+    - label: basic
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        - 4
+      expected: 24
+    - label: empty
+      input:
+        nums: []
+      expected: 1
+    - label: contains zero
+      input:
+        nums:
+        - 5
+        - 0
+        - 3
+      expected: 0
+    - label: negatives
+      input:
+        nums:
+        - -1
+        - -2
+        - -3
+      expected: -6
+    - label: single element
+      input:
+        nums:
+        - 7
+      expected: 7

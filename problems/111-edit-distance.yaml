@@ -78,3 +78,37 @@ explanation: |-
 references:
 - Write out a small example (e.g., "ab" vs "bc") and fill the table by hand before coding.
 - The three predecessors in the recurrence map exactly to delete, insert, replace — keep that mapping clear.
+languages:
+  javascript:
+    starter_code: |-
+      function editDistance(word1, word2) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: editDistance
+    test_cases:
+    - label: horse to ros
+      args:
+      - horse
+      - ros
+      expected: 3
+    - label: intention to execution
+      args:
+      - intention
+      - execution
+      expected: 5
+    - label: empty to word
+      args:
+      - ''
+      - abc
+      expected: 3
+    - label: same strings
+      args:
+      - kitten
+      - kitten
+      expected: 0
+    - label: one character diff
+      args:
+      - cat
+      - cut
+      expected: 1

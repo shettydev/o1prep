@@ -64,3 +64,31 @@ references:
 - 'Review constant-time dictionary operations: insert, lookup, delete, and how collisions affect real-world performance.'
 - Translate the input format into tokens and small grammar rules before worrying about implementation details.
 - Use examples that hit malformed input, nesting, and precedence to check your parser design.
+languages:
+  javascript:
+    starter_code: |-
+      function parseQuery(query) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: parseQuery
+    test_cases:
+    - label: simple pairs
+      input:
+        query: a=1&b=2
+      expected:
+        a: '1'
+        b: '2'
+    - label: repeated key
+      input:
+        query: tag=x&tag=y
+      expected:
+        tag:
+        - x
+        - y
+    - label: missing value
+      input:
+        query: debug&x=1
+      expected:
+        debug: ''
+        x: '1'

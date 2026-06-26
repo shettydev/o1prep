@@ -63,3 +63,40 @@ explanation: |-
 references:
 - 'Review the most common array patterns: one pass, two pointers, prefix accumulation, and counting.'
 - 'Treat Clamp Values as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function clampValues(nums, low, high) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: clampValues
+    test_cases:
+    - label: mixed values
+      input:
+        nums:
+        - 1
+        - 5
+        - 10
+        low: 3
+        high: 8
+      expected:
+      - 3
+      - 5
+      - 8
+    - label: already inside
+      input:
+        nums:
+        - 4
+        - 5
+        low: 3
+        high: 8
+      expected:
+      - 4
+      - 5
+    - label: empty
+      input:
+        nums: []
+        low: 0
+        high: 1
+      expected: []

@@ -62,3 +62,62 @@ explanation: |-
 references:
   - "Python docs: collections.deque — https://docs.python.org/3/library/collections.html#collections.deque"
   - "deque.rotate() — https://docs.python.org/3/library/collections.html#collections.deque.rotate"
+languages:
+  javascript:
+    starter_code: |-
+      function rotateList(lst, k) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: rotateList
+    test_cases:
+    - label: rotate right by 2
+      input:
+        lst:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        k: 2
+      expected:
+      - 4
+      - 5
+      - 1
+      - 2
+      - 3
+    - label: rotate right by 1
+      input:
+        lst:
+        - 1
+        - 2
+        - 3
+        k: 1
+      expected:
+      - 3
+      - 1
+      - 2
+    - label: negative k left rotation
+      input:
+        lst:
+        - 1
+        - 2
+        - 3
+        - 4
+        k: -1
+      expected:
+      - 2
+      - 3
+      - 4
+      - 1
+    - label: k equals length full rotation
+      input:
+        lst:
+        - 1
+        - 2
+        - 3
+        k: 6
+      expected:
+      - 1
+      - 2
+      - 3

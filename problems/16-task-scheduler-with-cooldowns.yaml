@@ -68,3 +68,44 @@ references:
 - 'Review constant-time dictionary operations: insert, lookup, delete, and how collisions affect real-world performance.'
 - Model which item should be processed next and which data structure answers that question most directly.
 - Keep one eye on tie-breaking rules so your output stays deterministic.
+languages:
+  javascript:
+    starter_code: |-
+      function scheduleTasks(tasks, cooldown) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: scheduleTasks
+    test_cases:
+    - label: classic cooldown
+      args:
+      - - A
+        - A
+        - A
+        - B
+        - B
+        - B
+      - 2
+      expected:
+      - 8
+      - - A
+        - B
+        - idle
+        - A
+        - B
+        - idle
+        - A
+        - B
+    - label: no idle needed
+      args:
+      - - A
+        - B
+        - A
+        - B
+      - 1
+      expected:
+      - 4
+      - - A
+        - B
+        - A
+        - B

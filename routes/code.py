@@ -1,12 +1,8 @@
-import os
-import subprocess
-import sys
-import tempfile
-
 from flask import Blueprint, jsonify, request
 from flask_login import login_required
 
-import config
+from services import languages
+from services.runners import get_runner
 
 bp = Blueprint('code', __name__)
 
@@ -19,33 +15,5 @@ def run_code():
     if not user_code.strip():
         return jsonify({'error': 'No code provided'}), 400
 
-    fd, path = tempfile.mkstemp(suffix='.py', prefix='o1prep_run_')
-    try:
-        with os.fdopen(fd, 'w') as f:
-            f.write(user_code)
-        result = subprocess.run(
-            [sys.executable, path],
-            capture_output=True, text=True, timeout=config.CODE_TIMEOUT,
-        )
-        return jsonify({
-            'stdout': result.stdout,
-            'stderr': result.stderr,
-            'exit_code': result.returncode,
-        })
-    except subprocess.TimeoutExpired:
-        return jsonify({
-            'stdout': '',
-            'stderr': f'Timeout: code took too long (>{config.CODE_TIMEOUT}s)',
-            'exit_code': 1,
-        })
-    except Exception as e:
-        return jsonify({
-            'stdout': '',
-            'stderr': f'Runner error: {e}',
-            'exit_code': 1,
-        })
-    finally:
-        try:
-            os.unlink(path)
-        except OSError:
-            pass
+    language = languages.resolve(data.get('language'))
+    return jsonify(get_runner(language).run_program(user_code))

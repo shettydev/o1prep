@@ -144,3 +144,89 @@ explanation: |-
 references:
 - Remove the tail from the set before the collision check — the head can enter the cell the tail is vacating.
 - Use a deque for O(1) append (new head) and popleft (old tail); use a set for O(1) body collision detection.
+languages:
+  javascript:
+    starter_code: |-
+      class SnakeGame {
+        constructor(width, height, food) {
+          // Write your solution here
+        }
+
+        move(direction) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: SnakeGame
+    test_cases:
+    - label: eat food and grow
+      init_args:
+      - 3
+      - 3
+      - - - 0
+          - 1
+        - - 1
+          - 2
+      ops:
+      - move
+      - move
+      - move
+      op_args:
+      - - R
+      - - D
+      - - R
+      expected:
+      - 1
+      - 1
+      - 2
+    - label: wall collision returns negative one
+      init_args:
+      - 3
+      - 4
+      - []
+      ops:
+      - move
+      - move
+      - move
+      - move
+      op_args:
+      - - D
+      - - D
+      - - D
+      - - D
+      expected:
+      - 0
+      - 0
+      - 0
+      - -1
+    - label: self collision returns negative one
+      init_args:
+      - 4
+      - 4
+      - - - 0
+          - 1
+        - - 0
+          - 2
+        - - 0
+          - 3
+      ops:
+      - move
+      - move
+      - move
+      - move
+      - move
+      - move
+      op_args:
+      - - R
+      - - R
+      - - R
+      - - D
+      - - L
+      - - R
+      expected:
+      - 1
+      - 2
+      - 3
+      - 3
+      - 3
+      - -1

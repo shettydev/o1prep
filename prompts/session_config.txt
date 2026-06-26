@@ -1,7 +1,7 @@
 Configuration:
 - target_level: staff
 - round_type: coding
-- language: Python
+- language: {LANGUAGE}
 - difficulty: medium-hard
 - interviewer_mode: strict
 - company_flavor: openai

@@ -92,3 +92,37 @@ explanation: |-
 references:
 - Backtracking template: append current state, loop from start to end, recurse, pop (undo).
 - The iterative approach (for each num, double the result set) is elegant and avoids recursion.
+languages:
+  javascript:
+    starter_code: |-
+      function subsets(nums) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: subsets
+    test_cases:
+    - label: three elements
+      args:
+      - - 1
+        - 2
+        - 3
+      expected:
+      - []
+      - - 1
+      - - 1
+        - 2
+      - - 1
+        - 2
+        - 3
+      - - 1
+        - 3
+      - - 2
+      - - 2
+        - 3
+      - - 3
+    - label: single element
+      args:
+      - - 0
+      expected:
+      - []
+      - - 0

@@ -65,3 +65,63 @@ explanation: |-
 references:
   - "Python docs: itertools.combinations — https://docs.python.org/3/library/itertools.html#itertools.combinations"
   - "Python docs: itertools — https://docs.python.org/3/library/itertools.html"
+languages:
+  javascript:
+    starter_code: |-
+      function uniquePairsSum(nums, target) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: uniquePairsSum
+    test_cases:
+    - label: two pairs found
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        target: 5
+      expected:
+      - - 1
+        - 4
+      - - 2
+        - 3
+    - label: no pairs found
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        target: 10
+      expected: []
+    - label: negative numbers included
+      input:
+        nums:
+        - -1
+        - 0
+        - 1
+        - 2
+        target: 1
+      expected:
+      - - -1
+        - 2
+      - - 0
+        - 1
+    - label: unsorted input distinct values
+      input:
+        nums:
+        - 1
+        - 5
+        - 3
+        - 2
+        - 4
+        target: 6
+      expected:
+      - - 1
+        - 5
+      - - 2
+        - 4

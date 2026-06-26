@@ -53,3 +53,28 @@ references:
   - 'str.split() with no argument splits on any whitespace and ignores leading/trailing — exactly what is needed here.'
   - '" ".join(reversed(s.split())) is the one-liner.'
   - 'Treat Reverse Words as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function reverseWords(s) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: reverseWords
+    test_cases:
+    - label: trailing spaces
+      input:
+        s: '  hello world  '
+      expected: world hello
+    - label: basic sentence
+      input:
+        s: the sky is blue
+      expected: blue is sky the
+    - label: single word
+      input:
+        s: python
+      expected: python
+    - label: multiple spaces between words
+      input:
+        s: a   b   c
+      expected: c b a

@@ -145,3 +145,103 @@ references:
 - 'Keep caller ergonomics in mind: a clean API should make the correct usage obvious.'
 - Use tests to define the contract, especially around chaining, defaults, and error cases.
 - After implementing Query Builder, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class Query {
+        constructor() {
+          // Write your solution here
+        }
+
+        where(field, op, value) {
+          // Write your solution here
+        }
+
+        orderBy(field, direction = 'asc') {
+          // Write your solution here
+        }
+
+        limit(n) {
+          // Write your solution here
+        }
+
+        offset(n) {
+          // Write your solution here
+        }
+
+        execute(data) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: Query
+    test_cases:
+    - label: filter sort execute
+      init_args: []
+      ops:
+      - where
+      - orderBy
+      - execute
+      op_args:
+      - - role
+        - eq
+        - admin
+      - - age
+        - asc
+      - - - name: Alice
+            age: 30
+            role: admin
+          - name: Bob
+            age: 25
+            role: user
+          - name: Charlie
+            age: 35
+            role: user
+          - name: Diana
+            age: 28
+            role: admin
+      compare:
+      - false
+      - false
+      - true
+      expected:
+      - null
+      - null
+      - - name: Diana
+          age: 28
+          role: admin
+        - name: Alice
+          age: 30
+          role: admin
+    - label: in and desc
+      init_args: []
+      ops:
+      - where
+      - orderBy
+      - execute
+      op_args:
+      - - name
+        - in
+        - - Alice
+          - Bob
+      - - name
+        - desc
+      - - - name: Alice
+            age: 30
+            role: admin
+          - name: Bob
+            age: 25
+            role: user
+      compare:
+      - false
+      - false
+      - true
+      expected:
+      - null
+      - null
+      - - name: Bob
+          age: 25
+          role: user
+        - name: Alice
+          age: 30
+          role: admin

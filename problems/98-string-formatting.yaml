@@ -67,3 +67,43 @@ references:
   - "Python docs: f-strings — https://docs.python.org/3/reference/lexical_analysis.html#f-strings"
   - "PEP 498: Literal String Interpolation"
   - "Python docs: format string syntax — https://docs.python.org/3/library/string.html#format-string-syntax"
+languages:
+  javascript:
+    starter_code: |-
+      function formatReport(records) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: formatReport
+    test_cases:
+    - label: A and C grade
+      input:
+        records:
+        - name: Alice
+          score: 92
+        - name: Bob
+          score: 74
+      expected:
+      - 'Alice: 92/100 — A'
+      - 'Bob: 74/100 — C'
+    - label: F grade
+      input:
+        records:
+        - name: X
+          score: 55
+      expected:
+      - 'X: 55/100 — F'
+    - label: B and A boundary
+      input:
+        records:
+        - name: P
+          score: 80
+        - name: Q
+          score: 90
+      expected:
+      - 'P: 80/100 — B'
+      - 'Q: 90/100 — A'
+    - label: empty list
+      input:
+        records: []
+      expected: []

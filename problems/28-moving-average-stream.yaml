@@ -80,3 +80,36 @@ references:
 - Look for bounded-memory updates that only touch the newest item and whatever just expired.
 - Use running aggregates so each new event is O(1) or close to it.
 - After implementing Moving Average Stream, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class MovingAverage {
+        constructor(windowSize) {
+          // Write your solution here
+        }
+
+        add(value) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: MovingAverage
+    test_cases:
+    - label: window updates
+      init_args:
+      - 3
+      ops:
+      - add
+      - add
+      - add
+      - add
+      op_args:
+      - - 1
+      - - 10
+      - - 3
+      - - 5
+      expected:
+      - 1.0
+      - 5.5
+      - 4.666666666666667
+      - 6.0

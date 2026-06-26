@@ -125,3 +125,67 @@ explanation: |-
 references:
 - 'Every time you see ''if x in list'', ask: can this list be a set? Usually yes.'
 - dict.fromkeys(items) is the idiomatic Python one-liner for order-preserving deduplication.
+languages:
+  javascript:
+    starter_code: |-
+      function removeDuplicates(items) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: removeDuplicates
+    test_cases:
+    - label: mixed duplicates
+      args:
+      - - 3
+        - 1
+        - 4
+        - 1
+        - 5
+        - 9
+        - 2
+        - 6
+        - 5
+        - 3
+        - 5
+      expected:
+      - 3
+      - 1
+      - 4
+      - 5
+      - 9
+      - 2
+      - 6
+    - label: empty list
+      args:
+      - []
+      expected: []
+    - label: all duplicates
+      args:
+      - - 7
+        - 7
+        - 7
+        - 7
+      expected:
+      - 7
+    - label: no duplicates
+      args:
+      - - 1
+        - 2
+        - 3
+        - 4
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+    - label: strings
+      args:
+      - - a
+        - b
+        - a
+        - c
+        - b
+      expected:
+      - a
+      - b
+      - c

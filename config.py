@@ -47,8 +47,13 @@ RESEARCH_MAX_TOKENS = 3000
 TEST_GEN_TEMPERATURE = 0.2
 TEST_GEN_MAX_TOKENS = 2000
 
-# Code execution
+# Code execution. Python runs via the current interpreter; JS/TS shell out to a
+# Node/TS toolchain (argument list only, never shell=True). Override the binaries
+# via the environment when they are not on PATH.
 CODE_TIMEOUT = 5
+NODE_BIN = os.environ.get('NODE_BIN', 'node')
+# TypeScript executor as an argument list (default: `tsx <file>`).
+TS_CMD = os.environ.get('TS_CMD', 'tsx').split()
 
 # Voice / Realtime
 REALTIME_API_URL = 'https://api.openai.com/v1/realtime/calls'

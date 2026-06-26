@@ -54,3 +54,32 @@ explanation: |-
 references:
   - '"".join(c * n for c in s) is the idiomatic one-liner using character repetition.'
   - 'Treat Repeat Characters as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function repeatChars(s, n) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: repeatChars
+    test_cases:
+    - label: basic
+      input:
+        s: abc
+        n: 3
+      expected: aaabbbccc
+    - label: single char
+      input:
+        s: x
+        n: 5
+      expected: xxxxx
+    - label: n equals one
+      input:
+        s: hi
+        n: 1
+      expected: hi
+    - label: empty string
+      input:
+        s: ''
+        n: 4
+      expected: ''

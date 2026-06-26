@@ -80,3 +80,42 @@ explanation: |-
 references:
 - This is the canonical unbounded knapsack variant — review how it differs from 0/1 knapsack (no per-item limit).
 - The recurrence dp[i] = min(dp[i - coin] + 1 for coin in coins if coin <= i) is worth memorizing.
+languages:
+  javascript:
+    starter_code: |-
+      function coinChange(coins, amount) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: coinChange
+    test_cases:
+    - label: classic case
+      args:
+      - - 1
+        - 5
+        - 10
+        - 25
+      - 41
+      expected: 4
+    - label: impossible
+      args:
+      - - 2
+      - 3
+      expected: -1
+    - label: amount zero
+      args:
+      - - 1
+      - 0
+      expected: 0
+    - label: single coin exact match
+      args:
+      - - 5
+      - 5
+      expected: 1
+    - label: larger amount
+      args:
+      - - 1
+        - 2
+        - 5
+      - 11
+      expected: 3

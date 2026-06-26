@@ -87,3 +87,49 @@ references:
 - Review how to shrink a window incrementally so old items leave exactly when they stop mattering.
 - Look for bounded-memory updates that only touch the newest item and whatever just expired.
 - Use running aggregates so each new event is O(1) or close to it.
+languages:
+  javascript:
+    starter_code: |-
+      class RecentCounter {
+          constructor() {
+              // Write your solution here
+          }
+
+          ping(t) {
+              // Write your solution here
+          }
+      }
+    test_type: class
+    class_name: RecentCounter
+    test_cases:
+    - label: rolling count
+      init_args: []
+      ops:
+      - ping
+      - ping
+      - ping
+      - ping
+      op_args:
+      - - 1
+      - - 100
+      - - 3001
+      - - 3002
+      expected:
+      - 1
+      - 2
+      - 3
+      - 3
+    - label: old items expire
+      init_args: []
+      ops:
+      - ping
+      - ping
+      - ping
+      op_args:
+      - - 1
+      - - 3000
+      - - 6001
+      expected:
+      - 1
+      - 2
+      - 1

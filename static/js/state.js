@@ -11,6 +11,7 @@ let selectedDifficulties = new Set();
 let warmupOnly = false;
 let attemptedProblems = {};
 let codeSaveTimeout = null;
+let currentLanguage = 'python';
 let visibleCount = 30;
 let selectedSort = 'default';
 let cmdPaletteItems = [];

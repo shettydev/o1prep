@@ -6,6 +6,7 @@ from flask import Blueprint, Response, jsonify, request
 from flask_login import login_required
 
 import config
+from services import languages
 
 bp = Blueprint('realtime', __name__)
 
@@ -22,9 +23,11 @@ def create_realtime_session():
         return jsonify({'error': 'No SDP offer provided'}), 400
 
     focus = request.args.get('focus', 'general')
+    language = languages.resolve(request.args.get('language'))
     focus_instruction = config.FOCUS_PROMPTS.get(focus, config.FOCUS_PROMPTS['general'])
+    session_config = config.SESSION_CONFIG.replace('{LANGUAGE}', languages.label(language))
     instructions = (
-        config.VOICE_SYSTEM_PROMPT + "\n\n" + config.SESSION_CONFIG
+        config.VOICE_SYSTEM_PROMPT + "\n\n" + session_config
         + f"\n\nProblem selection guidance: {focus_instruction}"
     )
 

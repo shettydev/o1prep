@@ -55,3 +55,40 @@ explanation: |-
 references:
   - "Python docs: dict comprehensions — https://docs.python.org/3/tutorial/datastructures.html#dictionaries"
   - "PEP 274: Dict Comprehensions"
+languages:
+  javascript:
+    starter_code: |-
+      function invertDict(d) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: invertDict
+    test_cases:
+    - label: three entries
+      input:
+        d:
+          a: 1
+          b: 2
+          c: 3
+      expected:
+        '1': a
+        '2': b
+        '3': c
+    - label: two entries
+      input:
+        d:
+          x: 10
+          y: 20
+      expected:
+        '10': x
+        '20': y
+    - label: single entry
+      input:
+        d:
+          only: 42
+      expected:
+        '42': only
+    - label: empty dict
+      input:
+        d: {}
+      expected: {}

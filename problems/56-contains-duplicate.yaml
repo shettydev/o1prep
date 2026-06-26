@@ -68,3 +68,35 @@ references:
 - 'Review indexing tradeoffs: what you precompute, what you scan, and how ranking is derived.'
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
+languages:
+  javascript:
+    starter_code: |-
+      function containsDuplicate(nums) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: containsDuplicate
+    test_cases:
+    - label: has duplicate
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        - 1
+      expected: true
+    - label: all unique
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        - 4
+      expected: false
+    - label: negative duplicate
+      input:
+        nums:
+        - -1
+        - 0
+        - -1
+      expected: true

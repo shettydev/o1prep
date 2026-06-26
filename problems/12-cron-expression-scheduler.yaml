@@ -64,3 +64,22 @@ references:
 - Translate the input format into tokens and small grammar rules before worrying about implementation details.
 - Use examples that hit malformed input, nesting, and precedence to check your parser design.
 - After implementing Cron Expression Scheduler, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      function nextRun(cronString, afterDatetime) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: nextRun
+    test_cases:
+    - label: next minute step
+      args:
+      - '*/15 * * * *'
+      - '2024-01-01T10:07:00'
+      expected: '2024-01-01T10:15:00'
+    - label: next matching hour
+      args:
+      - 0 12 * * *
+      - '2024-01-01T10:45:00'
+      expected: '2024-01-01T12:00:00'

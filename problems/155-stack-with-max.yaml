@@ -69,3 +69,40 @@ explanation: |-
 references:
   - The auxiliary max-stack pattern is also used in the classic Min Stack problem (LeetCode 155).
   - 'Treat Stack with Max as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      class MaxStack {
+        constructor() {
+          // Write your solution here
+        }
+
+        push(val) {}
+
+        pop() {}
+
+        getMax() {}
+      }
+    test_type: class
+    class_name: MaxStack
+    test_cases:
+    - label: basic max
+      init_args: []
+      ops:
+      - push
+      - push
+      - getMax
+      - pop
+      - getMax
+      op_args:
+      - - 3
+      - - 5
+      - []
+      - []
+      - []
+      expected:
+      - null
+      - null
+      - 5
+      - 5
+      - 3

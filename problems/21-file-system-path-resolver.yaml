@@ -93,3 +93,48 @@ references:
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
 - After implementing File System Path Resolver, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class PathResolver {
+        constructor(symlinks) {
+          // Write your solution here
+        }
+
+        resolve(path) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: PathResolver
+    test_cases:
+    - label: normalize path
+      init_args:
+      - {}
+      ops:
+      - resolve
+      op_args:
+      - - /home/user/./docs/../docs/file.txt
+      expected:
+      - /home/user/docs/file.txt
+    - label: follow symlink
+      init_args:
+      - /var/log/current: /var/log/2024
+      ops:
+      - resolve
+      op_args:
+      - - /var/log/current/app.log
+      expected:
+      - /var/log/2024/app.log
+    - label: cycle
+      init_args:
+      - /a: /b
+        /b: /a
+      ops:
+      - resolve
+      op_args:
+      - - /a/file.txt
+      expected_errors:
+      - cycle
+      expected:
+      - null

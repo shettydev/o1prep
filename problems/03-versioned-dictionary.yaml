@@ -146,3 +146,91 @@ references:
 - Practice identifying the smallest state slice that needs to be copied on each mutation.
 - 'Review constant-time dictionary operations: insert, lookup, delete, and how collisions affect real-world performance.'
 - Study how systems keep historical state queryable without making rollback logic fragile.
+languages:
+  javascript:
+    starter_code: |-
+      class VersionedDict {
+        constructor() {
+          /* ... */
+        }
+
+        put(key, value) {
+          /* ... */
+        }
+
+        delete(key) {
+          /* ... */
+        }
+
+        get(key) {
+          /* ... */
+        }
+
+        getAt(key, version) {
+          /* ... */
+        }
+
+        rollback(version) {
+          /* ... */
+        }
+      }
+    test_type: class
+    class_name: VersionedDict
+    test_cases:
+    - label: versioning and rollback
+      init_args: []
+      ops:
+      - put
+      - put
+      - get
+      - getAt
+      - delete
+      - get
+      - rollback
+      - get
+      op_args:
+      - - name
+        - Alice
+      - - age
+        - 30
+      - - name
+      - - name
+        - 1
+      - - name
+      - - name
+      - - 2
+      - - name
+      expected:
+      - 1
+      - 2
+      - Alice
+      - Alice
+      - 3
+      - null
+      - null
+      - Alice
+    - label: historical value
+      init_args: []
+      ops:
+      - put
+      - put
+      - getAt
+      - getAt
+      - getAt
+      op_args:
+      - - x
+        - 1
+      - - x
+        - 2
+      - - x
+        - 1
+      - - x
+        - 2
+      - - x
+        - 0
+      expected:
+      - 1
+      - 2
+      - 1
+      - 2
+      - null

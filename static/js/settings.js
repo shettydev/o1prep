@@ -16,6 +16,42 @@ async function loadEngineConfig() {
     engineConfig = null;
   }
   buildSettingsModal();
+  buildLanguageSelect();
+}
+
+// ── Language selection ──
+//
+// The /api/config payload carries the language allowlist (id, label, CodeMirror
+// mode). Populate the editor's language <select> from it and default to the
+// configured default language.
+
+function languageMeta(langId) {
+  const list = (engineConfig && engineConfig.languages) || [];
+  return list.find(l => l.id === langId) || { id: langId, codemirror_mode: langId, label: langId };
+}
+
+function availableLanguages() {
+  return (engineConfig && engineConfig.languages) || [{ id: 'python', label: 'Python' }];
+}
+
+// The default language preference: the user's saved choice if it is still a
+// supported language, otherwise the server default. Drives the editor's initial
+// language so it does not have to be picked for every problem.
+function defaultLanguage() {
+  const saved = getSavedSettings().language;
+  const langs = availableLanguages();
+  if (saved && langs.some(l => l.id === saved)) return saved;
+  return (engineConfig && engineConfig.default_language) || 'python';
+}
+
+function buildLanguageSelect() {
+  currentLanguage = defaultLanguage();
+  const sel = document.getElementById('language-select');
+  if (sel) {
+    sel.innerHTML = availableLanguages().map(l => `<option value="${l.id}">${l.label}</option>`).join('');
+    sel.value = currentLanguage;
+  }
+  if (typeof setEditorLanguageMode === 'function') setEditorLanguageMode(currentLanguage);
 }
 
 function getSavedSettings() {
@@ -42,6 +78,14 @@ function buildSettingsModal() {
 
   const provEl = document.getElementById('settings-provider');
   if (provEl) provEl.textContent = engineConfig.provider;
+
+  const langSel = document.getElementById('settings-language');
+  if (langSel) {
+    langSel.innerHTML = availableLanguages()
+      .map(l => `<option value="${l.id}">${l.label}</option>`)
+      .join('');
+    langSel.value = defaultLanguage();
+  }
 
   const modelSel = document.getElementById('settings-model');
   if (modelSel) {
@@ -80,6 +124,8 @@ function closeSettings() {
 
 function saveSettings() {
   const out = {};
+  const langSel = document.getElementById('settings-language');
+  if (langSel && langSel.value) out.language = langSel.value;
   const modelSel = document.getElementById('settings-model');
   if (modelSel && modelSel.value) out.model = modelSel.value;
   if (engineConfig && engineConfig.supports_effort) {
@@ -88,4 +134,13 @@ function saveSettings() {
   }
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(out));
   closeSettings();
+
+  // Apply the new default to the editor immediately when not mid-session, so the
+  // next interview starts in the chosen language without another click.
+  if (!currentSessionId) {
+    currentLanguage = defaultLanguage();
+    const editorSel = document.getElementById('language-select');
+    if (editorSel) editorSel.value = currentLanguage;
+    if (typeof setEditorLanguageMode === 'function') setEditorLanguageMode(currentLanguage);
+  }
 }

@@ -144,3 +144,52 @@ explanation: |-
 references:
 - Post-order is the right traversal order here because you need information from both subtrees before deciding at the current node.
 - The BST variant is faster: compare values to navigate left or right without visiting the full tree.
+languages:
+  javascript:
+    starter_code: |-
+      function lca(vals, p, q) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: lca
+    test_cases:
+    - label: LCA is root
+      args:
+      - - 3
+        - 5
+        - 1
+        - 6
+        - 2
+        - 0
+        - 8
+        - null
+        - null
+        - 7
+        - 4
+      - 5
+      - 1
+      expected: 3
+    - label: one node is ancestor of the other
+      args:
+      - - 3
+        - 5
+        - 1
+        - 6
+        - 2
+        - 0
+        - 8
+        - null
+        - null
+        - 7
+        - 4
+      - 5
+      - 4
+      expected: 5
+    - label: simple three-node tree
+      args:
+      - - 1
+        - 2
+        - 3
+      - 2
+      - 3
+      expected: 1

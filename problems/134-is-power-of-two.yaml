@@ -57,3 +57,32 @@ explanation: |-
 references:
   - 'Key insight: every power of two has exactly one set bit in binary. n & (n-1) strips the lowest set bit.'
   - 'Treat Is Power of Two as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function isPowerOfTwo(n) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: isPowerOfTwo
+    test_cases:
+    - label: power
+      input:
+        n: 8
+      expected: true
+    - label: not power
+      input:
+        n: 6
+      expected: false
+    - label: one
+      input:
+        n: 1
+      expected: true
+    - label: large power
+      input:
+        n: 1024
+      expected: true
+    - label: large non-power
+      input:
+        n: 1023
+      expected: false

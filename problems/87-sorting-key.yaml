@@ -58,3 +58,52 @@ explanation: |-
 references:
   - "Python docs: sorted() — https://docs.python.org/3/library/functions.html#sorted"
   - "Python Sorting HOW TO — https://docs.python.org/3/howto/sorting.html"
+languages:
+  javascript:
+    starter_code: |-
+      function sortWords(words) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: sortWords
+    test_cases:
+    - label: mixed lengths with tie
+      input:
+        words:
+        - banana
+        - fig
+        - apple
+        - kiwi
+      expected:
+      - fig
+      - kiwi
+      - apple
+      - banana
+    - label: all same length alphabetical
+      input:
+        words:
+        - cat
+        - bat
+        - ant
+      expected:
+      - ant
+      - bat
+      - cat
+    - label: single chars and two-char words
+      input:
+        words:
+        - z
+        - aa
+        - b
+        - cc
+      expected:
+      - b
+      - z
+      - aa
+      - cc
+    - label: single word
+      input:
+        words:
+        - hello
+      expected:
+      - hello

@@ -119,3 +119,36 @@ explanation: |-
 references:
 - The "snapshot queue size" pattern is the standard way to process one level at a time in BFS — memorize it.
 - A deque from collections is preferred over a list for O(1) popleft.
+languages:
+  javascript:
+    starter_code: |-
+      function levelOrder(vals) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: levelOrder
+    test_cases:
+    - label: three-level tree
+      args:
+      - - 3
+        - 9
+        - 20
+        - null
+        - null
+        - 15
+        - 7
+      expected:
+      - - 3
+      - - 9
+        - 20
+      - - 15
+        - 7
+    - label: single node
+      args:
+      - - 1
+      expected:
+      - - 1
+    - label: empty tree
+      args:
+      - []
+      expected: []

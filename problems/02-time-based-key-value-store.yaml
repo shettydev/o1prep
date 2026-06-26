@@ -125,3 +125,72 @@ references:
 - Review lower-bound / upper-bound style binary search and the off-by-one rules that keep it correct.
 - Study when a sorted list is enough versus when you need a heap, tree, or bisect-based structure.
 - Think about append-only time-series storage and why monotonic timestamps simplify retrieval.
+languages:
+  javascript:
+    starter_code: |-
+      class TimeMap {
+        constructor() {
+          /* ... */
+        }
+
+        set(key, value, timestamp) {
+          /* ... */
+        }
+
+        get(key, timestamp) {
+          /* ... */
+        }
+      }
+    test_type: class
+    class_name: TimeMap
+    test_cases:
+    - label: basic lookups
+      init_args: []
+      ops:
+      - set
+      - set
+      - get
+      - get
+      - get
+      op_args:
+      - - theme
+        - dark
+        - 1
+      - - theme
+        - light
+        - 5
+      - - theme
+        - 3
+      - - theme
+        - 5
+      - - theme
+        - 0
+      expected:
+      - null
+      - null
+      - dark
+      - light
+      - ''
+    - label: independent keys
+      init_args: []
+      ops:
+      - set
+      - set
+      - get
+      - get
+      op_args:
+      - - lang
+        - en
+        - 10
+      - - lang
+        - fr
+        - 20
+      - - lang
+        - 15
+      - - region
+        - 5
+      expected:
+      - null
+      - null
+      - en
+      - ''

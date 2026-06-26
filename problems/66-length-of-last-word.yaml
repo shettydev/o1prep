@@ -46,3 +46,24 @@ explanation: |-
 references:
 - Practice a few small string transforms by hand so indexing, trimming, and reconstruction feel automatic.
 - 'Treat Length of Last Word as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function lengthOfLastWord(s) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: lengthOfLastWord
+    test_cases:
+    - label: trailing spaces
+      input:
+        s: 'hello world  '
+      expected: 5
+    - label: single word
+      input:
+        s: CodePrep
+      expected: 8
+    - label: leading and trailing
+      input:
+        s: '  fly me  '
+      expected: 2

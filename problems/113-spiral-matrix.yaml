@@ -113,3 +113,74 @@ explanation: |-
 references:
 - Shrinking boundaries is easier to debug than the direction-rotation approach — pick whichever you can reliably implement.
 - Guard the inner two traversals to handle the case where only a single row or column remains.
+languages:
+  javascript:
+    starter_code: |-
+      function spiralOrder(matrix) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: spiralOrder
+    test_cases:
+    - label: 3x3 matrix
+      args:
+      - - - 1
+          - 2
+          - 3
+        - - 4
+          - 5
+          - 6
+        - - 7
+          - 8
+          - 9
+      expected:
+      - 1
+      - 2
+      - 3
+      - 6
+      - 9
+      - 8
+      - 7
+      - 4
+      - 5
+    - label: 3x4 matrix
+      args:
+      - - - 1
+          - 2
+          - 3
+          - 4
+        - - 5
+          - 6
+          - 7
+          - 8
+        - - 9
+          - 10
+          - 11
+          - 12
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 8
+      - 12
+      - 11
+      - 10
+      - 9
+      - 5
+      - 6
+      - 7
+    - label: single row
+      args:
+      - - - 1
+          - 2
+          - 3
+      expected:
+      - 1
+      - 2
+      - 3
+    - label: single element
+      args:
+      - - - 42
+      expected:
+      - 42

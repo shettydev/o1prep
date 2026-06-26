@@ -60,3 +60,59 @@ explanation: |-
 references:
   - "Python docs: zip() — https://docs.python.org/3/library/functions.html#zip"
   - "Python docs: range() — https://docs.python.org/3/library/functions.html#range"
+languages:
+  javascript:
+    starter_code: |-
+      function pairProducts(a, b) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: pairProducts
+    test_cases:
+    - label: basic three elements
+      input:
+        a:
+        - 1
+        - 2
+        - 3
+        b:
+        - 4
+        - 5
+        - 6
+      expected:
+      - 4
+      - 10
+      - 18
+    - label: contains zero
+      input:
+        a:
+        - 0
+        - 5
+        b:
+        - 3
+        - 7
+      expected:
+      - 0
+      - 35
+    - label: all same value
+      input:
+        a:
+        - 2
+        - 2
+        - 2
+        b:
+        - 2
+        - 2
+        - 2
+      expected:
+      - 4
+      - 4
+      - 4
+    - label: single element
+      input:
+        a:
+        - 7
+        b:
+        - 3
+      expected:
+      - 21

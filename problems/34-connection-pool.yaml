@@ -146,3 +146,91 @@ references:
 - Study acquisition, release, reuse, and shutdown paths so resources never leak or get reused unsafely.
 - 'Design for lifecycle edges: startup, retries, cleanup, shutdown, and bad inputs.'
 - Explain which failures should be surfaced, retried, ignored, or quarantined.
+languages:
+  javascript:
+    starter_code: |-
+      class ConnectionPool {
+        constructor(createConn, healthCheck, maxSize, maxIdleTime) {
+          // Write your solution here
+        }
+
+        acquire() {
+          // Write your solution here
+        }
+
+        release(conn) {
+          // Write your solution here
+        }
+
+        closeIdle() {
+          // Write your solution here
+        }
+
+        shutdown() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: ConnectionPool
+    test_cases:
+    - label: reuse and close idle
+      init_args:
+      - __ref__: makeConn
+      - __ref__: ping
+      - 2
+      - 0.02
+      ops:
+      - acquire
+      - acquire
+      - release
+      - acquire
+      - __eval__
+      - release
+      - __sleep__
+      - closeIdle
+      - acquire
+      - __eval__
+      op_args:
+      - []
+      - []
+      - - __ref__: conn1
+      - []
+      - - scope.conn3 === scope.conn1
+      - - __ref__: conn2
+      - - 0.03
+      - []
+      - []
+      - - scope.conn4 === scope.conn1
+      save_as:
+      - conn1
+      - conn2
+      - null
+      - conn3
+      - null
+      - null
+      - null
+      - null
+      - conn4
+      - null
+      compare:
+      - false
+      - false
+      - true
+      - false
+      - true
+      - true
+      - true
+      - true
+      - false
+      - true
+      expected:
+      - null
+      - null
+      - null
+      - null
+      - true
+      - null
+      - null
+      - 1
+      - null
+      - false

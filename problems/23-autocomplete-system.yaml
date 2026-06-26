@@ -101,3 +101,56 @@ references:
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
 - After implementing Autocomplete System, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class AutocompleteSystem {
+        constructor() {
+          // Write your solution here
+        }
+
+        add(sentence, frequency) {
+          // Write your solution here
+        }
+
+        search(prefix) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: AutocompleteSystem
+    test_cases:
+    - label: top three by frequency
+      init_args: []
+      ops:
+      - add
+      - add
+      - add
+      - search
+      - add
+      - search
+      - search
+      op_args:
+      - - i love python
+        - 5
+      - - i love java
+        - 3
+      - - i love coding
+        - 2
+      - - i love
+      - - i love python
+        - 2
+      - - i love
+      - - xyz
+      expected:
+      - null
+      - null
+      - null
+      - - i love python
+        - i love java
+        - i love coding
+      - null
+      - - i love python
+        - i love java
+        - i love coding
+      - []

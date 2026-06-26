@@ -57,3 +57,24 @@ references:
 - Practice scanning from both ends or from two sorted arrays without losing track of termination conditions.
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
+languages:
+  javascript:
+    starter_code: |-
+      function isPalindrome(s) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: isPalindrome
+    test_cases:
+    - label: classic true
+      input:
+        s: 'A man, a plan, a canal: Panama'
+      expected: true
+    - label: false case
+      input:
+        s: race a car
+      expected: false
+    - label: empty after filtering
+      input:
+        s: .,
+      expected: true

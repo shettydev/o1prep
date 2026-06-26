@@ -42,6 +42,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
 
+      - name: Set up Node.js
+        # Node powers the JavaScript code runner; without it the JS runner tests
+        # skip themselves. Installing it here keeps them exercised in CI.
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

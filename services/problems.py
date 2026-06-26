@@ -15,7 +15,7 @@ from glob import glob
 import yaml
 
 from config import PROBLEMS_DIR
-from services.db import DEFAULT_LANGUAGE, merge_problem, split_problem
+from services.db import DEFAULT_LANGUAGE, LANGUAGE_KEYS, merge_problem, split_problem
 from services.extensions import db
 from services.models import Problem, ProblemLanguage
 
@@ -40,6 +40,11 @@ def _to_dict(problem, language=DEFAULT_LANGUAGE):
 def seed(force=False):
     """Load the YAML problems into the database.
 
+    Each YAML file carries the language-agnostic fields plus the default-language
+    (Python) fields at the top level. Additional languages live under an optional
+    ``languages:`` mapping, e.g. ``languages: {javascript: {starter_code, ...}}``;
+    each entry becomes its own ``problem_languages`` row, keyed by language.
+
     Idempotent: existing rows are updated in place (upsert by primary key). With
     ``force=True`` the tables are cleared first so problems deleted from disk are
     also removed. Returns the number of problems seeded.
@@ -50,6 +55,7 @@ def seed(force=False):
         db.session.query(Problem).delete()
         db.session.flush()
     for problem in yaml_problems:
+        extra_languages = problem.pop('languages', None) or {}
         agnostic, language = split_problem(problem)
         db.session.merge(Problem(
             id=problem['id'],
@@ -63,6 +69,14 @@ def seed(force=False):
             language=DEFAULT_LANGUAGE,
             data=language,
         ))
+        for lang_id, lang_fields in extra_languages.items():
+            # Keep only the per-language keys so the row mirrors the default one.
+            lang_data = {k: v for k, v in (lang_fields or {}).items() if k in LANGUAGE_KEYS}
+            db.session.merge(ProblemLanguage(
+                problem_id=problem['id'],
+                language=lang_id,
+                data=lang_data,
+            ))
     db.session.commit()
     return len(yaml_problems)
 
@@ -73,16 +87,34 @@ def ensure_seeded():
         seed()
 
 
-def load_all():
+def load_all(language=DEFAULT_LANGUAGE):
     rows = db.session.query(Problem).order_by(Problem.id).all()
-    return [d for d in (_to_dict(p) for p in rows) if d is not None]
+    return [d for d in (_to_dict(p, language) for p in rows) if d is not None]
 
 
-def get_by_id(problem_id):
+def get_by_id(problem_id, language=DEFAULT_LANGUAGE):
+    """Return the full problem dict for ``language``, or ``None`` if missing.
+
+    Pass ``language`` to fetch a specific language variant. The returned dict is
+    ``None`` when the problem has no row for that language (e.g. a problem that
+    has not been translated yet) — callers that just need a problem to display
+    can fall back via ``language=DEFAULT_LANGUAGE``.
+    """
     if problem_id is None:
         return None
     problem = db.session.get(Problem, problem_id)
-    return _to_dict(problem) if problem else None
+    return _to_dict(problem, language) if problem else None
+
+
+def available_languages(problem_id):
+    """Return the language ids that have a row for this problem (default first)."""
+    if problem_id is None:
+        return []
+    problem = db.session.get(Problem, problem_id)
+    if problem is None:
+        return []
+    langs = [pl.language for pl in problem.languages]
+    return sorted(langs, key=lambda lang: (lang != DEFAULT_LANGUAGE, lang))
 
 
 def serialize_for_list(problem):
@@ -97,7 +129,7 @@ def serialize_for_list(problem):
     }
 
 
-def serialize_full(problem):
+def serialize_full(problem, language=DEFAULT_LANGUAGE, available=None):
     return {
         'id': problem['id'],
         'title': problem['title'],
@@ -113,10 +145,12 @@ def serialize_full(problem):
         'starter_code': problem.get('starter_code', ''),
         'explanation': problem.get('explanation', ''),
         'references': problem.get('references', []),
+        'language': language,
+        'available_languages': available if available is not None else [language],
     }
 
 
-def build_problem_block(problem):
+def build_problem_block(problem, language=DEFAULT_LANGUAGE):
     follow_ups = "\n".join(f"- {f}" for f in problem.get('follow_ups', []))
     constraints = "\n".join(f"- {c}" for c in problem.get('constraints', []))
     examples = []
@@ -133,7 +167,7 @@ def build_problem_block(problem):
     if problem.get('starter_code'):
         interface_block = (
             "\n\nRequired interface (the candidate's code should match this shape):"
-            f"\n```python\n{problem['starter_code']}\n```"
+            f"\n```{language}\n{problem['starter_code']}\n```"
         )
 
     return (

@@ -75,3 +75,42 @@ references:
 - 'Review indexing tradeoffs: what you precompute, what you scan, and how ranking is derived.'
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
+languages:
+  javascript:
+    starter_code: |-
+      function twoSum(nums, target) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: twoSum
+    test_cases:
+    - label: basic case
+      input:
+        nums:
+        - 2
+        - 7
+        - 11
+        - 15
+        target: 9
+      expected:
+      - 0
+      - 1
+    - label: middle pair
+      input:
+        nums:
+        - 3
+        - 2
+        - 4
+        target: 6
+      expected:
+      - 1
+      - 2
+    - label: duplicate values
+      input:
+        nums:
+        - 3
+        - 3
+        target: 6
+      expected:
+      - 0
+      - 1

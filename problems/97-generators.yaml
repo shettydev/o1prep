@@ -60,3 +60,50 @@ references:
   - "Python docs: generators — https://docs.python.org/3/glossary.html#term-generator"
   - "PEP 255: Simple Generators"
   - "Python docs: yield expression — https://docs.python.org/3/reference/expressions.html#yield-expressions"
+languages:
+  javascript:
+    starter_code: |-
+      function runningAverages(nums) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: runningAverages
+    test_cases:
+    - label: four integers
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        - 4
+      expected:
+      - 1.0
+      - 1.5
+      - 2.0
+      - 2.5
+    - label: three elements with jump
+      input:
+        nums:
+        - 10
+        - 20
+        - 30
+      expected:
+      - 10.0
+      - 15.0
+      - 20.0
+    - label: single element
+      input:
+        nums:
+        - 5
+      expected:
+      - 5.0
+    - label: all zeros
+      input:
+        nums:
+        - 0
+        - 0
+        - 0
+      expected:
+      - 0.0
+      - 0.0
+      - 0.0

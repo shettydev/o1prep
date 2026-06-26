@@ -93,3 +93,56 @@ explanation: |-
 references:
 - The 1D optimization (iterating right-to-left) is interview-standard — understand why the direction prevents double-counting.
 - Compare to coin change (unbounded knapsack) — the only difference is iteration direction.
+languages:
+  javascript:
+    starter_code: |-
+      function knapsack(weights, values, capacity) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: knapsack
+    test_cases:
+    - label: classic case
+      input:
+        weights:
+        - 1
+        - 3
+        - 4
+        - 5
+        values:
+        - 1
+        - 4
+        - 5
+        - 7
+        capacity: 7
+      expected: 9
+    - label: nothing fits
+      input:
+        weights:
+        - 2
+        - 3
+        values:
+        - 3
+        - 4
+        capacity: 1
+      expected: 0
+    - label: exact fit single item
+      input:
+        weights:
+        - 5
+        values:
+        - 10
+        capacity: 5
+      expected: 10
+    - label: all items fit
+      input:
+        weights:
+        - 1
+        - 2
+        - 3
+        values:
+        - 2
+        - 3
+        - 4
+        capacity: 10
+      expected: 9

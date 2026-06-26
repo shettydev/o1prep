@@ -73,3 +73,43 @@ references:
 - Translate the input format into tokens and small grammar rules before worrying about implementation details.
 - Use examples that hit malformed input, nesting, and precedence to check your parser design.
 - After implementing JSON Path Query Engine, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      function query(data, path) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: query
+    test_cases:
+    - label: array index
+      input:
+        data:
+          a:
+            b:
+            - 1
+            - 2
+            - 3
+        path: $.a.b[1]
+      expected:
+      - 2
+    - label: wildcard
+      input:
+        data:
+          a: 1
+          b: 2
+        path: $.*
+      expected:
+      - 1
+      - 2
+    - label: recursive descent
+      input:
+        data:
+          a:
+            target: 1
+          b:
+          - target: 2
+        path: $..target
+      expected:
+      - 1
+      - 2

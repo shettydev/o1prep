@@ -95,3 +95,58 @@ references:
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
 - After implementing Shortest Path with Constraints, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class FlightRouter {
+        constructor(flights) {
+          // Write your solution here
+        }
+
+        cheapest(start, end, maxStops) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: FlightRouter
+    test_cases:
+    - label: cheapest route
+      init_args:
+      - - - SFO
+          - ORD
+          - 200
+        - - ORD
+          - JFK
+          - 150
+        - - SFO
+          - JFK
+          - 500
+        - - ORD
+          - DEN
+          - 100
+        - - DEN
+          - JFK
+          - 120
+      ops:
+      - cheapest
+      - cheapest
+      - cheapest
+      op_args:
+      - - SFO
+        - JFK
+        - 1
+      - - SFO
+        - JFK
+        - 0
+      - - SFO
+        - LAX
+        - 2
+      expected:
+      - - 350
+        - - SFO
+          - ORD
+          - JFK
+      - - 500
+        - - SFO
+          - JFK
+      - -1

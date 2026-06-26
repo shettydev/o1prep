@@ -88,3 +88,44 @@ references:
 - 'Review constant-time dictionary operations: insert, lookup, delete, and how collisions affect real-world performance.'
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
+languages:
+  javascript:
+    starter_code: |-
+      class SearchIndex {
+        constructor() {
+          // Write your solution here
+        }
+
+        index(docId, text) {
+        }
+
+        search(query) {
+        }
+      }
+    test_type: class
+    class_name: SearchIndex
+    test_cases:
+    - label: and search
+      init_args: []
+      ops:
+      - index
+      - index
+      - index
+      - search
+      - search
+      op_args:
+      - - 1
+        - the quick brown fox
+      - - 2
+        - the quick brown dog
+      - - 3
+        - the fox jumps high
+      - - quick brown
+      - - quick fox
+      expected:
+      - null
+      - null
+      - null
+      - - 1
+        - 2
+      - - 1

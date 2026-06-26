@@ -54,3 +54,25 @@ references:
 - Translate the input format into tokens and small grammar rules before worrying about implementation details.
 - Use examples that hit malformed input, nesting, and precedence to check your parser design.
 - After implementing Log Pattern Matcher, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      function matchLog(pattern, line) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: matchLog
+    test_cases:
+    - label: basic parse
+      input:
+        pattern: '{timestamp} [{level}] {message}'
+        line: 2024-01-15 [ERROR] disk full
+      expected:
+        timestamp: '2024-01-15'
+        level: ERROR
+        message: disk full
+    - label: literal mismatch
+      input:
+        pattern: '[{level}] {message}'
+        line: WARN disk full
+      expected_error: match

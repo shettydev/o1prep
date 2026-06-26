@@ -143,3 +143,62 @@ references:
 - 'Keep caller ergonomics in mind: a clean API should make the correct usage obvious.'
 - Use tests to define the contract, especially around chaining, defaults, and error cases.
 - After implementing Schema Validator, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      function validate(data, schema, path = '') {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: validate
+    test_cases:
+    - label: multiple errors
+      input:
+        data:
+          name: ''
+          age: -5
+        schema:
+          type: dict
+          required:
+          - name
+          - age
+          fields:
+            name:
+              type: string
+              min_length: 1
+              max_length: 50
+            age:
+              type: int
+              min: 0
+              max: 150
+            email:
+              type: string
+              optional: true
+      expected:
+      - 'name: string length 0 is less than min_length 1'
+      - 'age: value -5 is less than min 0'
+    - label: nested missing field
+      input:
+        data:
+          users:
+          - id: 1
+          - role: admin
+        schema:
+          type: dict
+          required:
+          - users
+          fields:
+            users:
+              type: list
+              items:
+                type: dict
+                required:
+                - id
+                fields:
+                  id:
+                    type: int
+                  role:
+                    type: string
+                    optional: true
+      expected:
+      - 'users[1].id: required field missing'

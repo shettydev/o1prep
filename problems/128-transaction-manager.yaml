@@ -187,3 +187,141 @@ explanation: |-
 references:
 - The _DELETED sentinel lets deletes participate in the same layer-lookup order as sets — no separate tracking needed.
 - commit() merges into the layer below (not the base store) when nested — the outer transaction still controls whether to commit further.
+languages:
+  javascript:
+    starter_code: |-
+      class TransactionManager {
+        constructor() {
+          // Write your solution here
+        }
+
+        begin() {
+          // Write your solution here
+        }
+
+        commit() {
+          // Write your solution here
+        }
+
+        rollback() {
+          // Write your solution here
+        }
+
+        set(key, value) {
+          // Write your solution here
+        }
+
+        get(key, defaultValue = null) {
+          // Write your solution here
+        }
+
+        delete(key) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: TransactionManager
+    test_cases:
+    - label: basic set and get without transaction
+      init_args: []
+      ops:
+      - set
+      - get
+      op_args:
+      - - a
+        - 1
+      - - a
+      expected:
+      - null
+      - 1
+    - label: rollback discards changes
+      init_args: []
+      ops:
+      - set
+      - begin
+      - set
+      - get
+      - rollback
+      - get
+      op_args:
+      - - x
+        - 1
+      - []
+      - - x
+        - 2
+      - - x
+      - []
+      - - x
+      expected:
+      - null
+      - null
+      - null
+      - 2
+      - null
+      - 1
+    - label: commit merges into base
+      init_args: []
+      ops:
+      - begin
+      - set
+      - commit
+      - get
+      op_args:
+      - []
+      - - y
+        - 10
+      - []
+      - - y
+      expected:
+      - null
+      - null
+      - null
+      - 10
+    - label: nested transactions
+      init_args: []
+      ops:
+      - set
+      - begin
+      - set
+      - begin
+      - set
+      - get
+      - rollback
+      - get
+      - commit
+      - get
+      op_args:
+      - - z
+        - 0
+      - []
+      - - z
+        - 1
+      - []
+      - - z
+        - 2
+      - - z
+      - []
+      - - z
+      - []
+      - - z
+      expected:
+      - null
+      - null
+      - null
+      - null
+      - null
+      - 2
+      - null
+      - 1
+      - null
+      - 1
+    - label: commit or rollback with no transaction raises error
+      init_args: []
+      ops:
+      - rollback
+      op_args:
+      - []
+      expected:
+      - null
+      expected_errors:
+      - no active transaction

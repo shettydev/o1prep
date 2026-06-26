@@ -128,3 +128,80 @@ references:
 - 'Design for lifecycle edges: startup, retries, cleanup, shutdown, and bad inputs.'
 - Explain which failures should be surfaced, retried, ignored, or quarantined.
 - After implementing Circuit Breaker, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class CircuitOpenError extends Error {
+          constructor(message) {
+              super(message);
+              this.name = 'CircuitOpenError';
+          }
+      }
+
+      class CircuitBreaker {
+          constructor(failureThreshold, windowSeconds, cooldownSeconds) {
+              // Write your solution here
+          }
+
+          state() {
+              // Write your solution here
+          }
+
+          recordSuccess(timestamp) {
+              // Write your solution here
+          }
+
+          recordFailure(timestamp) {
+              // Write your solution here
+          }
+
+          call(func, timestamp) {
+              // Write your solution here
+          }
+      }
+    test_type: class
+    class_name: CircuitBreaker
+    test_cases:
+    - label: open half open close
+      init_args:
+      - 3
+      - 60
+      - 30
+      ops:
+      - state
+      - recordFailure
+      - recordFailure
+      - recordFailure
+      - state
+      - call
+      - call
+      - state
+      op_args:
+      - []
+      - - 100
+      - - 105
+      - - 110
+      - []
+      - - __ref__: ok
+        - 120
+      - - __ref__: ok
+        - 145
+      - []
+      expected:
+      - CLOSED
+      - null
+      - null
+      - null
+      - OPEN
+      - null
+      - ok
+      - CLOSED
+      expected_errors:
+      - null
+      - null
+      - null
+      - null
+      - null
+      - CircuitOpenError
+      - null
+      - null

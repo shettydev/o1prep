@@ -73,3 +73,43 @@ references:
 - 'Review constant-time dictionary operations: insert, lookup, delete, and how collisions affect real-world performance.'
 - Translate the input format into tokens and small grammar rules before worrying about implementation details.
 - Use examples that hit malformed input, nesting, and precedence to check your parser design.
+languages:
+  javascript:
+    starter_code: |-
+      function parseConfig(text) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: parseConfig
+    test_cases:
+    - label: sections and interpolation
+      input:
+        text: |-
+          [server]
+          host = localhost
+          port = 8080
+          [app]
+          url = http://${server.host}:${server.port}
+      expected:
+        server:
+          host: localhost
+          port: '8080'
+        app:
+          url: http://localhost:8080
+    - label: nested section
+      input:
+        text: |-
+          [root.child]
+          name = demo
+      expected:
+        root:
+          child:
+            name: demo
+    - label: cycle detection
+      input:
+        text: |-
+          [a]
+          x = ${b.y}
+          [b]
+          y = ${a.x}
+      expected_error: cycle

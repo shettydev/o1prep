@@ -77,3 +77,43 @@ explanation: |-
 references:
 - The correctness proof hinges on showing that when you discard a pointer, you're not skipping the optimal pair.
 - Don't confuse with Trapping Rain Water — that problem counts water above every bar, not just between two endpoints.
+languages:
+  javascript:
+    starter_code: |-
+      function maxWater(height) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: maxWater
+    test_cases:
+    - label: classic example
+      args:
+      - - 1
+        - 8
+        - 6
+        - 2
+        - 5
+        - 4
+        - 8
+        - 3
+        - 7
+      expected: 49
+    - label: two elements
+      args:
+      - - 1
+        - 1
+      expected: 1
+    - label: decreasing heights
+      args:
+      - - 4
+        - 3
+        - 2
+        - 1
+      expected: 4
+    - label: all same height
+      args:
+      - - 3
+        - 3
+        - 3
+        - 3
+      expected: 9

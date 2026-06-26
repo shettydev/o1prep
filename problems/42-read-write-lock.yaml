@@ -109,3 +109,53 @@ references:
 - Write down the shared state and the blocking conditions before choosing locks or queues.
 - Test mentally for races, starvation, and forgotten wakeups.
 - After implementing Read-Write Lock, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class ReadWriteLock {
+        constructor() {
+          // Write your solution here
+        }
+
+        acquireRead() {
+          // Write your solution here
+        }
+
+        releaseRead() {
+          // Write your solution here
+        }
+
+        acquireWrite() {
+          // Write your solution here
+        }
+
+        releaseWrite() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: ReadWriteLock
+    test_cases:
+    - label: basic acquire release
+      init_args: []
+      ops:
+      - acquireRead
+      - acquireRead
+      - releaseRead
+      - releaseRead
+      - acquireWrite
+      - releaseWrite
+      op_args:
+      - []
+      - []
+      - []
+      - []
+      - []
+      - []
+      expected:
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
