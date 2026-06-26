@@ -29,14 +29,12 @@ import sys
 
 import yaml
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # for _jsgen_lib
+
+import _jsgen_lib as lib  # noqa: E402
 
 import config  # noqa: E402
 from services.db import LANGUAGE_KEYS  # noqa: E402
-from services.runners.javascript_runner import JavaScriptRunner  # noqa: E402
-
-PROBLEMS_DIR = config.PROBLEMS_DIR
-_runner = JavaScriptRunner()
 
 SYSTEM_PROMPT = """\
 You translate Python coding-interview problems into JavaScript for an automated
@@ -150,63 +148,6 @@ def _ask_model(problem):
     return _extract_json_object(result_text)
 
 
-def _validate(variant):
-    """Run the reference solution through the JS runner. Return (ok, detail)."""
-    test_type = variant.get("test_type", "function")
-    target = variant.get("class_name") if test_type == "class" else variant.get("function_name")
-    reference = variant.get("reference_solution")
-    test_cases = variant.get("test_cases")
-    if not target or not reference or not test_cases:
-        return False, "missing target/reference/test_cases"
-    result = _runner.run_tests(reference, target, test_cases, test_type)
-    if not result["success"]:
-        return False, f"runner error: {result['error']}"
-    failed = [r for r in result["results"] if not r["passed"]]
-    if failed:
-        return False, f"{len(failed)}/{len(result['results'])} cases failed under reference solution"
-    return True, f"{len(result['results'])} cases pass"
-
-
-class _LiteralDumper(yaml.SafeDumper):
-    pass
-
-
-def _str_representer(dumper, data):
-    style = "|" if "\n" in data else None
-    return dumper.represent_scalar("tag:yaml.org,2002:str", data, style=style)
-
-
-_LiteralDumper.add_representer(str, _str_representer)
-
-
-def _languages_block(variant):
-    """Serialize a `languages: {javascript: {...}}` YAML block (2-space indent)."""
-    lang_data = {k: variant[k] for k in LANGUAGE_KEYS if k in variant}
-    block = yaml.dump(
-        {"languages": {"javascript": lang_data}},
-        Dumper=_LiteralDumper,
-        sort_keys=False,
-        default_flow_style=False,
-        allow_unicode=True,
-        width=10**9,
-    )
-    return block.rstrip("\n") + "\n"
-
-
-def _append_languages_block(path, variant):
-    with open(path, "r", encoding="utf-8") as f:
-        text = f.read()
-    if not text.endswith("\n"):
-        text += "\n"
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(text + _languages_block(variant))
-
-
-def _problem_files():
-    import glob
-    return sorted(glob.glob(os.path.join(PROBLEMS_DIR, "*.yaml")))
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--ids", help="comma-separated problem ids to process")
@@ -219,13 +160,13 @@ def main():
 
     succeeded, failed, skipped = [], [], 0
     processed = 0
-    for path in _problem_files():
+    for path in lib.problem_files():
         with open(path, encoding="utf-8") as f:
             problem = yaml.safe_load(f)
         pid = problem.get("id")
         if ids is not None and pid not in ids:
             continue
-        if "languages" in problem and "javascript" in (problem.get("languages") or {}):
+        if lib.has_js_variant(problem):
             skipped += 1
             continue
         if args.limit is not None and processed >= args.limit:
@@ -240,10 +181,10 @@ def main():
             if not variant:
                 detail = "model returned no JSON"
                 continue
-            ok, detail = _validate(variant)
+            ok, detail = lib.validate(variant)
             if ok:
                 if not args.dry_run:
-                    _append_languages_block(path, variant)
+                    lib.append_languages_block(path, variant)
                 break
             detail = f"attempt {attempt}: {detail}"
 
