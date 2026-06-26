@@ -16,6 +16,27 @@ async function loadEngineConfig() {
     engineConfig = null;
   }
   buildSettingsModal();
+  buildLanguageSelect();
+}
+
+// ── Language selection ──
+//
+// The /api/config payload carries the language allowlist (id, label, CodeMirror
+// mode). Populate the editor's language <select> from it and default to the
+// configured default language.
+
+function languageMeta(langId) {
+  const list = (engineConfig && engineConfig.languages) || [];
+  return list.find(l => l.id === langId) || { id: langId, codemirror_mode: langId, label: langId };
+}
+
+function buildLanguageSelect() {
+  const sel = document.getElementById('language-select');
+  if (!sel) return;
+  const langs = (engineConfig && engineConfig.languages) || [{ id: 'python', label: 'Python' }];
+  sel.innerHTML = langs.map(l => `<option value="${l.id}">${l.label}</option>`).join('');
+  if (engineConfig && engineConfig.default_language) currentLanguage = engineConfig.default_language;
+  sel.value = currentLanguage;
 }
 
 function getSavedSettings() {

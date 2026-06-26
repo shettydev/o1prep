@@ -42,7 +42,7 @@ async function startInterview(focus, problemId) {
   btn.textContent = 'Starting...';
 
   try {
-    const body = { focus, mode: interviewMode, ...currentEngineSettings() };
+    const body = { focus, mode: interviewMode, language: currentLanguage, ...currentEngineSettings() };
     if (problemId) body.problem_id = problemId;
 
     const res = await fetch('/api/sessions', {
@@ -69,11 +69,12 @@ async function startInterview(focus, problemId) {
     setTutorSidebar(false);
     const problem = problemId ? allProblems.find(p => p.id === problemId) : null;
     const title = problem ? problem.title : 'Technical Interview';
-    const starterCode = problem?.starter_code || '# Write your solution here\n\n';
     document.getElementById('top-bar-title').textContent = title;
     document.getElementById('chat-messages').innerHTML =
       problem ? renderInterviewProblemHeader(problem) : '';
-    editor.setValue(starterCode);
+    setEditorLanguageMode(currentLanguage);
+    // Show a placeholder immediately; the language-specific starter loads below.
+    editor.setValue(editorPlaceholder(currentLanguage));
     resetOutputPanel();
 
     const studyBtn = document.getElementById('interview-study-btn');
@@ -82,7 +83,8 @@ async function startInterview(focus, problemId) {
     const refPanel = document.getElementById('ref-panel');
     refPanel.style.display = 'none';
     if (problemId) {
-      fetch(`/api/problems/${problemId}`).then(r => r.json()).then(fullProblem => {
+      fetch(`/api/problems/${problemId}?language=${currentLanguage}`).then(r => r.json()).then(fullProblem => {
+        if (fullProblem.starter_code) editor.setValue(fullProblem.starter_code);
         document.getElementById('ref-panel-body').innerHTML = buildReferenceContent(fullProblem);
       }).catch(() => {});
     }
@@ -120,6 +122,12 @@ async function resumeSession(id) {
   const title = session.problem_title || 'Technical Interview';
   document.getElementById('top-bar-title').textContent = title;
 
+  currentInterviewProblemId = session.problem_id || null;
+  currentLanguage = session.language || 'python';
+  const langSelect = document.getElementById('language-select');
+  if (langSelect) langSelect.value = currentLanguage;
+  setEditorLanguageMode(currentLanguage);
+
   document.getElementById('text-input-area').style.display = '';
   document.getElementById('voice-controls').style.display = 'none';
 
@@ -131,7 +139,7 @@ async function resumeSession(id) {
     container.innerHTML = '';
   }
   resetOutputPanel();
-  editor.setValue(session.code || '# Write your solution here\n\n');
+  editor.setValue(session.code || editorPlaceholder(currentLanguage));
 
   for (const msg of session.messages) {
     if (msg.role === 'system') continue;
@@ -240,7 +248,7 @@ async function submitCode() {
   input.value = '';
   input.style.height = 'auto';
 
-  const displayText = text + '\n\n```python\n' + code + '\n```';
+  const displayText = text + '\n\n```' + currentLanguage + '\n' + code + '\n```';
   appendMessage('user', displayText);
 
   isStreaming = true;

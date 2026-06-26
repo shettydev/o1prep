@@ -249,6 +249,19 @@ def save_code(session_id):
     return jsonify({'success': True})
 
 
+@bp.route('/api/sessions/<session_id>/language', methods=['PUT'])
+@login_required
+def set_language(session_id):
+    session = sessions.load(session_id, current_user.id)
+    if not session:
+        return jsonify({'error': 'Session not found'}), 404
+    data = request.json or {}
+    language = languages.resolve(data.get('language'))
+    session['language'] = language
+    sessions.save(session)
+    return jsonify({'success': True, 'language': language})
+
+
 @bp.route('/api/sessions/<session_id>/end', methods=['POST'])
 @login_required
 def end_session(session_id):

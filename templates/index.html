@@ -352,7 +352,7 @@
       <!-- RIGHT: Code Editor -->
       <div class="editor-panel">
         <div class="editor-header">
-          <span class="editor-lang">Python</span>
+          <select class="editor-lang-select" id="language-select" onchange="onLanguageChange(this.value)" title="Programming language"></select>
           <div class="editor-actions-bar">
             <button class="btn btn-ghost btn-sm" onclick="clearEditor()">Clear</button>
             <button class="btn btn-secondary btn-sm" id="run-btn" onclick="runCode()">
@@ -412,6 +412,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>

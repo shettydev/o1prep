@@ -28,9 +28,63 @@ function initEditor() {
   });
 }
 
+// ── Language ──
+
+function editorPlaceholder(lang) {
+  const comment = (lang === 'javascript' || lang === 'typescript') ? '//' : '#';
+  return `${comment} Write your solution here\n\n`;
+}
+
+function isPlaceholderCode(code) {
+  const trimmed = (code || '').trim();
+  return trimmed === '' || /^(#|\/\/)\s*Write your solution here$/.test(trimmed);
+}
+
+function setEditorLanguageMode(lang) {
+  if (!editor) return;
+  editor.setOption('mode', languageMeta(lang).codemirror_mode);
+}
+
+// User switched the editor language. Update CodeMirror's mode, persist the
+// choice on an active session, and load that language's starter code (only when
+// the editor still holds untouched starter/placeholder text, so real work is
+// never clobbered without consent).
+async function onLanguageChange(lang) {
+  const previous = currentLanguage;
+  currentLanguage = lang;
+  setEditorLanguageMode(lang);
+
+  const dirty = !isPlaceholderCode(editor.getValue());
+  if (dirty && !confirm(`Switch to ${languageMeta(lang).label}? This will replace the editor with the ${languageMeta(lang).label} starter code.`)) {
+    currentLanguage = previous;
+    setEditorLanguageMode(previous);
+    document.getElementById('language-select').value = previous;
+    return;
+  }
+
+  if (currentSessionId) {
+    await fetch(`/api/sessions/${currentSessionId}/language`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ language: lang }),
+    }).catch(() => {});
+  }
+
+  const problemId = currentInterviewProblemId;
+  let starter = editorPlaceholder(lang);
+  if (problemId) {
+    try {
+      const full = await fetch(`/api/problems/${problemId}?language=${lang}`).then(r => r.json());
+      if (full.starter_code) starter = full.starter_code;
+    } catch (e) { /* fall back to placeholder */ }
+  }
+  editor.setValue(starter);
+  resetOutputPanel();
+}
+
 function clearEditor() {
   if (confirm('Clear the editor?')) {
-    editor.setValue('# Write your solution here\n\n');
+    editor.setValue(editorPlaceholder(currentLanguage));
   }
 }
 
@@ -98,7 +152,7 @@ function selectOutputTab(tab) {
 
 async function runCode() {
   const code = editor.getValue().trim();
-  if (!code || code === '# Write your solution here') {
+  if (isPlaceholderCode(code)) {
     alert('Write some code first.');
     return;
   }
@@ -114,7 +168,7 @@ async function runCode() {
     const res = await fetch('/api/run', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ code, language: currentLanguage }),
     });
     const data = await res.json();
 
@@ -142,7 +196,7 @@ async function runTests() {
   }
 
   const code = editor.getValue().trim();
-  if (!code || code === '# Write your solution here') {
+  if (isPlaceholderCode(code)) {
     alert('Write some code first.');
     return;
   }
