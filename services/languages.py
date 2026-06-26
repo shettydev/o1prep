@@ -45,6 +45,11 @@ def get(language) -> dict:
     return LANGUAGES[resolve(language)]
 
 
+def label(language) -> str:
+    """Human-readable name for a language id (resolves unknown ids to the default)."""
+    return get(language)['label']
+
+
 def all_languages() -> list:
     ordered = [LANGUAGES[DEFAULT_LANGUAGE]]
     ordered += [meta for lid, meta in LANGUAGES.items() if lid != DEFAULT_LANGUAGE]

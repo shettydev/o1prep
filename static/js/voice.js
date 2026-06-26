@@ -38,7 +38,7 @@ async function startVoiceSession(focus) {
   await voicePc.setLocalDescription(offer);
 
   try {
-    const sdpResp = await fetch(`/api/realtime/session?focus=${encodeURIComponent(focus)}`, {
+    const sdpResp = await fetch(`/api/realtime/session?focus=${encodeURIComponent(focus)}&language=${encodeURIComponent(currentLanguage)}`, {
       method: 'POST',
       body: offer.sdp,
       headers: { 'Content-Type': 'application/sdp' },

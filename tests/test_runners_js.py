@@ -47,6 +47,12 @@ def test_languages_registry_metadata():
     assert [m['id'] for m in languages.all_languages()][0] == 'python'
 
 
+def test_languages_label():
+    assert languages.label('javascript') == 'JavaScript'
+    assert languages.label('python') == 'Python'
+    assert languages.label('cobol') == 'Python'  # unknown resolves to default
+
+
 # ── Function-style JS ───────────────────────────────────────────────────
 
 def test_js_function_pass_with_positional_args():

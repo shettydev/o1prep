@@ -61,7 +61,8 @@ def create():
             f"\nGenerate a novel, original problem in this category. Do not reuse well-known interview questions."
         )
 
-    system_message = config.SYSTEM_PROMPT + "\n\n" + config.SESSION_CONFIG + problem_block
+    session_config = config.SESSION_CONFIG.replace('{LANGUAGE}', languages.label(language))
+    system_message = config.SYSTEM_PROMPT + "\n\n" + session_config + problem_block
     session = sessions.create(focus, mode, problem_id, problem_title, system_message, current_user.id)
     session['language'] = language
     session['model'] = data.get('model')
