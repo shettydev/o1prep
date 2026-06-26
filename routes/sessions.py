@@ -5,7 +5,8 @@ from flask import Blueprint, Response, jsonify, request, stream_with_context
 from flask_login import current_user, login_required
 
 import config
-from services import ai, code_runner, problems, sessions
+from services import ai, code_runner, languages, problems, sessions
+from services.runners import get_runner
 
 bp = Blueprint('sessions', __name__)
 
@@ -18,7 +19,11 @@ def check_key():
 
 @bp.route('/api/config')
 def get_config():
-    return jsonify(ai.config_info())
+    return jsonify({
+        **ai.config_info(),
+        'languages': languages.all_languages(),
+        'default_language': languages.DEFAULT_LANGUAGE,
+    })
 
 
 @bp.route('/api/sessions', methods=['GET'])
@@ -38,15 +43,18 @@ def create():
     focus = data.get('focus', 'general')
     mode = data.get('mode', 'text')
     problem_id = data.get('problem_id')
+    language = languages.resolve(data.get('language'))
     focus_instruction = config.FOCUS_PROMPTS.get(focus, config.FOCUS_PROMPTS['general'])
 
     problem_block = ""
     problem_title = None
     if problem_id:
-        problem = problems.get_by_id(problem_id)
+        # Prefer the chosen language's variant; fall back to the default so the
+        # interview still works for problems not yet translated.
+        problem = problems.get_by_id(problem_id, language) or problems.get_by_id(problem_id)
         if problem:
             problem_title = problem['title']
-            problem_block = problems.build_problem_block(problem)
+            problem_block = problems.build_problem_block(problem, language)
     else:
         problem_block = (
             f"\n\nProblem selection guidance: {focus_instruction}"
@@ -55,6 +63,7 @@ def create():
 
     system_message = config.SYSTEM_PROMPT + "\n\n" + config.SESSION_CONFIG + problem_block
     session = sessions.create(focus, mode, problem_id, problem_title, system_message, current_user.id)
+    session['language'] = language
     session['model'] = data.get('model')
     session['effort'] = data.get('effort')
     sessions.save(session)
@@ -78,6 +87,7 @@ def get(session_id):
         'messages': visible,
         'rating': session.get('rating'),
         'code': session.get('code', ''),
+        'language': session.get('language', languages.DEFAULT_LANGUAGE),
     })
 
 
@@ -101,9 +111,10 @@ def chat(session_id):
     if code.strip():
         session['code'] = code
 
+    language = session.get('language', languages.DEFAULT_LANGUAGE)
     content = user_message
     if code.strip():
-        content += f"\n\n[CODE]\n```python\n{code}\n```"
+        content += f"\n\n[CODE]\n```{language}\n{code}\n```"
 
     test_results_data = None
 
@@ -276,17 +287,18 @@ def save_transcript(session_id):
     return jsonify({'success': True})
 
 
-def _run_pre_canned_tests(user_code, problem):
+def _run_pre_canned_tests(user_code, problem, language):
     test_cases = problem.get('test_cases') or []
     if not test_cases:
         return None
 
+    runner = get_runner(language)
     test_type = problem.get('test_type', 'function')
     if test_type == 'class':
         class_name = problem.get('class_name')
         if not class_name:
             return None
-        run_result = code_runner.run_class(user_code, class_name, test_cases)
+        run_result = runner.run_tests(user_code, class_name, test_cases, 'class')
         return {
             'test_type': 'class',
             'display_name': class_name,
@@ -299,7 +311,7 @@ def _run_pre_canned_tests(user_code, problem):
     if not function_name:
         return None
 
-    run_result = code_runner.run(user_code, function_name, test_cases)
+    run_result = runner.run_tests(user_code, function_name, test_cases, 'function')
     return {
         'test_type': 'function',
         'display_name': function_name,
@@ -310,9 +322,12 @@ def _run_pre_canned_tests(user_code, problem):
 
 
 def _run_tests_for_session(session, user_code, client):
-    problem = problems.get_by_id(session.get('problem_id'))
+    language = session.get('language', languages.DEFAULT_LANGUAGE)
+    # Use the language-specific problem variant so pre-canned test cases (and the
+    # function/class name) match the runtime the candidate is writing in.
+    problem = problems.get_by_id(session.get('problem_id'), language)
     if problem:
-        pre_canned = _run_pre_canned_tests(user_code, problem)
+        pre_canned = _run_pre_canned_tests(user_code, problem, language)
         if pre_canned is not None:
             return pre_canned
 
@@ -320,7 +335,7 @@ def _run_tests_for_session(session, user_code, client):
     if not fn_name or not test_cases:
         return None
 
-    run_result = code_runner.run(user_code, fn_name, test_cases)
+    run_result = get_runner(language).run_tests(user_code, fn_name, test_cases, 'function')
     return {
         'test_type': 'function',
         'display_name': fn_name,
