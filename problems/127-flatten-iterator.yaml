@@ -125,3 +125,79 @@ explanation: |-
 references:
 - Push items in reverse when expanding a sublist — this maintains left-to-right order with a stack.
 - The generator alternative (yield from) is shorter; know both and explain the memory trade-off.
+languages:
+  javascript:
+    starter_code: |-
+      class NestedIterator {
+        constructor(nestedList) {
+          // Write your solution here
+        }
+
+        next() {
+          // Write your solution here
+        }
+
+        hasNext() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: NestedIterator
+    test_cases:
+    - label: two-level nesting
+      init_args:
+      - - - 1
+          - 1
+        - 2
+        - - 1
+          - 1
+      ops:
+      - collectN
+      op_args:
+      - - 5
+      expected:
+      - - 1
+        - 1
+        - 2
+        - 1
+        - 1
+    - label: deep nesting
+      init_args:
+      - - 1
+        - - 4
+          - - 6
+      ops:
+      - collectN
+      op_args:
+      - - 10
+      expected:
+      - - 1
+        - 4
+        - 6
+    - label: empty sublists skipped
+      init_args:
+      - - []
+        - 1
+        - - []
+          - 2
+        - 3
+      ops:
+      - collectN
+      op_args:
+      - - 10
+      expected:
+      - - 1
+        - 2
+        - 3
+    - label: has_next is false when exhausted
+      init_args:
+      - - 5
+      ops:
+      - next
+      - hasNext
+      op_args:
+      - []
+      - []
+      expected:
+      - 5
+      - false

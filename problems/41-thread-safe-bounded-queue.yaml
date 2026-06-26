@@ -114,3 +114,58 @@ references:
 - Write down the shared state and the blocking conditions before choosing locks or queues.
 - Test mentally for races, starvation, and forgotten wakeups.
 - After implementing Thread-Safe Bounded Queue, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class BoundedQueue {
+        constructor(capacity) {
+          // Write your solution here
+        }
+
+        async put(item, timeout = null) {
+          // Write your solution here
+        }
+
+        async get(timeout = null) {
+          // Write your solution here
+        }
+
+        qsize() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: BoundedQueue
+    test_cases:
+    - label: fifo
+      init_args:
+      - 2
+      ops:
+      - put
+      - put
+      - get
+      - get
+      - qsize
+      op_args:
+      - - x
+      - - y
+      - []
+      - []
+      - []
+      expected:
+      - null
+      - null
+      - x
+      - y
+      - 0
+    - label: timeout on empty
+      init_args:
+      - 1
+      ops:
+      - get
+      op_args:
+      - - 0.01
+      expected:
+      - null
+      expected_errors:
+      - Timeout

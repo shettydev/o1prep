@@ -138,3 +138,42 @@ explanation: |-
 references:
 - The in-order traversal of a valid BST yields a strictly increasing sequence — that is an alternative O(n) check.
 - Range propagation is the canonical interview approach because it is O(n) with no extra list allocation.
+languages:
+  javascript:
+    starter_code: |-
+      function isValidBst(vals) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: isValidBst
+    test_cases:
+    - label: valid BST
+      args:
+      - - 2
+        - 1
+        - 3
+      expected: true
+    - label: invalid BST (deep violation)
+      args:
+      - - 5
+        - 1
+        - 4
+        - null
+        - null
+        - 3
+        - 6
+      expected: false
+    - label: single node
+      args:
+      - - 1
+      expected: true
+    - label: looks valid locally but isnt globally
+      args:
+      - - 10
+        - 5
+        - 15
+        - null
+        - null
+        - 6
+        - 20
+      expected: false

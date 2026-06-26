@@ -95,3 +95,51 @@ references:
 - Think about lazy cleanup versus eager cleanup and what each means for latency and memory.
 - Look for bounded-memory updates that only touch the newest item and whatever just expired.
 - Use running aggregates so each new event is O(1) or close to it.
+languages:
+  javascript:
+    starter_code: |-
+      class WindowedEventCounter {
+        constructor() {
+          // Write your solution here
+        }
+
+        record(timestamp) {
+          // Write your solution here
+        }
+
+        count(timestamp, windowSeconds) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: WindowedEventCounter
+    test_cases:
+    - label: count windows
+      init_args: []
+      ops:
+      - record
+      - record
+      - record
+      - record
+      - count
+      - count
+      - count
+      op_args:
+      - - 100
+      - - 105
+      - - 110
+      - - 200
+      - - 110
+        - 15
+      - - 110
+        - 5
+      - - 200
+        - 100
+      expected:
+      - null
+      - null
+      - null
+      - null
+      - 3
+      - 2
+      - 4

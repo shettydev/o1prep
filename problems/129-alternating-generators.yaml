@@ -142,3 +142,89 @@ explanation: |-
 references:
 - Use a sentinel object (not None, which could be a valid value) to signal generator exhaustion.
 - merge_sorted is the same algorithm as merging two sorted arrays — just adapted for pull-based generators.
+languages:
+  javascript:
+    starter_code: |-
+      /**
+       * Yield values alternating between genA and genB.
+       * When one is exhausted, yield remaining values from the other.
+       * @param {Iterable} genA
+       * @param {Iterable} genB
+       */
+      function* interleave(genA, genB) {
+        // Write your solution here
+      }
+
+      /**
+       * Merge two sorted iterables into a single sorted output stream.
+       * O(1) memory — do not collect all values first.
+       * @param {Iterable} genA
+       * @param {Iterable} genB
+       */
+      function* mergeSorted(genA, genB) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: interleave
+    test_cases:
+    - label: interleave equal length
+      function_name: testInterleave
+      args:
+      - - 1
+        - 3
+        - 5
+      - - 2
+        - 4
+        - 6
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+    - label: interleave unequal length drains remainder
+      function_name: testInterleave
+      args:
+      - - 1
+        - 2
+        - 3
+      - - 10
+        - 20
+      expected:
+      - 1
+      - 10
+      - 2
+      - 20
+      - 3
+    - label: merge sorted two streams
+      function_name: testMergeSorted
+      args:
+      - - 1
+        - 3
+        - 5
+        - 7
+      - - 2
+        - 4
+        - 6
+        - 8
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+    - label: merge sorted one empty
+      function_name: testMergeSorted
+      args:
+      - []
+      - - 1
+        - 2
+        - 3
+      expected:
+      - 1
+      - 2
+      - 3

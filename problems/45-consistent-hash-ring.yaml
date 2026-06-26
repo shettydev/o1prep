@@ -112,3 +112,53 @@ references:
 - Write down the shared state and the blocking conditions before choosing locks or queues.
 - Test mentally for races, starvation, and forgotten wakeups.
 - After implementing Consistent Hash Ring, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class ConsistentHashRing {
+        constructor(numVirtualNodes = 150) {
+          // Write your solution here
+        }
+
+        addNode(nodeId) {
+          // Write your solution here
+        }
+
+        removeNode(nodeId) {
+          // Write your solution here
+        }
+
+        getNode(key) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: ConsistentHashRing
+    test_cases:
+    - label: basic add remove
+      init_args:
+      - 50
+      ops:
+      - __eval__
+      - addNode
+      - __eval__
+      - addNode
+      - __eval__
+      - removeNode
+      - __eval__
+      op_args:
+      - - obj.getNode('user:1')
+      - - A
+      - - obj.getNode('user:1')
+      - - B
+      - - '[''A'', ''B''].includes(obj.getNode(''user:1''))'
+      - - B
+      - - obj.getNode('user:1')
+      expected:
+      - null
+      - null
+      - A
+      - null
+      - true
+      - null
+      - A

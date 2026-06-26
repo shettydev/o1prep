@@ -84,3 +84,42 @@ explanation: |-
 references:
 - Sort first — this is what makes two pointers work and deduplication easy.
 - The deduplication pattern (skip while arr[ptr] == arr[ptr-1]) appears in many k-sum variants.
+languages:
+  javascript:
+    starter_code: |-
+      function threeSum(nums) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: threeSum
+    test_cases:
+    - label: two triplets
+      args:
+      - - -1
+        - 0
+        - 1
+        - 2
+        - -1
+        - -4
+      expected:
+      - - -1
+        - -1
+        - 2
+      - - -1
+        - 0
+        - 1
+    - label: no triplets
+      args:
+      - - 0
+        - 1
+        - 1
+      expected: []
+    - label: all zeros
+      args:
+      - - 0
+        - 0
+        - 0
+      expected:
+      - - 0
+        - 0
+        - 0

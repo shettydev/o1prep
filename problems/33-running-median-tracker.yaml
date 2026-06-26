@@ -98,3 +98,51 @@ references:
 - Look for bounded-memory updates that only touch the newest item and whatever just expired.
 - Use running aggregates so each new event is O(1) or close to it.
 - After implementing Running Median Tracker, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class RunningMedianTracker {
+        constructor() {
+          // Write your solution here
+        }
+
+        add(num) {
+          // Write your solution here
+        }
+
+        median() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: RunningMedianTracker
+    test_cases:
+    - label: running medians
+      init_args: []
+      ops:
+      - add
+      - add
+      - median
+      - add
+      - median
+      - add
+      - add
+      - median
+      op_args:
+      - - 3
+      - - 1
+      - []
+      - - 5
+      - []
+      - - 2
+      - - 4
+      - []
+      expected:
+      - null
+      - null
+      - 2.0
+      - null
+      - 3
+      - null
+      - null
+      - 3

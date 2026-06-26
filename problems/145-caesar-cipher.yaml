@@ -60,3 +60,37 @@ explanation: |-
 references:
   - 'chr((ord(c) - ord(''a'') + k) % 26 + ord(''a'')) is the core formula for lowercase letters.'
   - 'Treat Caesar Cipher as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function caesar(text, k) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: caesar
+    test_cases:
+    - label: basic
+      input:
+        text: Hello, World!
+        k: 3
+      expected: Khoor, Zruog!
+    - label: wrap around
+      input:
+        text: xyz
+        k: 3
+      expected: abc
+    - label: zero shift
+      input:
+        text: abc
+        k: 0
+      expected: abc
+    - label: full rotation
+      input:
+        text: abc
+        k: 26
+      expected: abc
+    - label: negative shift
+      input:
+        text: Khoor
+        k: -3
+      expected: Hello

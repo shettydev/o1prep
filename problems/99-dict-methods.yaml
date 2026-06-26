@@ -65,3 +65,51 @@ references:
   - "Python docs: dict — https://docs.python.org/3/library/stdtypes.html#mapping-types-dict"
   - "PEP 448: Additional Unpacking Generalizations (**kwargs in dict literals)"
   - "Python docs: dict.update() — https://docs.python.org/3/library/stdtypes.html#dict.update"
+languages:
+  javascript:
+    starter_code: |-
+      function mergeConfigs(base, overrides) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: mergeConfigs
+    test_cases:
+    - label: override with removal
+      input:
+        base:
+          a: 1
+          b: 2
+          c: 3
+        overrides:
+          b: 20
+          c: null
+          d: 4
+      expected:
+        a: 1
+        b: 20
+        d: 4
+    - label: override removes only key
+      input:
+        base:
+          x: 1
+        overrides:
+          x: null
+      expected: {}
+    - label: empty base
+      input:
+        base: {}
+        overrides:
+          a: 1
+          b: 2
+      expected:
+        a: 1
+        b: 2
+    - label: empty overrides
+      input:
+        base:
+          a: 1
+          b: 2
+        overrides: {}
+      expected:
+        a: 1
+        b: 2

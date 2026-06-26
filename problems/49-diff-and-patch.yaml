@@ -128,3 +128,62 @@ references:
 - 'Keep caller ergonomics in mind: a clean API should make the correct usage obvious.'
 - Use tests to define the contract, especially around chaining, defaults, and error cases.
 - After implementing Diff and Patch, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      function diff(oldData, newData) {
+        // Write your solution here
+      }
+
+      function patch(data, operations) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: diff
+    test_cases:
+    - label: nested diff
+      function_name: diff
+      input:
+        old:
+          a: 1
+          b:
+            c: 2
+            d: 3
+        new:
+          a: 1
+          b:
+            c: 99
+            e: 4
+      expected:
+      - op: replace
+        path: b.c
+        old_value: 2
+        new_value: 99
+      - op: remove
+        path: b.d
+        old_value: 3
+      - op: add
+        path: b.e
+        new_value: 4
+    - label: patch
+      function_name: patch
+      input:
+        data:
+          a: 1
+          b:
+            c: 2
+            d: 3
+        operations:
+        - op: replace
+          path: b.c
+          new_value: 99
+        - op: remove
+          path: b.d
+        - op: add
+          path: b.e
+          new_value: 4
+      expected:
+        a: 1
+        b:
+          c: 99
+          e: 4

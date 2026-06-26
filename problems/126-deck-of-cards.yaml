@@ -178,3 +178,125 @@ explanation: |-
 references:
 - Use pop() from the end of the list for O(1) deal — the "top" of the deck is just a convention.
 - Accept a seed in the constructor to make the class testable without mocking random.
+languages:
+  javascript:
+    starter_code: |-
+      class Card {
+        constructor(suit, rank) {
+          this.suit = suit;
+          this.rank = rank;
+        }
+
+        toString() {
+          // Write your solution here
+        }
+      }
+
+      class Deck {
+        static SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
+        static RANKS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace'];
+
+        constructor(seed = null) {
+          // Write your solution here
+        }
+
+        shuffle() {
+          // Write your solution here
+        }
+
+        deal() {
+          // Write your solution here
+        }
+
+        cardsRemaining() {
+          // Write your solution here
+        }
+
+        reset() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: Deck
+    test_cases:
+    - label: full deck has 52 cards
+      init_args:
+      - 0
+      ops:
+      - cardsRemaining
+      op_args:
+      - []
+      expected:
+      - 52
+    - label: deal reduces count
+      init_args:
+      - 0
+      ops:
+      - deal
+      - cardsRemaining
+      op_args:
+      - []
+      - []
+      expected:
+      - null
+      - 51
+      compare:
+      - false
+      - true
+    - label: deal all 52 then empty raises error
+      init_args:
+      - 0
+      ops:
+      - __eval__
+      - cardsRemaining
+      - deal
+      op_args:
+      - - 'Array.from({length: 52}, () => obj.deal())'
+      - []
+      - []
+      expected:
+      - null
+      - 0
+      - null
+      compare:
+      - false
+      - true
+      - false
+      expected_errors:
+      - null
+      - null
+      - indexerror
+    - label: reset restores 52 cards
+      init_args:
+      - 0
+      ops:
+      - deal
+      - deal
+      - reset
+      - cardsRemaining
+      op_args:
+      - []
+      - []
+      - []
+      - []
+      expected:
+      - null
+      - null
+      - null
+      - 52
+      compare:
+      - false
+      - false
+      - false
+      - true
+    - label: card string format
+      init_args:
+      - 99
+      ops:
+      - deal
+      op_args:
+      - []
+      expected:
+      - null
+      compare:
+      - false

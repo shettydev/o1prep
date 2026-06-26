@@ -109,3 +109,84 @@ references:
 - Model which item should be processed next and which data structure answers that question most directly.
 - Keep one eye on tie-breaking rules so your output stays deterministic.
 - After implementing Job Queue with Retries, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class JobQueue {
+        constructor(maxRetries = 3) {
+          // Write your solution here
+        }
+
+        enqueue(jobId, priority) {
+          // Write your solution here
+        }
+
+        processNext(success = true) {
+          // Write your solution here
+        }
+
+        advanceTime(seconds) {
+          // Write your solution here
+        }
+
+        getDeadLetters() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: JobQueue
+    test_cases:
+    - label: priority order
+      init_args:
+      - 2
+      ops:
+      - enqueue
+      - enqueue
+      - processNext
+      - processNext
+      op_args:
+      - - low
+        - 1
+      - - high
+        - 5
+      - []
+      - []
+      expected:
+      - null
+      - null
+      - high
+      - low
+    - label: retry then dead letter
+      init_args:
+      - 2
+      ops:
+      - enqueue
+      - processNext
+      - processNext
+      - advanceTime
+      - processNext
+      - processNext
+      - advanceTime
+      - processNext
+      - getDeadLetters
+      op_args:
+      - - job1
+        - 5
+      - - false
+      - []
+      - - 1
+      - - false
+      - []
+      - - 2
+      - - false
+      - []
+      expected:
+      - null
+      - job1
+      - null
+      - null
+      - job1
+      - null
+      - null
+      - job1
+      - - job1

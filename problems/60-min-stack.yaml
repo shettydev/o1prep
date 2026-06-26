@@ -87,3 +87,52 @@ references:
 - Practice describing what extra derived state you maintain so query methods never have to rescan everything.
 - 'Focus on invariants first: what state must always stay true after every method call?'
 - Practice stepping through short operation sequences by hand before writing code.
+languages:
+  javascript:
+    starter_code: |-
+      class MinStack {
+        constructor() {
+          // Write your solution here
+        }
+
+        push(val) {
+        }
+
+        pop() {
+        }
+
+        top() {
+        }
+
+        getMin() {
+        }
+      }
+    test_type: class
+    class_name: MinStack
+    test_cases:
+    - label: basic min tracking
+      init_args: []
+      ops:
+      - push
+      - push
+      - push
+      - getMin
+      - pop
+      - top
+      - getMin
+      op_args:
+      - - -2
+      - - 0
+      - - -3
+      - []
+      - []
+      - []
+      - []
+      expected:
+      - null
+      - null
+      - null
+      - -3
+      - null
+      - 0
+      - -2

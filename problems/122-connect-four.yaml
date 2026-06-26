@@ -154,3 +154,112 @@ explanation: |-
 references:
 - Check only from the last-placed piece in all 4 directions — this is faster and avoids re-scanning the whole board.
 - The ±direction trick (count both ways on the same axis and sum) is the cleanest way to detect four-in-a-row.
+languages:
+  javascript:
+    starter_code: |-
+      class ConnectFour {
+        constructor() {
+          // Write your solution here
+        }
+
+        drop(col) {
+          // Write your solution here
+        }
+
+        getBoard() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: ConnectFour
+    test_cases:
+    - label: player 1 wins vertically
+      init_args: []
+      ops:
+      - drop
+      - drop
+      - drop
+      - drop
+      - drop
+      - drop
+      - drop
+      op_args:
+      - - 3
+      - - 4
+      - - 3
+      - - 4
+      - - 3
+      - - 4
+      - - 3
+      expected:
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - Player 1 wins
+    - label: player 1 wins horizontally
+      init_args: []
+      ops:
+      - drop
+      - drop
+      - drop
+      - drop
+      - drop
+      - drop
+      - drop
+      op_args:
+      - - 0
+      - - 0
+      - - 1
+      - - 1
+      - - 2
+      - - 2
+      - - 3
+      expected:
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - Player 1 wins
+    - label: full column raises error
+      init_args: []
+      ops:
+      - drop
+      - drop
+      - drop
+      - drop
+      - drop
+      - drop
+      - drop
+      - drop
+      op_args:
+      - - 0
+      - - 1
+      - - 0
+      - - 1
+      - - 0
+      - - 1
+      - - 0
+      - - 0
+      expected:
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - Player 1 wins
+      - null
+      expected_errors:
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - over

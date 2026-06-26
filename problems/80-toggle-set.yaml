@@ -72,3 +72,46 @@ explanation: |-
 references:
 - Use a hash map when you need fast membership checks or counts without rescanning the input.
 - 'Treat Toggle Set as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      class ToggleSet {
+        constructor() {
+          // Write your solution here
+        }
+
+        toggle(item) {
+          // Write your solution here
+        }
+
+        items() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: ToggleSet
+    test_cases:
+    - label: toggle flow
+      init_args: []
+      ops:
+      - toggle
+      - toggle
+      - toggle
+      - items
+      - toggle
+      - items
+      op_args:
+      - - 2
+      - - 1
+      - - 2
+      - []
+      - - 3
+      - []
+      expected:
+      - null
+      - null
+      - null
+      - - 1
+      - null
+      - - 1
+        - 3

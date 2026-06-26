@@ -108,3 +108,62 @@ references:
 - Look for bounded-memory updates that only touch the newest item and whatever just expired.
 - Use running aggregates so each new event is O(1) or close to it.
 - After implementing Log Aggregator Pipeline, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class LogAggregator {
+        constructor() {
+          // Write your solution here
+        }
+
+        ingest(logEntry) {}
+
+        groupBy(field) {}
+
+        count() {}
+
+        sum(field) {}
+
+        avg(field) {}
+
+        min(field) {}
+
+        max(field) {}
+      }
+    test_type: class
+    class_name: LogAggregator
+    test_cases:
+    - label: aggregate by group
+      init_args: []
+      ops:
+      - ingest
+      - ingest
+      - ingest
+      - groupBy
+      - count
+      - groupBy
+      - sum
+      op_args:
+      - - endpoint: /api/users
+          status: '200'
+          latency_ms: 45
+      - - endpoint: /api/users
+          status: '200'
+          latency_ms: 52
+      - - endpoint: /api/orders
+          status: '500'
+          latency_ms: 210
+      - - endpoint
+      - []
+      - - status
+      - - latency_ms
+      expected:
+      - null
+      - null
+      - null
+      - null
+      - /api/users: 2
+        /api/orders: 1
+      - null
+      - '200': 97
+        '500': 210

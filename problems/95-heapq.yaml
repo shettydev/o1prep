@@ -62,3 +62,59 @@ explanation: |-
 references:
   - "Python docs: heapq — https://docs.python.org/3/library/heapq.html"
   - "heapq.nsmallest() — https://docs.python.org/3/library/heapq.html#heapq.nsmallest"
+languages:
+  javascript:
+    starter_code: |-
+      function kSmallest(nums, k) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: kSmallest
+    test_cases:
+    - label: k equals 3 with duplicates
+      input:
+        nums:
+        - 3
+        - 1
+        - 4
+        - 1
+        - 5
+        - 9
+        - 2
+        - 6
+        k: 3
+      expected:
+      - 1
+      - 1
+      - 2
+    - label: k equals 2 distinct values
+      input:
+        nums:
+        - 5
+        - 3
+        - 1
+        - 4
+        - 2
+        k: 2
+      expected:
+      - 1
+      - 2
+    - label: single element list
+      input:
+        nums:
+        - 10
+        k: 1
+      expected:
+      - 10
+    - label: all same values
+      input:
+        nums:
+        - 7
+        - 7
+        - 7
+        - 7
+        k: 3
+      expected:
+      - 7
+      - 7
+      - 7

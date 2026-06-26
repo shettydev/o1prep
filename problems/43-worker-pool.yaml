@@ -167,3 +167,59 @@ references:
 - Write down the shared state and the blocking conditions before choosing locks or queues.
 - Test mentally for races, starvation, and forgotten wakeups.
 - After implementing Worker Pool, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class WorkerPool {
+        constructor(numWorkers) {
+          // Write your solution here
+        }
+
+        submit(task) {
+          // Write your solution here
+        }
+
+        async shutdown(wait) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: WorkerPool
+    test_cases:
+    - label: successful tasks
+      init_args:
+      - 2
+      ops:
+      - submit
+      - submit
+      - shutdown
+      op_args:
+      - - __ref__: taskOne
+      - - __ref__: taskTwo
+      - - true
+      expected:
+      - 4
+      - HELLO
+      - null
+      compare:
+      - true
+      - true
+      - true
+    - label: propagates exception
+      init_args:
+      - 1
+      ops:
+      - submit
+      - shutdown
+      op_args:
+      - - __ref__: failingTask
+      - - true
+      expected:
+      - null
+      - null
+      expected_errors:
+      - bad input
+      - null
+      compare:
+      - true
+      - true

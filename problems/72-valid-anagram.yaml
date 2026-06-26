@@ -52,3 +52,27 @@ references:
 - Use a hash map when you need fast membership checks or counts without rescanning the input.
 - Practice a few small string transforms by hand so indexing, trimming, and reconstruction feel automatic.
 - 'Treat Valid Anagram as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function isAnagram(a, b) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: isAnagram
+    test_cases:
+    - label: true case
+      input:
+        a: anagram
+        b: nagaram
+      expected: true
+    - label: false case
+      input:
+        a: rat
+        b: car
+      expected: false
+    - label: different lengths
+      input:
+        a: ab
+        b: a
+      expected: false

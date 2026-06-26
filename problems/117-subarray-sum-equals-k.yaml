@@ -86,3 +86,48 @@ explanation: |-
 references:
 - Initialize the prefix-sum map with {0: 1} — this is the most common source of off-by-one errors.
 - Prefix sum + hash map is the general pattern for range sum queries with a target; sliding window only works for non-negative arrays.
+languages:
+  javascript:
+    starter_code: |-
+      function subarraySum(nums, k) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: subarraySum
+    test_cases:
+    - label: two subarrays
+      args:
+      - - 1
+        - 1
+        - 1
+      - 2
+      expected: 2
+    - label: mixed lengths
+      args:
+      - - 1
+        - 2
+        - 3
+      - 3
+      expected: 2
+    - label: negative numbers
+      args:
+      - - 1
+        - -1
+        - 1
+        - -1
+      - 0
+      expected: 4
+    - label: k equals total sum
+      args:
+      - - 3
+        - 4
+        - 7
+      - 7
+      expected: 2
+    - label: no match
+      args:
+      - - 1
+        - 2
+        - 3
+      - 7
+      expected: 0

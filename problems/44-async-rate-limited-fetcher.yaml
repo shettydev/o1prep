@@ -102,3 +102,25 @@ references:
 - Write down the shared state and the blocking conditions before choosing locks or queues.
 - Test mentally for races, starvation, and forgotten wakeups.
 - After implementing Async Rate-Limited Fetcher, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      async function fetchAll(urls, maxConcurrent = 10, maxPerSecond = 20) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: fetchAll
+    test_cases:
+    - label: captures success and failure
+      kwargs:
+        urls:
+        - https://a.com
+        - https://down.com
+        max_concurrent: 2
+        max_per_second: 5
+      expected:
+      - url: https://a.com
+        status: 200
+        body: HTTPS://A.COM
+      - url: https://down.com
+        error: 'TimeoutError: down'

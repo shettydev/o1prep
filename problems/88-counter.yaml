@@ -61,3 +61,60 @@ explanation: |-
 references:
   - "Python docs: collections.Counter — https://docs.python.org/3/library/collections.html#collections.Counter"
   - "Counter.most_common() — https://docs.python.org/3/library/collections.html#collections.Counter.most_common"
+languages:
+  javascript:
+    starter_code: |-
+      function topKWords(words, k) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: topKWords
+    test_cases:
+    - label: top 2 with clear winner
+      input:
+        words:
+        - a
+        - b
+        - a
+        - c
+        - b
+        - a
+        k: 2
+      expected:
+      - a
+      - b
+    - label: top 1 with tie broken alphabetically
+      input:
+        words:
+        - x
+        - y
+        - x
+        - y
+        - z
+        k: 1
+      expected:
+      - x
+    - label: top 2 from three unique words
+      input:
+        words:
+        - cat
+        - dog
+        - cat
+        - bird
+        - dog
+        - cat
+        k: 2
+      expected:
+      - cat
+      - dog
+    - label: all words equally frequent
+      input:
+        words:
+        - a
+        - b
+        - c
+        k: 3
+      expected:
+      - a
+      - b
+      - c

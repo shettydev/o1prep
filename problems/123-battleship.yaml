@@ -160,3 +160,135 @@ explanation: |-
 references:
 - Storing remaining ship cells as sets makes sunk detection O(1).
 - Separate occupied from ships so attack lookup stays O(1) regardless of ship sizes.
+languages:
+  javascript:
+    starter_code: |-
+      class Battleship {
+        constructor() {
+          // Write your solution here
+        }
+
+        placeShip(name, cells) {
+          // Write your solution here
+        }
+
+        attack(row, col) {
+          // Write your solution here
+        }
+
+        isGameOver() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: Battleship
+    test_cases:
+    - label: hit and sunk one ship
+      init_args: []
+      ops:
+      - placeShip
+      - attack
+      - attack
+      - isGameOver
+      op_args:
+      - - destroyer
+        - - - 0
+            - 0
+          - - 0
+            - 1
+      - - 0
+        - 0
+      - - 0
+        - 1
+      - []
+      expected:
+      - null
+      - hit
+      - 'sunk: destroyer'
+      - true
+    - label: miss then hit two ships
+      init_args: []
+      ops:
+      - placeShip
+      - placeShip
+      - attack
+      - attack
+      - attack
+      - isGameOver
+      op_args:
+      - - carrier
+        - - - 2
+            - 2
+          - - 2
+            - 3
+          - - 2
+            - 4
+      - - sub
+        - - - 5
+            - 5
+      - - 9
+        - 9
+      - - 2
+        - 2
+      - - 5
+        - 5
+      - []
+      expected:
+      - null
+      - null
+      - miss
+      - hit
+      - 'sunk: sub'
+      - false
+    - label: duplicate attack raises error
+      init_args: []
+      ops:
+      - placeShip
+      - attack
+      - attack
+      op_args:
+      - - boat
+        - - - 3
+            - 3
+      - - 3
+        - 3
+      - - 3
+        - 3
+      expected:
+      - null
+      - 'sunk: boat'
+      - null
+      expected_errors:
+      - null
+      - null
+      - Error
+    - label: all ships sunk triggers game over
+      init_args: []
+      ops:
+      - placeShip
+      - placeShip
+      - attack
+      - attack
+      - attack
+      - isGameOver
+      op_args:
+      - - a
+        - - - 0
+            - 0
+      - - b
+        - - - 1
+            - 1
+      - - 0
+        - 0
+      - - 1
+        - 1
+      - - 9
+        - 9
+      - []
+      expected:
+      - null
+      - null
+      - 'sunk: a'
+      - 'sunk: b'
+      - miss
+      - true

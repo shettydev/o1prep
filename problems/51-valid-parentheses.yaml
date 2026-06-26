@@ -61,3 +61,28 @@ references:
 - Practice turning informal text rules into a tokenizer plus a small set of deterministic parsing steps.
 - Translate the input format into tokens and small grammar rules before worrying about implementation details.
 - Use examples that hit malformed input, nesting, and precedence to check your parser design.
+languages:
+  javascript:
+    starter_code: |-
+      function isValid(s) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: isValid
+    test_cases:
+    - label: simple valid
+      input:
+        s: ()[]{}
+      expected: true
+    - label: nested valid
+      input:
+        s: '{[()()]}'
+      expected: true
+    - label: crossed invalid
+      input:
+        s: ([)]
+      expected: false
+    - label: missing close
+      input:
+        s: (((
+      expected: false

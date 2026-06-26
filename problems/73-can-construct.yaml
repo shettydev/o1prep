@@ -52,3 +52,27 @@ references:
 - Use a hash map when you need fast membership checks or counts without rescanning the input.
 - Practice a few small string transforms by hand so indexing, trimming, and reconstruction feel automatic.
 - 'Treat Can Construct as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function canConstruct(ransomNote, magazine) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: canConstruct
+    test_cases:
+    - label: possible
+      input:
+        ransomNote: aa
+        magazine: aab
+      expected: true
+    - label: impossible
+      input:
+        ransomNote: aa
+        magazine: ab
+      expected: false
+    - label: empty note
+      input:
+        ransomNote: ''
+        magazine: abc
+      expected: true

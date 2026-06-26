@@ -57,3 +57,32 @@ explanation: |-
 references:
   - 'In Python, str(n) == str(n)[::-1] is fine; in other languages reversing an integer avoids string allocation.'
   - 'Treat Palindrome Number as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function isPalindromeNumber(n) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: isPalindromeNumber
+    test_cases:
+    - label: palindrome
+      input:
+        n: 121
+      expected: true
+    - label: negative
+      input:
+        n: -121
+      expected: false
+    - label: not palindrome
+      input:
+        n: 123
+      expected: false
+    - label: single digit
+      input:
+        n: 7
+      expected: true
+    - label: ends in zero
+      input:
+        n: 10
+      expected: false

@@ -51,3 +51,28 @@ explanation: |-
 references:
   - Prefer the iterative two-variable approach over naive recursion to avoid recomputing subproblems.
   - 'Treat Fibonacci as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function fibonacci(n) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: fibonacci
+    test_cases:
+    - label: zero
+      input:
+        n: 0
+      expected: 0
+    - label: one
+      input:
+        n: 1
+      expected: 1
+    - label: sixth
+      input:
+        n: 6
+      expected: 8
+    - label: tenth
+      input:
+        n: 10
+      expected: 55

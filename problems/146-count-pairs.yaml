@@ -55,3 +55,47 @@ explanation: |-
 references:
   - The complement trick (target - x) is the foundation of the two-sum family of problems.
   - 'Treat Count Pairs as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function countPairs(nums, target) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: countPairs
+    test_cases:
+    - label: basic
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        target: 6
+      expected: 2
+    - label: no pairs
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        target: 10
+      expected: 0
+    - label: duplicates
+      input:
+        nums:
+        - 2
+        - 2
+        - 2
+        target: 4
+      expected: 3
+    - label: negatives
+      input:
+        nums:
+        - -1
+        - 1
+        - 0
+        - 2
+        target: 1
+      expected: 2

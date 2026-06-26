@@ -117,3 +117,67 @@ references:
 - Look for bounded-memory updates that only touch the newest item and whatever just expired.
 - Use running aggregates so each new event is O(1) or close to it.
 - After implementing Top-K Frequent Items in Stream, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class TopKTracker {
+        constructor(k) {
+          // Write your solution here
+        }
+
+        add(item) {
+          // Write your solution here
+        }
+
+        topK() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: TopKTracker
+    test_cases:
+    - label: top k ordering
+      init_args:
+      - 2
+      ops:
+      - add
+      - add
+      - add
+      - add
+      - add
+      - add
+      - topK
+      - add
+      - add
+      - add
+      - topK
+      op_args:
+      - - '404'
+      - - '500'
+      - - '404'
+      - - '404'
+      - - '500'
+      - - '503'
+      - []
+      - - '503'
+      - - '503'
+      - - '503'
+      - []
+      expected:
+      - null
+      - null
+      - null
+      - null
+      - null
+      - null
+      - - - '404'
+          - 3
+        - - '500'
+          - 2
+      - null
+      - null
+      - null
+      - - - '503'
+          - 4
+        - - '404'
+          - 3

@@ -118,3 +118,72 @@ explanation: |-
 references:
 - Sinking cells in-place is the most concise approach — mark as '0' immediately when enqueuing to avoid revisiting.
 - This is the classic "connected components" problem on an implicit graph — the edges are the 4-directional adjacencies.
+languages:
+  javascript:
+    starter_code: |-
+      function numIslands(grid) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: numIslands
+    test_cases:
+    - label: one island
+      input:
+        grid:
+        - - '1'
+          - '1'
+          - '1'
+          - '1'
+          - '0'
+        - - '1'
+          - '1'
+          - '0'
+          - '1'
+          - '0'
+        - - '1'
+          - '1'
+          - '0'
+          - '0'
+          - '0'
+        - - '0'
+          - '0'
+          - '0'
+          - '0'
+          - '0'
+      expected: 1
+    - label: three islands
+      input:
+        grid:
+        - - '1'
+          - '1'
+          - '0'
+          - '0'
+          - '0'
+        - - '1'
+          - '1'
+          - '0'
+          - '0'
+          - '0'
+        - - '0'
+          - '0'
+          - '1'
+          - '0'
+          - '0'
+        - - '0'
+          - '0'
+          - '0'
+          - '1'
+          - '1'
+      expected: 3
+    - label: empty grid
+      input:
+        grid: []
+      expected: 0
+    - label: all water
+      input:
+        grid:
+        - - '0'
+          - '0'
+        - - '0'
+          - '0'
+      expected: 0

@@ -128,3 +128,37 @@ explanation: |-
 references:
 - The key insight is the split between what you return (one direction) and what you record globally (through both directions).
 - Clamping to max(0, gain) elegantly handles negative subtrees without special cases.
+languages:
+  javascript:
+    starter_code: |-
+      function maxPathSum(vals) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: maxPathSum
+    test_cases:
+    - label: simple three nodes
+      function_name: maxPathSum
+      args:
+      - - 1
+        - 2
+        - 3
+      expected: 6
+    - label: path not through root
+      function_name: maxPathSum
+      args:
+      - - -10
+        - 9
+        - 20
+        - null
+        - null
+        - 15
+        - 7
+      expected: 42
+    - label: all negative
+      function_name: maxPathSum
+      args:
+      - - -3
+        - -1
+        - -2
+      expected: -1

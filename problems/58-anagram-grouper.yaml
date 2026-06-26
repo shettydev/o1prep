@@ -65,3 +65,34 @@ references:
 - 'Review indexing tradeoffs: what you precompute, what you scan, and how ranking is derived.'
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
+languages:
+  javascript:
+    starter_code: |-
+      function groupAnagrams(words) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: groupAnagrams
+    test_cases:
+    - label: basic groups
+      input:
+        words:
+        - eat
+        - tea
+        - tan
+        - ate
+        - nat
+        - bat
+      expected:
+      - - eat
+        - tea
+        - ate
+      - - tan
+        - nat
+      - - bat
+    - label: single empty string
+      input:
+        words:
+        - ''
+      expected:
+      - - ''

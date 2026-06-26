@@ -172,3 +172,81 @@ references:
 - 'Keep caller ergonomics in mind: a clean API should make the correct usage obvious.'
 - Use tests to define the contract, especially around chaining, defaults, and error cases.
 - After implementing Plugin Registry, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class PluginRegistry {
+        constructor() {
+          // Write your solution here
+        }
+
+        register(name, plugin) {
+          // Write your solution here
+        }
+
+        get(name) {
+          // Write your solution here
+        }
+
+        initializeAll() {
+          // Write your solution here
+        }
+
+        shutdownAll() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: PluginRegistry
+    test_cases:
+    - label: dependency order
+      init_args: []
+      ops:
+      - __eval__
+      - register
+      - register
+      - initializeAll
+      - __eval__
+      - shutdownAll
+      - __eval__
+      op_args:
+      - - 'var logs = []; var dbPlugin = { dependencies: [], initialize() { logs.push(''db:init''); }, shutdown() { logs.push(''db:down''); } }; var authPlugin = { dependencies: [''database''], initialize() { logs.push(''auth:init''); }, shutdown() { logs.push(''auth:down''); } }; null'
+      - - database
+        - __ref__: dbPlugin
+      - - auth
+        - __ref__: authPlugin
+      - []
+      - - logs
+      - []
+      - - logs
+      expected:
+      - null
+      - null
+      - null
+      - null
+      - - db:init
+        - auth:init
+      - null
+      - - db:init
+        - auth:init
+        - auth:down
+        - db:down
+    - label: missing dependency
+      init_args: []
+      ops:
+      - __eval__
+      - register
+      - initializeAll
+      op_args:
+      - - 'var badPlugin = { dependencies: [''missing''], initialize() {}, shutdown() {} }; null'
+      - - bad
+        - __ref__: badPlugin
+      - []
+      expected:
+      - null
+      - null
+      - null
+      expected_errors:
+      - null
+      - null
+      - depends

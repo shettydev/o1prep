@@ -93,3 +93,42 @@ references:
 - Review how to shrink a window incrementally so old items leave exactly when they stop mattering.
 - Look for bounded-memory updates that only touch the newest item and whatever just expired.
 - Use running aggregates so each new event is O(1) or close to it.
+languages:
+  javascript:
+    starter_code: |-
+      class StreamDeduplicator {
+        constructor(windowSize) {
+          // Write your solution here
+        }
+
+        isDuplicate(eventId) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: StreamDeduplicator
+    test_cases:
+    - label: window eviction
+      init_args:
+      - 3
+      ops:
+      - isDuplicate
+      - isDuplicate
+      - isDuplicate
+      - isDuplicate
+      - isDuplicate
+      - isDuplicate
+      op_args:
+      - - evt-1
+      - - evt-2
+      - - evt-1
+      - - evt-3
+      - - evt-4
+      - - evt-1
+      expected:
+      - false
+      - false
+      - true
+      - false
+      - false
+      - false

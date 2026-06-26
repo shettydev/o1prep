@@ -79,3 +79,48 @@ explanation: |-
 references:
 - Counting problems usually become easier once you decide what each counter means.
 - 'Treat Simple Counter as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      class Counter {
+        constructor() {
+          // Write your solution here
+        }
+
+        increment() {}
+
+        decrement() {}
+
+        reset() {}
+
+        value() {}
+      }
+    test_type: class
+    class_name: Counter
+    test_cases:
+    - label: basic flow
+      init_args: []
+      ops:
+      - increment
+      - increment
+      - value
+      - decrement
+      - value
+      - reset
+      - value
+      op_args:
+      - []
+      - []
+      - []
+      - []
+      - []
+      - []
+      - []
+      expected:
+      - null
+      - null
+      - 2
+      - null
+      - 1
+      - null
+      - 0

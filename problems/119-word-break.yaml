@@ -83,3 +83,44 @@ explanation: |-
 references:
 - dp[0] = True is the seed — without it, no position can ever become True.
 - Convert the word list to a set before the DP loop so membership checks are O(1) not O(m*k).
+languages:
+  javascript:
+    starter_code: |-
+      function wordBreak(s, wordDict) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: wordBreak
+    test_cases:
+    - label: leet code
+      args:
+      - leetcode
+      - - leet
+        - code
+      expected: true
+    - label: reuse words
+      args:
+      - applepenapple
+      - - apple
+        - pen
+      expected: true
+    - label: impossible
+      args:
+      - catsandog
+      - - cats
+        - dog
+        - sand
+        - and
+        - cat
+      expected: false
+    - label: empty string
+      args:
+      - ''
+      - - word
+      expected: true
+    - label: single word match
+      args:
+      - hello
+      - - hello
+        - world
+      expected: true

@@ -51,3 +51,40 @@ explanation: |-
 references:
   - 'sum(1 for x in nums if x % 2 == 0) is idiomatic and avoids creating an intermediate list.'
   - 'Treat Count Even Numbers as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function countEvens(nums) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: countEvens
+    test_cases:
+    - label: mixed
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+      expected: 2
+    - label: all even
+      input:
+        nums:
+        - 2
+        - 4
+        - 6
+        - 8
+      expected: 4
+    - label: none even
+      input:
+        nums:
+        - 1
+        - 3
+        - 5
+      expected: 0
+    - label: empty
+      input:
+        nums: []
+      expected: 0

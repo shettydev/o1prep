@@ -84,3 +84,48 @@ references:
 - 'Design for lifecycle edges: startup, retries, cleanup, shutdown, and bad inputs.'
 - Explain which failures should be surfaced, retried, ignored, or quarantined.
 - After implementing Streaming Line Reader, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class LineTooLongError extends Error {
+        constructor(message) {
+          super(message);
+          this.name = 'LineTooLongError';
+        }
+      }
+
+      class StreamingLineReader {
+        constructor(maxLineLength = 65536) {
+          // Write your solution here
+        }
+
+        feed(chunk) {
+          // Write your solution here
+        }
+
+        flush() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: StreamingLineReader
+    test_cases:
+    - label: buffer and flush
+      init_args:
+      - 1024
+      ops:
+      - feed
+      - feed
+      - flush
+      op_args:
+      - - hello wo
+      - - |-
+          rld
+          foo
+          ba
+      - []
+      expected:
+      - []
+      - - hello world
+        - foo
+      - - ba

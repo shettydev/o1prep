@@ -75,3 +75,45 @@ references:
 - Practice spotting cycles in graphs, linked structures, and recursive references.
 - Translate the input format into tokens and small grammar rules before worrying about implementation details.
 - Use examples that hit malformed input, nesting, and precedence to check your parser design.
+languages:
+  javascript:
+    starter_code: |-
+      function resolve(deps) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: resolve
+    test_cases:
+    - label: topological order
+      input:
+        deps:
+          a:
+          - b
+          - c
+          b:
+          - c
+          c: []
+      expected:
+      - c
+      - b
+      - a
+    - label: lexicographic tie break
+      input:
+        deps:
+          a: []
+          b: []
+          c:
+          - a
+          - b
+      expected:
+      - a
+      - b
+      - c
+    - label: cycle
+      input:
+        deps:
+          a:
+          - b
+          b:
+          - a
+      expected_error: circular

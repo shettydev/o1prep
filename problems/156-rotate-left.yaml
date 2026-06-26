@@ -60,3 +60,65 @@ explanation: |-
 references:
   - 'k = k % len(lst) handles the wrap; lst[k:] + lst[:k] does the rotation in one line.'
   - 'Treat Rotate Left as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function rotateLeft(lst, k) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: rotateLeft
+    test_cases:
+    - label: basic
+      input:
+        lst:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        k: 2
+      expected:
+      - 3
+      - 4
+      - 5
+      - 1
+      - 2
+    - label: k larger than length
+      input:
+        lst:
+        - 1
+        - 2
+        - 3
+        k: 5
+      expected:
+      - 3
+      - 1
+      - 2
+    - label: k is zero
+      input:
+        lst:
+        - 1
+        - 2
+        - 3
+        k: 0
+      expected:
+      - 1
+      - 2
+      - 3
+    - label: empty
+      input:
+        lst: []
+        k: 3
+      expected: []
+    - label: full rotation
+      input:
+        lst:
+        - 1
+        - 2
+        - 3
+        k: 3
+      expected:
+      - 1
+      - 2
+      - 3

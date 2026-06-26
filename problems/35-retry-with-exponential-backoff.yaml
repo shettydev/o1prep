@@ -89,3 +89,28 @@ references:
 - 'Design for lifecycle edges: startup, retries, cleanup, shutdown, and bad inputs.'
 - Explain which failures should be surfaced, retried, ignored, or quarantined.
 - After implementing Retry with Exponential Backoff, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class RetryConfig {
+        constructor(maxRetries = 3, baseDelay = 1.0, retryableErrors = [Error], maxTimeout = null) {
+          // Write your solution here
+        }
+      }
+
+      async function retryWithBackoff(func, config) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: retryWithBackoff
+    test_cases:
+    - label: eventual success
+      args:
+      - __ref__: flakyFunc
+      - __ref__: retryConfig
+      expected: ok
+    - label: non retryable
+      args:
+      - __ref__: badFunc
+      - __ref__: retryConfig
+      expected_error: TypeError

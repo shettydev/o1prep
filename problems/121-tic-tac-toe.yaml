@@ -167,3 +167,144 @@ explanation: |-
 references:
 - Check win condition before checking draw — a board-full move can simultaneously be a winning move.
 - A clean helper like _check_winner(player) that scans all 8 lines keeps make_move readable.
+languages:
+  javascript:
+    starter_code: |-
+      class TicTacToe {
+        constructor() {
+          this.board = Array.from({length: 3}, () => Array(3).fill(null));
+          this.current = 'X';
+          this.over = false;
+          // Write your solution here
+        }
+
+        makeMove(row, col) {
+          // Write your solution here
+        }
+
+        getBoard() {
+          // Write your solution here
+        }
+
+        getCurrentPlayer() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: TicTacToe
+    test_cases:
+    - label: X wins on top row
+      init_args: []
+      ops:
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      op_args:
+      - - 0
+        - 0
+      - - 1
+        - 0
+      - - 0
+        - 1
+      - - 1
+        - 1
+      - - 0
+        - 2
+      expected:
+      - continue
+      - continue
+      - continue
+      - continue
+      - X wins
+    - label: O wins on diagonal
+      init_args: []
+      ops:
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      op_args:
+      - - 0
+        - 1
+      - - 0
+        - 0
+      - - 1
+        - 2
+      - - 1
+        - 1
+      - - 2
+        - 0
+      - - 2
+        - 2
+      - - 0
+        - 2
+      expected:
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - O wins
+      - null
+    - label: draw
+      init_args: []
+      ops:
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      - makeMove
+      op_args:
+      - - 0
+        - 0
+      - - 0
+        - 1
+      - - 0
+        - 2
+      - - 1
+        - 1
+      - - 1
+        - 0
+      - - 1
+        - 2
+      - - 2
+        - 1
+      - - 2
+        - 0
+      - - 2
+        - 2
+      expected:
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - continue
+      - draw
+    - label: occupied cell raises error
+      init_args: []
+      ops:
+      - makeMove
+      - makeMove
+      op_args:
+      - - 0
+        - 0
+      - - 0
+        - 0
+      expected:
+      - continue
+      - null
+      expected_errors:
+      - null
+      - valueerror

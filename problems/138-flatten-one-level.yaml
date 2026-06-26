@@ -51,3 +51,54 @@ explanation: |-
 references:
   - '[x for sub in nested for x in sub] is the canonical one-liner for one-level flattening.'
   - 'Treat Flatten One Level as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function flatten(nested) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: flatten
+    test_cases:
+    - label: basic
+      input:
+        nested:
+        - - 1
+          - 2
+        - - 3
+          - 4
+        - - 5
+      expected:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+    - label: empty sublists
+      input:
+        nested:
+        - []
+        - - 1
+        - []
+        - - 2
+          - 3
+      expected:
+      - 1
+      - 2
+      - 3
+    - label: single sublist
+      input:
+        nested:
+        - - 7
+          - 8
+          - 9
+      expected:
+      - 7
+      - 8
+      - 9
+    - label: all empty
+      input:
+        nested:
+        - []
+        - []
+      expected: []

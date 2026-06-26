@@ -55,3 +55,43 @@ explanation: |-
 references:
   - list.count() is O(n) and reads clearly. For multiple counts in one pass, use collections.Counter.
   - 'Treat Count Occurrences as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function countOccurrences(nums, target) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: countOccurrences
+    test_cases:
+    - label: multiple
+      input:
+        nums:
+        - 1
+        - 2
+        - 2
+        - 3
+        - 2
+        target: 2
+      expected: 3
+    - label: not found
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        target: 5
+      expected: 0
+    - label: all match
+      input:
+        nums:
+        - 4
+        - 4
+        - 4
+        target: 4
+      expected: 3
+    - label: empty
+      input:
+        nums: []
+        target: 1
+      expected: 0

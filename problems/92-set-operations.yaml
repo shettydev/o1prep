@@ -63,3 +63,73 @@ explanation: |-
 references:
   - "Python docs: set types — https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset"
   - "Set operations overview — https://docs.python.org/3/library/stdtypes.html#frozenset.intersection"
+languages:
+  javascript:
+    starter_code: |-
+      function setSummary(a, b) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: setSummary
+    test_cases:
+    - label: partial overlap
+      input:
+        a:
+        - 1
+        - 2
+        - 3
+        b:
+        - 2
+        - 3
+        - 4
+      expected:
+        both:
+        - 2
+        - 3
+        only_a:
+        - 1
+        only_b:
+        - 4
+    - label: no overlap
+      input:
+        a:
+        - 1
+        - 2
+        b:
+        - 3
+        - 4
+      expected:
+        both: []
+        only_a:
+        - 1
+        - 2
+        only_b:
+        - 3
+        - 4
+    - label: identical lists
+      input:
+        a:
+        - 1
+        - 2
+        - 3
+        b:
+        - 1
+        - 2
+        - 3
+      expected:
+        both:
+        - 1
+        - 2
+        - 3
+        only_a: []
+        only_b: []
+    - label: one empty list
+      input:
+        a: []
+        b:
+        - 1
+      expected:
+        both: []
+        only_a: []
+        only_b:
+        - 1

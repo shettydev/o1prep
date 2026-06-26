@@ -135,3 +135,58 @@ references:
 - 'Design for lifecycle edges: startup, retries, cleanup, shutdown, and bad inputs.'
 - Explain which failures should be surfaced, retried, ignored, or quarantined.
 - After implementing Middleware Pipeline, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class MiddlewarePipeline {
+        constructor() {
+          // Write your solution here
+        }
+
+        use(middlewareFn) {
+          // Write your solution here
+        }
+
+        handle(request) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: MiddlewarePipeline
+    test_cases:
+    - label: middleware order
+      init_args: []
+      ops:
+      - use
+      - use
+      - handle
+      - __eval__
+      op_args:
+      - - __ref__: loggingMw
+      - - __ref__: handler
+      - - method: GET
+          path: /users
+      - - logs
+      expected:
+      - null
+      - null
+      - status: 200
+        body: OK
+      - - before /users
+        - after 200
+    - label: short circuit
+      init_args: []
+      ops:
+      - use
+      - use
+      - handle
+      op_args:
+      - - __ref__: authMw
+      - - __ref__: handler
+      - - method: GET
+          path: /secret
+      expected:
+      - null
+      - null
+      - status: 401
+        body: Unauthorized

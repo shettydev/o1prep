@@ -54,3 +54,28 @@ explanation: |-
 references:
   - '(year % 4 == 0 and year % 100 != 0) or year % 400 == 0 is the canonical one-liner.'
   - 'Treat Is Leap Year as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      function isLeapYear(year) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: isLeapYear
+    test_cases:
+    - label: divisible by 400
+      input:
+        year: 2000
+      expected: true
+    - label: divisible by 100 not 400
+      input:
+        year: 1900
+      expected: false
+    - label: divisible by 4 not 100
+      input:
+        year: 2024
+      expected: true
+    - label: not divisible by 4
+      input:
+        year: 2023
+      expected: false

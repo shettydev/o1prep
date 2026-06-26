@@ -62,3 +62,32 @@ references:
 - Translate the input format into tokens and small grammar rules before worrying about implementation details.
 - Use examples that hit malformed input, nesting, and precedence to check your parser design.
 - After implementing Template Engine, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      function render(template, context) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: render
+    test_cases:
+    - label: variables
+      input:
+        template: Hello {{ name }}!
+        context:
+          name: Ada
+      expected: Hello Ada!
+    - label: loop
+      input:
+        template: '{% for item in items %}[{{ item }}]{% endfor %}'
+        context:
+          items:
+          - a
+          - b
+      expected: '[a][b]'
+    - label: if
+      input:
+        template: '{% if is_admin %}admin{% endif %}'
+        context:
+          is_admin: true
+      expected: admin

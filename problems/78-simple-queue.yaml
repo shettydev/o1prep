@@ -79,3 +79,56 @@ explanation: |-
 references:
 - Queues help when items must leave in the same order they arrived.
 - 'Treat Simple Queue as a speed drill: solve it cleanly, run the tests, then restate the core idea in one sentence.'
+languages:
+  javascript:
+    starter_code: |-
+      class SimpleQueue {
+        constructor() {
+          // Write your solution here
+        }
+
+        enqueue(x) {
+          // Write your solution here
+        }
+
+        dequeue() {
+          // Write your solution here
+        }
+
+        peek() {
+          // Write your solution here
+        }
+
+        isEmpty() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: SimpleQueue
+    test_cases:
+    - label: fifo order
+      init_args: []
+      ops:
+      - isEmpty
+      - enqueue
+      - enqueue
+      - peek
+      - dequeue
+      - dequeue
+      - isEmpty
+      op_args:
+      - []
+      - - 1
+      - - 2
+      - []
+      - []
+      - []
+      - []
+      expected:
+      - true
+      - null
+      - null
+      - 1
+      - 1
+      - 2
+      - true

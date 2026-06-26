@@ -127,3 +127,37 @@ explanation: |-
 references:
 - Think about what three things you need to remember at each step before you overwrite the next pointer.
 - The iterative approach is preferred over recursive for large lists due to stack overflow risk.
+languages:
+  javascript:
+    starter_code: |-
+      function reverseLinkedList(arr) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: reverseLinkedList
+    test_cases:
+    - label: reverse five nodes
+      args:
+      - - 1
+        - 2
+        - 3
+        - 4
+        - 5
+      expected:
+      - 5
+      - 4
+      - 3
+      - 2
+      - 1
+    - label: reverse two nodes
+      args:
+      - - 1
+        - 2
+      expected:
+      - 2
+      - 1
+    - label: single node
+      args:
+      - - 42
+      expected:
+      - 42

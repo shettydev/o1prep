@@ -148,3 +148,85 @@ references:
 - 'Design for lifecycle edges: startup, retries, cleanup, shutdown, and bad inputs.'
 - Explain which failures should be surfaced, retried, ignored, or quarantined.
 - After implementing Event Emitter, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class EventEmitter {
+        constructor() {
+          // Write your solution here
+        }
+
+        on(event, callback) {
+          // Write your solution here
+        }
+
+        off(event, callback) {
+          // Write your solution here
+        }
+
+        once(event, callback) {
+          // Write your solution here
+        }
+
+        emit(event, ...args) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: EventEmitter
+    test_cases:
+    - label: on once wildcard
+      init_args: []
+      ops:
+      - __eval__
+      - 'on'
+      - emit
+      - emit
+      - __eval__
+      - once
+      - emit
+      - emit
+      - __eval__
+      - 'on'
+      - emit
+      - emit
+      - __eval__
+      op_args:
+      - - scope.results = []; scope.onceResults = []; scope.wild = []; scope.onData = (x) => { scope.results.push(x); }; scope.onDone = (msg) => { scope.onceResults.push(msg); }; scope.onAny = (event, ...args) => { scope.wild.push(event); }; undefined
+      - - data
+        - __ref__: onData
+      - - data
+        - 42
+      - - data
+        - 99
+      - - scope.results
+      - - done
+        - __ref__: onDone
+      - - done
+        - first
+      - - done
+        - second
+      - - scope.onceResults
+      - - '*'
+        - __ref__: onAny
+      - - click
+        - 1
+      - - hover
+        - 2
+      - - scope.wild
+      expected:
+      - null
+      - null
+      - null
+      - null
+      - - 42
+        - 99
+      - null
+      - null
+      - null
+      - - first
+      - null
+      - null
+      - null
+      - - click
+        - hover

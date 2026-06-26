@@ -71,3 +71,32 @@ explanation: |-
 references:
 - The hash-map approach is faster than the set approach because it jumps over already-processed characters in one step.
 - 'Sliding window template: expand right unconditionally, shrink left when the window is invalid.'
+languages:
+  javascript:
+    starter_code: |-
+      function longestUnique(s) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: longestUnique
+    test_cases:
+    - label: repeating blocks
+      args:
+      - abcabcbb
+      expected: 3
+    - label: all same
+      args:
+      - bbbbb
+      expected: 1
+    - label: mixed
+      args:
+      - pwwkew
+      expected: 3
+    - label: empty string
+      args:
+      - ''
+      expected: 0
+    - label: all unique
+      args:
+      - abcdef
+      expected: 6

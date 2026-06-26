@@ -68,3 +68,27 @@ references:
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
 - After implementing Wildcard File Matcher, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      function match(pattern, path) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: match
+    test_cases:
+    - label: double star
+      input:
+        pattern: src/**/*.py
+        path: src/lib/utils/helpers.py
+      expected: true
+    - label: single char
+      input:
+        pattern: test_?.py
+        path: test_a.py
+      expected: true
+    - label: single char too long
+      input:
+        pattern: test_?.py
+        path: test_ab.py
+      expected: false

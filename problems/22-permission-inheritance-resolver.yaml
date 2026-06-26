@@ -99,3 +99,54 @@ references:
 - Separate the indexing step from the query step so you know where the work belongs.
 - Be explicit about ranking and tie-breaking instead of leaving output order accidental.
 - After implementing Permission Inheritance Resolver, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class PermissionResolver {
+        constructor() {
+          // Write your solution here
+        }
+
+        setPermission(resource, role, action, permission) {
+          // Write your solution here
+        }
+
+        getPermission(resource, role, action) {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: PermissionResolver
+    test_cases:
+    - label: inherit and override
+      init_args: []
+      ops:
+      - setPermission
+      - getPermission
+      - setPermission
+      - getPermission
+      - getPermission
+      op_args:
+      - - /docs
+        - editor
+        - read
+        - ALLOW
+      - - /docs/design
+        - editor
+        - read
+      - - /docs/secret
+        - editor
+        - read
+        - DENY
+      - - /docs/secret
+        - editor
+        - read
+      - - /docs/design/v2
+        - viewer
+        - delete
+      expected:
+      - null
+      - ALLOW
+      - null
+      - DENY
+      - DENY

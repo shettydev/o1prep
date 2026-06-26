@@ -86,3 +86,52 @@ explanation: |-
 references:
 - Start with the O(n²) DP to get the right answer, then optimize to O(n log n) with bisect.bisect_left.
 - The patience sorting intuition: each pile represents a candidate tail for a subsequence of that length.
+languages:
+  javascript:
+    starter_code: |-
+      function lis(nums) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: lis
+    test_cases:
+    - label: mixed array
+      args:
+      - - 10
+        - 9
+        - 2
+        - 5
+        - 3
+        - 7
+        - 101
+        - 18
+      expected: 4
+    - label: partially increasing
+      args:
+      - - 0
+        - 1
+        - 0
+        - 3
+        - 2
+        - 3
+      expected: 4
+    - label: all equal
+      args:
+      - - 7
+        - 7
+        - 7
+        - 7
+        - 7
+      expected: 1
+    - label: already sorted
+      args:
+      - - 1
+        - 2
+        - 3
+        - 4
+        - 5
+      expected: 5
+    - label: single element
+      args:
+      - - 5
+      expected: 1

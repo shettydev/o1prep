@@ -64,3 +64,55 @@ explanation: |-
 references:
   - "Pattern: Two Pointers on sorted arrays"
   - "LeetCode 167: Two Sum II — Input Array Is Sorted"
+languages:
+  javascript:
+    starter_code: |-
+      function twoSumSorted(nums, target) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: twoSumSorted
+    test_cases:
+    - label: basic pair at start
+      input:
+        nums:
+        - 2
+        - 7
+        - 11
+        - 15
+        target: 9
+      expected:
+      - 0
+      - 1
+    - label: middle pair
+      input:
+        nums:
+        - 2
+        - 3
+        - 5
+        - 8
+        target: 8
+      expected:
+      - 1
+      - 2
+    - label: last two elements
+      input:
+        nums:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        target: 9
+      expected:
+      - 3
+      - 4
+    - label: two-element list
+      input:
+        nums:
+        - 2
+        - 4
+        target: 6
+      expected:
+      - 0
+      - 1

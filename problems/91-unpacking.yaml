@@ -59,3 +59,49 @@ explanation: |-
 references:
   - "PEP 3132: Extended Iterable Unpacking"
   - "Python docs: assignment statements — https://docs.python.org/3/reference/simple_stmts.html#assignment-statements"
+languages:
+  javascript:
+    starter_code: |-
+      function splitFirstRest(lst) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: splitFirstRest
+    test_cases:
+    - label: four elements
+      input:
+        lst:
+        - 1
+        - 2
+        - 3
+        - 4
+      expected:
+      - 1
+      - - 2
+        - 3
+        - 4
+    - label: single element
+      input:
+        lst:
+        - 42
+      expected:
+      - 42
+      - []
+    - label: string elements
+      input:
+        lst:
+        - a
+        - b
+        - c
+      expected:
+      - a
+      - - b
+        - c
+    - label: two elements
+      input:
+        lst:
+        - 10
+        - 20
+      expected:
+      - 10
+      - - 20

@@ -119,3 +119,60 @@ references:
 - 'Design for lifecycle edges: startup, retries, cleanup, shutdown, and bad inputs.'
 - Explain which failures should be surfaced, retried, ignored, or quarantined.
 - After implementing Batched Writer with Flush, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class BatchedWriter {
+        constructor(flushFn, batchSize, flushIntervalMs) {
+          // Write your solution here
+        }
+
+        write(item) {
+          // Write your solution here
+        }
+
+        flush() {
+          // Write your solution here
+        }
+
+        close() {
+          // Write your solution here
+        }
+      }
+    test_type: class
+    class_name: BatchedWriter
+    test_cases:
+    - label: size and close flush
+      init_args:
+      - null
+      - 3
+      - 5000
+      ops:
+      - write
+      - write
+      - write
+      - __eval__
+      - write
+      - close
+      - __eval__
+      op_args:
+      - - a
+      - - b
+      - - c
+      - - obj._flushed
+      - - d
+      - []
+      - - obj._flushed
+      expected:
+      - null
+      - null
+      - null
+      - - - a
+          - b
+          - c
+      - null
+      - null
+      - - - a
+          - b
+          - c
+        - - d

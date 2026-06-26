@@ -104,3 +104,38 @@ explanation: |-
 references:
 - Floyd's cycle detection is the canonical O(1)-space solution — understand why the two pointers must meet inside the cycle.
 - The meeting point has a useful property for finding where the cycle starts; explore that as a follow-up.
+languages:
+  javascript:
+    starter_code: |-
+      function hasCycle(vals, cyclePos) {
+        // Write your solution here
+      }
+    test_type: function
+    function_name: hasCycle
+    test_cases:
+    - label: cycle exists
+      args:
+      - - 3
+        - 1
+        - 2
+        - 0
+      - 1
+      expected: true
+    - label: no cycle
+      args:
+      - - 1
+        - 2
+        - 3
+        - 4
+      - -1
+      expected: false
+    - label: single node no cycle
+      args:
+      - - 1
+      - -1
+      expected: false
+    - label: single node self-loop
+      args:
+      - - 1
+      - 0
+      expected: true

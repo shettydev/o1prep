@@ -112,3 +112,49 @@ references:
 - 'Keep caller ergonomics in mind: a clean API should make the correct usage obvious.'
 - Use tests to define the contract, especially around chaining, defaults, and error cases.
 - After implementing Cursor-Based Paginator, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class CursorPaginator {
+          constructor(data, sortKey) {
+              // Write your solution here
+          }
+
+          paginate(cursor = null, pageSize = 10, direction = 'forward') {
+              // Write your solution here
+          }
+      }
+    test_type: class
+    class_name: CursorPaginator
+    test_cases:
+    - label: forward pagination
+      init_args:
+      - - id: 1
+          ts: 100
+        - id: 2
+          ts: 200
+        - id: 3
+          ts: 300
+        - id: 4
+          ts: 400
+        - id: 5
+          ts: 500
+      - ts
+      ops:
+      - __eval__
+      - __eval__
+      - __eval__
+      op_args:
+      - - obj.paginate(null, 2).items
+      - - obj.paginate(null, 2).has_next
+      - - obj.paginate(obj.paginate(null, 2).next_cursor, 2).items
+      expected:
+      - - id: 1
+          ts: 100
+        - id: 2
+          ts: 200
+      - true
+      - - id: 3
+          ts: 300
+        - id: 4
+          ts: 400
