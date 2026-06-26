@@ -61,3 +61,28 @@ references:
 - Study recursive-descent or stack-based expression evaluation so precedence is encoded cleanly.
 - Review how stacks help with matching delimiters, backtracking, and incremental parsing.
 - Translate the input format into tokens and small grammar rules before worrying about implementation details.
+languages:
+  javascript:
+    starter_code: function evaluate(expression, variables) { /* ... */ }
+    test_type: function
+    function_name: evaluate
+    test_cases:
+    - label: precedence
+      input:
+        expression: 2 + 3 * 4
+        variables: {}
+      expected: 14
+    - label: variables and parentheses
+      input:
+        expression: (a + b) * c
+        variables:
+          a: 2
+          b: 3
+          c: 4
+      expected: 20
+    - label: integer division
+      input:
+        expression: x / 3
+        variables:
+          x: 8
+      expected: 2

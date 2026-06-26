@@ -85,3 +85,57 @@ references:
 - 'Focus on invariants first: what state must always stay true after every method call?'
 - Practice stepping through short operation sequences by hand before writing code.
 - After implementing Ordered Event Stream Reassembler, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class EventReassembler {
+        constructor() {
+          /* ... */
+        }
+
+        add(seq, data) {
+          /* ... */
+        }
+      }
+    test_type: class
+    class_name: EventReassembler
+    test_cases:
+    - label: out of order delivery
+      init_args: []
+      ops:
+      - add
+      - add
+      - add
+      - add
+      op_args:
+      - - 1
+        - a
+      - - 3
+        - c
+      - - 2
+        - b
+      - - 4
+        - d
+      expected:
+      - - a
+      - []
+      - - b
+        - c
+      - - d
+    - label: duplicate ignored
+      init_args: []
+      ops:
+      - add
+      - add
+      - add
+      op_args:
+      - - 1
+        - x
+      - - 1
+        - x
+      - - 2
+        - y
+      expected:
+      - - x
+      - []
+      - - y
