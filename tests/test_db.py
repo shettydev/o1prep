@@ -37,12 +37,16 @@ def test_seed_count_matches_yaml():
 
 
 def test_get_by_id_is_lossless_vs_yaml():
-    # The dict reconstructed from the DB must equal the original YAML dict,
-    # modulo JSON normalization. This is the same normalization code_runner
-    # already applies to test_cases (a few problems use integer dict keys in
-    # `expected`, which JSON represents as strings), so it does not change how
-    # tests are executed -- see test_db_test_cases_run_identically.
-    yaml_problems = {p["id"]: p for p in problems.load_yaml_problems()}
+    # The dict reconstructed from the DB (default language) must equal the
+    # original YAML dict, modulo JSON normalization. This is the same
+    # normalization code_runner already applies to test_cases (a few problems use
+    # integer dict keys in `expected`, which JSON represents as strings), so it
+    # does not change how tests are executed -- see
+    # test_db_test_cases_run_identically. The optional `languages:` block is a
+    # seeding directive for additional-language rows, not part of the
+    # default-language problem dict, so it is excluded from the comparison.
+    yaml_problems = {p["id"]: {k: v for k, v in p.items() if k != "languages"}
+                     for p in problems.load_yaml_problems()}
     mismatches = [pid for pid, y in yaml_problems.items() if problems.get_by_id(pid) != _json_norm(y)]
     assert not mismatches, f"DB reconstruction diverged from YAML for ids: {mismatches}"
 

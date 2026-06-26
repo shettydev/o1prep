@@ -15,7 +15,7 @@ from glob import glob
 import yaml
 
 from config import PROBLEMS_DIR
-from services.db import DEFAULT_LANGUAGE, merge_problem, split_problem
+from services.db import DEFAULT_LANGUAGE, LANGUAGE_KEYS, merge_problem, split_problem
 from services.extensions import db
 from services.models import Problem, ProblemLanguage
 
@@ -40,6 +40,11 @@ def _to_dict(problem, language=DEFAULT_LANGUAGE):
 def seed(force=False):
     """Load the YAML problems into the database.
 
+    Each YAML file carries the language-agnostic fields plus the default-language
+    (Python) fields at the top level. Additional languages live under an optional
+    ``languages:`` mapping, e.g. ``languages: {javascript: {starter_code, ...}}``;
+    each entry becomes its own ``problem_languages`` row, keyed by language.
+
     Idempotent: existing rows are updated in place (upsert by primary key). With
     ``force=True`` the tables are cleared first so problems deleted from disk are
     also removed. Returns the number of problems seeded.
@@ -50,6 +55,7 @@ def seed(force=False):
         db.session.query(Problem).delete()
         db.session.flush()
     for problem in yaml_problems:
+        extra_languages = problem.pop('languages', None) or {}
         agnostic, language = split_problem(problem)
         db.session.merge(Problem(
             id=problem['id'],
@@ -63,6 +69,14 @@ def seed(force=False):
             language=DEFAULT_LANGUAGE,
             data=language,
         ))
+        for lang_id, lang_fields in extra_languages.items():
+            # Keep only the per-language keys so the row mirrors the default one.
+            lang_data = {k: v for k, v in (lang_fields or {}).items() if k in LANGUAGE_KEYS}
+            db.session.merge(ProblemLanguage(
+                problem_id=problem['id'],
+                language=lang_id,
+                data=lang_data,
+            ))
     db.session.commit()
     return len(yaml_problems)
 
