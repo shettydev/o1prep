@@ -37,10 +37,12 @@ def test_javascript_variant_has_its_own_fields():
     assert problem["title"] == "Sum of Digits"
 
 
-def test_untranslated_problem_returns_none_for_javascript():
-    # Problem 1 has no JS variant yet → exact fetch is None (route falls back).
-    assert problems.get_by_id(1, "javascript") is None
-    assert "javascript" not in problems.available_languages(1)
+def test_missing_variant_returns_none():
+    # No problem ships a TypeScript variant, so the exact fetch is None and the
+    # route falls back to the default. (Content-independent: stays true as more
+    # JavaScript variants are generated.)
+    assert problems.get_by_id(1, "typescript") is None
+    assert "typescript" not in problems.available_languages(1)
 
 
 @pytest.mark.skipif(not _HAS_NODE, reason="Node.js not installed")

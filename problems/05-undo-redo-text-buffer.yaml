@@ -152,3 +152,94 @@ references:
 - 'Focus on invariants first: what state must always stay true after every method call?'
 - Practice stepping through short operation sequences by hand before writing code.
 - After implementing Undo/Redo Text Buffer, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class TextBuffer {
+        constructor() {
+          /* ... */
+        }
+
+        insert(position, text) {
+          /* ... */
+        }
+
+        delete(position, length) {
+          /* ... */
+        }
+
+        getText() {
+          /* ... */
+        }
+
+        undo() {
+          /* ... */
+        }
+
+        redo() {
+          /* ... */
+        }
+      }
+    test_type: class
+    class_name: TextBuffer
+    test_cases:
+    - label: undo redo
+      init_args: []
+      ops:
+      - insert
+      - insert
+      - getText
+      - undo
+      - getText
+      - redo
+      - getText
+      op_args:
+      - - 0
+        - hello
+      - - 5
+        - ' world'
+      - []
+      - []
+      - []
+      - []
+      - []
+      expected:
+      - null
+      - null
+      - hello world
+      - null
+      - hello
+      - null
+      - hello world
+    - label: redo cleared by new edit
+      init_args: []
+      ops:
+      - insert
+      - delete
+      - getText
+      - undo
+      - getText
+      - insert
+      - redo
+      - getText
+      op_args:
+      - - 0
+        - abcdef
+      - - 2
+        - 3
+      - []
+      - []
+      - []
+      - - 0
+        - X
+      - []
+      - []
+      expected:
+      - null
+      - null
+      - abf
+      - null
+      - abcdef
+      - null
+      - null
+      - Xabcdef

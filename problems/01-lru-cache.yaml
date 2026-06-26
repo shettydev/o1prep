@@ -137,3 +137,73 @@ references:
 - Review pointer updates for insert/remove in a doubly linked list, especially head/tail sentinels and edge cases.
 - Practice mapping product requirements to invariants so you can justify when an operation truly stays O(1).
 - Compare FIFO, LRU, and LFU so you can explain why LRU is a good default for cache locality.
+languages:
+  javascript:
+    starter_code: |-
+      class LRUCache {
+          constructor(capacity) {
+              // ...
+          }
+
+          get(key) {
+              // ...
+          }
+
+          put(key, value) {
+              // ...
+          }
+      }
+    test_type: class
+    class_name: LRUCache
+    test_cases:
+    - label: basic eviction
+      init_args:
+      - 2
+      ops:
+      - put
+      - put
+      - get
+      - put
+      - get
+      op_args:
+      - - 1
+        - 1
+      - - 2
+        - 2
+      - - 1
+      - - 3
+        - 3
+      - - 2
+      expected:
+      - null
+      - null
+      - 1
+      - null
+      - -1
+    - label: overwrite refreshes recency
+      init_args:
+      - 2
+      ops:
+      - put
+      - put
+      - get
+      - put
+      - get
+      - get
+      op_args:
+      - - 1
+        - 10
+      - - 1
+        - 99
+      - - 1
+      - - 2
+        - 20
+      - - 1
+      - - 2
+      expected:
+      - null
+      - null
+      - 99
+      - null
+      - 99
+      - 20

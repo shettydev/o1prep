@@ -67,7 +67,9 @@ Services encapsulate all domain logic and external integrations. Routes import t
 | `services/extensions.py` | Flask extension singletons: SQLAlchemy `db`, `login_manager`, `migrate` |
 | `services/problems.py` | Problem access: DB-backed loading (`load_all`, `get_by_id`), YAML seeding (`seed`, `ensure_seeded`), serialization for list/detail views, and context builders for system prompts (`build_problem_block`, `build_study_context`) |
 | `services/db.py` | Pure helpers for the problem agnostic/per-language split used to store and reconstruct problem dicts |
-| `services/code_runner.py` | Python code execution sandbox: builds a temporary test harness embedding user code + test cases, runs it in a subprocess with a configurable timeout, parses structured results. Supports both function-based and class-based problems |
+| `services/languages.py` | Language registry — single source of truth for the supported languages (id, label, CodeMirror mode, file extension) with `is_supported`/`resolve`/`get`/`all_languages` |
+| `services/runners/` | Per-language code execution. `base.Runner` defines the interface (`run_program`, `run_tests`) and shared subprocess/parsing helpers; `PythonRunner`, `JavaScriptRunner`, and `TypeScriptRunner` each own their harness. `get_runner(language)` returns the runner for a validated language id. Every runner emits the same `__RESULTS__<json>` shape so the frontend renderer is language-agnostic |
+| `services/code_runner.py` | Facade over the runners: `run`/`run_class` are Python-only shims kept for back-compat; `format_results_for_context` renders a run result into the interview transcript |
 
 ---
 
@@ -183,18 +185,19 @@ All prompts are loaded once at import time by `config.py`.
 
 ## Code Execution
 
-When a user runs code or submits it during an interview, the execution follows one of two paths:
+When a user runs code or submits it during an interview, the execution follows one of two paths. Both resolve the session's language to a runner via `services.runners.get_runner(language)`, so Python, JavaScript, and TypeScript share the same flow.
 
 ### Ad-hoc Run (`POST /api/run`)
 
-The user's raw Python code is written to a temp file and executed via `subprocess.run()` with a timeout. Stdout and stderr are captured and returned. This is used by the editor's "Run" button outside of test context.
+The request's `language` selects a runner; the user's raw code is written to a temp file and executed via `run_program()` (Python through `[sys.executable]`, JS through `[node]`, TS through `[tsx]` — always an argument list, never `shell=True`) with a timeout. Stdout and stderr are captured and returned. This is the editor's "Run" button outside of test context.
 
 ### Test Execution (`POST /api/sessions/:id/run-tests`)
 
-1. **Pre-canned tests first**: If the problem has `test_cases` in its YAML, `code_runner.run()` or `run_class()` is called directly with those cases
-2. **AI-generated tests as fallback**: If no YAML tests exist (random topic interviews), `ai.generate_test_cases()` asks GPT to produce a function name and test cases from the conversation history, then runs them
-3. **Harness construction**: `code_runner` builds a temporary Python file that imports the user's code, iterates over test cases, catches exceptions, and prints structured JSON results to stdout via a `__RESULTS__` marker
-4. **Subprocess isolation**: The harness runs in a separate Python process with `config.CODE_TIMEOUT` (default 5 seconds). This provides process isolation and timeout protection, but is not a security sandbox
+1. **Language-specific problem**: The session's language picks both the runner and the matching problem variant, so the function/class name and `test_cases` align with the runtime the candidate is writing in
+2. **Pre-canned tests first**: If the problem variant has `test_cases`, `get_runner(language).run_tests()` is called directly with those cases
+3. **AI-generated tests as fallback**: If no YAML tests exist (random topic interviews), `ai.generate_test_cases()` asks GPT to produce a function name and test cases from the conversation history, then runs them through the same runner
+4. **Harness construction**: each runner builds a temporary file that loads the user's code, iterates over test cases, catches exceptions, and prints structured JSON results to stdout via a `__RESULTS__` marker. The JS/TS harness mirrors the Python contract (deep equality, awaited async, `__ref__`/`__sleep__`, `expected_error` matching) so results render identically
+5. **Subprocess isolation**: the harness runs in a separate process with `config.CODE_TIMEOUT` (default 5 seconds). This provides process isolation and timeout protection, but is not a security sandbox
 
 ---
 

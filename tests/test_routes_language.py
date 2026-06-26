@@ -49,12 +49,14 @@ def test_session_rejects_unknown_language_falls_back(auth_client):
     assert detail["language"] == "python"
 
 
-def test_problem_fetch_reports_available_languages(client):
-    # Only Python is seeded by default, so a JS request falls back to Python
-    # content but still reports which languages actually exist.
-    data = client.get("/api/problems/1?language=javascript").get_json()
-    assert data["available_languages"] == ["python"]
+def test_problem_fetch_falls_back_for_missing_language(client):
+    # TypeScript is a supported language but no problem ships a TS variant, so a
+    # TS request exercises the fallback to the default language while still
+    # reporting which languages actually exist.
+    data = client.get("/api/problems/1?language=typescript").get_json()
     assert data["language"] == "python"
+    assert "typescript" not in data["available_languages"]
+    assert "python" in data["available_languages"]
 
 
 def test_run_requires_auth(client):

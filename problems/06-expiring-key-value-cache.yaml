@@ -83,3 +83,50 @@ references:
 - 'Focus on invariants first: what state must always stay true after every method call?'
 - Practice stepping through short operation sequences by hand before writing code.
 - After implementing Expiring Key-Value Cache, re-run the provided hardcoded tests and explain why each one protects an important invariant.
+languages:
+  javascript:
+    starter_code: |-
+      class ExpiringCache {
+        put(key, value, ttlSeconds) { /* ... */ }
+        get(key) { /* ... */ }
+      }
+    test_type: class
+    class_name: ExpiringCache
+    test_cases:
+    - label: expires after ttl
+      init_args: []
+      ops:
+      - put
+      - get
+      - __sleep__
+      - get
+      op_args:
+      - - a
+        - 1
+        - 0.02
+      - - a
+      - - 0.03
+      - - a
+      expected:
+      - null
+      - 1
+      - null
+      - null
+    - label: non expired remains
+      init_args: []
+      ops:
+      - put
+      - put
+      - get
+      op_args:
+      - - x
+        - 10
+        - 0.1
+      - - y
+        - 20
+        - 0.1
+      - - y
+      expected:
+      - null
+      - null
+      - 20

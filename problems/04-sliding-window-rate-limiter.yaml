@@ -139,3 +139,72 @@ references:
 - Know when a deque is the right fit for popping from both ends while preserving order.
 - 'Review constant-time dictionary operations: insert, lookup, delete, and how collisions affect real-world performance.'
 - Think about lazy cleanup versus eager cleanup and what each means for latency and memory.
+languages:
+  javascript:
+    starter_code: |-
+      class RateLimiter {
+          constructor(maxRequests, windowSeconds) {
+              /* ... */
+          }
+
+          allow(clientId, timestamp) {
+              /* ... */
+          }
+      }
+    test_type: class
+    class_name: RateLimiter
+    test_cases:
+    - label: sliding window
+      init_args:
+      - 3
+      - 10
+      ops:
+      - allow
+      - allow
+      - allow
+      - allow
+      - allow
+      op_args:
+      - - A
+        - 1
+      - - A
+        - 2
+      - - A
+        - 3
+      - - A
+        - 4
+      - - A
+        - 12
+      expected:
+      - true
+      - true
+      - true
+      - false
+      - true
+    - label: per client
+      init_args:
+      - 2
+      - 5
+      ops:
+      - allow
+      - allow
+      - allow
+      - allow
+      - allow
+      op_args:
+      - - X
+        - 1
+      - - Y
+        - 1
+      - - X
+        - 2
+      - - Y
+        - 2
+      - - X
+        - 3
+      expected:
+      - true
+      - true
+      - true
+      - true
+      - false
