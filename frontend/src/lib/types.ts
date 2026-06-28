@@ -30,3 +30,61 @@ export type SortKey =
   | "difficulty-desc"
   | "unattempted"
   | "alpha";
+
+// ── Interview / editor ──
+
+export interface ChatMessage {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
+
+export interface FullProblem extends ProblemSummary {
+  description?: string;
+  scenario?: string;
+  constraints?: string[];
+  examples?: { input?: string; output?: string }[];
+}
+
+export interface RunResult {
+  stdout: string;
+  stderr: string;
+  exit_code: number;
+}
+
+/** One row from a test run — mirrors the harness output in services/runners. */
+export interface TestCaseResult {
+  passed: boolean;
+  call?: string;
+  label?: string;
+  input?: Record<string, unknown>;
+  expected?: unknown;
+  actual?: unknown;
+  error?: string;
+  expected_error?: string;
+}
+
+export interface TestResults {
+  test_type: "function" | "class";
+  display_name: string;
+  success: boolean;
+  results: TestCaseResult[];
+  error?: string | null;
+}
+
+export interface LanguageMeta {
+  id: string;
+  label: string;
+  codemirror_mode: string;
+  file_extension: string;
+}
+
+export interface EngineConfig {
+  provider: string;
+  models: string[];
+  default_model: string;
+  supports_effort: boolean;
+  efforts: string[];
+  default_effort: string;
+  languages: LanguageMeta[];
+  default_language: string;
+}

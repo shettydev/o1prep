@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, VT323 } from "next/font/google";
 import "./globals.css";
+import "katex/dist/katex.min.css";
 import { AuthGate } from "@/components/AuthGate";
 
 // Workhorse mono — UI, body, code. The app's heritage face, refined.

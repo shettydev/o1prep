@@ -1,4 +1,4 @@
-import { ComingSoon } from "@/components/ComingSoon";
+import { InterviewView } from "@/components/interview/InterviewView";
 
 export default async function InterviewPage({
   params,
@@ -6,5 +6,5 @@ export default async function InterviewPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <ComingSoon module="interview" id={Number(id)} />;
+  return <InterviewView problemId={Number(id)} />;
 }
