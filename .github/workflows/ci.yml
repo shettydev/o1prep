@@ -9,6 +9,10 @@ jobs:
   test:
     name: Test (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        # The Python backend lives in backend/ since the monorepo split.
+        working-directory: backend
     strategy:
       fail-fast: false
       matrix:
@@ -41,6 +45,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
+          cache-dependency-path: backend/requirements*.txt
 
       - name: Set up Node.js
         # Node powers the JavaScript code runner; without it the JS runner tests

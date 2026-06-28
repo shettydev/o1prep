@@ -26,14 +26,19 @@ Most interview platforms are puzzle grinders. O(1) Prep puts you in a real inter
 
 ## Quick Start
 
+The repository is a monorepo: the Python API lives in **`backend/`**, the web client in **`frontend/`**, and shared infrastructure (`docker-compose.yml`) at the root.
+
 ```bash
 git clone <repo-url>
 cd o1prep
+docker compose up -d                  # start PostgreSQL (from the repo root)
+
+cd backend                            # the Python API lives here
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Copy `.env.example` to `.env` and set your values (database URL, a secret key, and your OpenAI key):
+Copy `backend/.env.example` to `backend/.env` and set your values (database URL, a secret key, and your OpenAI key):
 
 ```
 DATABASE_URL=postgresql+psycopg://o1prep:o1prep@localhost:5433/o1prep
@@ -41,10 +46,9 @@ SECRET_KEY=change-me
 OPENAI_API_KEY=sk-your-key-here
 ```
 
-Start PostgreSQL, create the schema, load the problems, and run:
+Create the schema, load the problems, and run — all from `backend/`:
 
 ```bash
-docker compose up -d                  # start PostgreSQL
 export FLASK_APP=app
 flask db upgrade                      # create tables
 python scripts/seed_problems.py       # load the problem library
