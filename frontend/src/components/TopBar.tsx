@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useProblems } from "@/store/problems";
+import { useAuth } from "@/store/auth";
 
 /**
  * Global top bar for the landing view. Mode toggle + history/settings get fully
@@ -11,6 +12,8 @@ import { useProblems } from "@/store/problems";
 export function TopBar() {
   const total = useProblems((s) => s.problems.length);
   const done = useProblems((s) => Object.keys(s.attempts).length);
+  const email = useAuth((s) => s.email);
+  const signOut = useAuth((s) => s.logout);
   const [mode, setMode] = useState<"text" | "voice">("text");
 
   return (
@@ -51,6 +54,19 @@ export function TopBar() {
             <span className="text-text-faint"> / {total}</span> done
           </span>
         </div>
+
+        {/* Signed-in identity + sign out */}
+        {email && (
+          <span
+            className="hidden max-w-[160px] truncate text-[11px] text-text-faint md:inline"
+            title={`signed in as ${email}`}
+          >
+            {email}
+          </span>
+        )}
+        <button onClick={signOut} className="tbtn" title="Sign out">
+          ⏻ exit
+        </button>
       </div>
     </header>
   );

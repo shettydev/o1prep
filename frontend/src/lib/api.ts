@@ -25,6 +25,46 @@ export class ApiError extends Error {
   }
 }
 
+/** POST JSON. On a non-2xx, throws ApiError carrying the backend's {error} message. */
+async function apiPost<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`/api${path}`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
+  if (!res.ok) {
+    const msg =
+      typeof data.error === "string" ? data.error : `Request failed (${res.status})`;
+    throw new ApiError(res.status, msg);
+  }
+  return data as T;
+}
+
+// ── Auth (Flask-Login session cookie) — mirrors backend/routes/auth.py ──
+
+export interface AuthState {
+  authenticated: boolean;
+  email?: string;
+}
+
+export function getMe(): Promise<AuthState> {
+  return apiGet<AuthState>("/auth/me");
+}
+
+export function login(email: string, password: string): Promise<AuthState> {
+  return apiPost<AuthState>("/auth/login", { email, password });
+}
+
+export function register(email: string, password: string): Promise<AuthState> {
+  return apiPost<AuthState>("/auth/register", { email, password });
+}
+
+export function logout(): Promise<{ success: boolean }> {
+  return apiPost<{ success: boolean }>("/auth/logout", {});
+}
+
 export function getProblems(): Promise<ProblemSummary[]> {
   return apiGet<ProblemSummary[]>("/problems");
 }

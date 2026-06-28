@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, VT323 } from "next/font/google";
 import "./globals.css";
+import { AuthGate } from "@/components/AuthGate";
 
 // Workhorse mono — UI, body, code. The app's heritage face, refined.
 const jetbrains = JetBrains_Mono({
@@ -30,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${jetbrains.variable} ${vt323.variable}`}>
       <body>
-        {children}
+        <AuthGate>{children}</AuthGate>
         <div className="crt-overlay" aria-hidden />
       </body>
     </html>
