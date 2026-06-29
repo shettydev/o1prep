@@ -31,8 +31,8 @@ export function TopBar() {
       </div>
 
       <div className="flex items-center gap-1.5 sm:gap-2">
-        {/* Mode toggle — voice is wired in a later phase; cosmetic for now. */}
-        <div className="hidden border border-line sm:flex">
+        {/* TODO: Mode toggle — voice is wired in a later phase; cosmetic for now. */}
+        {/*<div className="hidden border border-line sm:flex">
           {(["text", "voice"] as const).map((m) => (
             <button
               key={m}
@@ -44,7 +44,7 @@ export function TopBar() {
               {m}
             </button>
           ))}
-        </div>
+        </div>*/}
 
         {/* Progress chip → progress drawer */}
         <button
