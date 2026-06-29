@@ -2,16 +2,16 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+This app is part of a [pnpm workspace](https://pnpm.io/workspaces). Install
+dependencies once from the **repo root** (`pnpm install`), then run the dev
+server either from the root or from this directory:
 
 ```bash
-npm run dev
+pnpm dev          # from the repo root (proxies to this workspace)
 # or
-yarn dev
-# or
+pnpm --filter frontend dev
+# or, from inside frontend/
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
