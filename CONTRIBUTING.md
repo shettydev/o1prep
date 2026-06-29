@@ -81,6 +81,15 @@ python scripts/seed_problems.py   # load problems from YAML
 python app.py
 ```
 
+One-time, from the repo root, install the Git hook tooling (requires Node 18+):
+
+```bash
+npm install   # sets up Husky pre-commit + commit-msg hooks
+```
+
+This activates auto-formatting and commit-message validation on every commit
+(see [Git hooks](#git-hooks) and [Commit messages](#commit-messages) below).
+
 ### Running tests
 
 Tests run against PostgreSQL (a dedicated `o1prep_test` database is created
@@ -115,6 +124,64 @@ ruff check --fix .    # auto-fix import order, etc.
 CI (GitHub Actions) spins up a PostgreSQL service and runs `ruff check .` and
 `pytest` on every push and pull request across Python 3.11 and 3.12. Please make
 sure both pass locally first.
+
+### Git hooks
+
+After `npm install` (repo root), [Husky](https://typicode.github.io/husky/)
+installs two hooks that run automatically:
+
+- **`pre-commit`** — runs [lint-staged](https://github.com/lint-staged/lint-staged)
+  on your **staged files only**, formatting them in place and re-staging the
+  result:
+  - Frontend (`frontend/**/*.{ts,tsx,js,jsx,mjs,cjs,css,json,md}`) → `prettier --write`
+  - Backend (`backend/**/*.py`) → `ruff check --fix` then `ruff format`
+- **`commit-msg`** — validates your commit message with
+  [commitlint](https://commitlint.js.org/) (see below).
+
+Formatting config lives in `.prettierrc` / `.prettierignore` (frontend) and the
+`[tool.ruff]` sections of `backend/pyproject.toml` (backend). Backend formatting
+relies on `ruff`, which you already have from `requirements-dev.txt`.
+
+If a hook ever blocks you mid-rebase or in an automated context, you can bypass
+it with `git commit --no-verify` — but please don't make a habit of it.
+
+### Commit messages
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/) with a
+**required scope**, enforced by the `commit-msg` hook. The format is:
+
+```
+type(scope): subject
+```
+
+Examples:
+
+```
+feat(frontend): persist study chat width across reloads
+fix(backend): correct expected output for Two Sum 'adjacent' case
+docs(repo): document commit conventions and contributor setup
+refactor(frontend,backend): split into a monorepo layout
+```
+
+**Allowed types**: `feat`, `fix`, `refactor`, `chore`, `docs`, `ci`, `perf`,
+`test`, `build`, `style`, `revert`, `polish`
+
+**Allowed scopes**:
+
+| Scope      | Use for                                      |
+| ---------- | -------------------------------------------- |
+| `frontend` | the Next.js app                              |
+| `backend`  | Flask app, API, services                     |
+| `problems` | problem content, variants, generators        |
+| `db`       | migrations, schema, Postgres                  |
+| `ci`       | GitHub Actions / pipelines                    |
+| `docs`     | README, `docs/`, markdown                     |
+| `deps`     | dependency bumps                              |
+| `repo`     | root tooling / monorepo-wide changes          |
+
+Rules of thumb: the subject is required, written in lowercase, and has no
+trailing period. Commits spanning two areas may list both scopes
+(`feat(frontend,backend): ...`). The full ruleset is in `commitlint.config.js`.
 
 ---
 
