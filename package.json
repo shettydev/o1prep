@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "description": "Repo-root dev tooling: Git pre-commit hooks that format staged files (Prettier for frontend, ruff for backend).",
+  "packageManager": "pnpm@10.22.0",
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev": "pnpm --filter frontend dev",
+    "build": "pnpm --filter frontend build",
+    "start": "pnpm --filter frontend start",
+    "lint": "pnpm --filter frontend lint"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",
