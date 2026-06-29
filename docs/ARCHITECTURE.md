@@ -247,36 +247,38 @@ User ends interview
 
 ```
 o1prep/
-├── app.py                   # Flask app factory, index route, blueprint registration
-├── config.py                # All settings, model names, prompt loading
-├── services/                # Business logic
-│   ├── ai.py                # OpenAI client, streaming, test generation
-│   ├── sessions.py          # Session file I/O
-│   ├── problems.py          # DB-backed problem access + YAML seeding
-│   ├── db.py                # Problem agnostic/per-language split helpers
-│   ├── models.py            # SQLAlchemy models (Problem, User, Session, ...)
-│   ├── extensions.py        # db / login_manager / migrate singletons
-│   └── code_runner.py       # Subprocess code execution
-├── routes/                  # HTTP layer (Flask Blueprints)
-│   ├── auth.py              # Register / login / logout
-│   ├── sessions.py          # Session CRUD, chat, code, transcript endpoints
-│   ├── problems.py          # Problem list and detail endpoints
-│   ├── code.py              # Ad-hoc code execution endpoint
-│   ├── realtime.py          # WebRTC SDP proxy for voice mode
-│   └── research.py          # Study/tutor chat endpoint
-├── migrations/              # Alembic (Flask-Migrate) migrations
-├── docker-compose.yml       # Local PostgreSQL service
-├── scripts/
-│   └── seed_problems.py     # Seed the database from the problem YAMLs
-├── templates/
-│   └── index.html           # Single-page app shell + CDN library imports
-├── static/                  # Flask-served app assets
-│   ├── style.css
-│   ├── favicon.*
-│   └── js/                  # Frontend modules (9 files, ~2400 lines total)
-├── prompts/                 # LLM system prompts (6 files)
-├── problems/                # 150+ YAML problem definitions (canonical source)
-├── tests/                   # pytest suite (code runner, problems, DB, schema)
-├── docs/                    # Documentation and screenshots
-└── .env                     # DATABASE_URL, SECRET_KEY, OpenAI API key (git-ignored)
+├── backend/                 # Python API (Flask) — run everything from here
+│   ├── app.py               # Flask app factory, index route, blueprint registration
+│   ├── config.py            # All settings, model names, prompt loading
+│   ├── services/            # Business logic
+│   │   ├── ai.py            # OpenAI client, streaming, test generation
+│   │   ├── sessions.py      # Session file I/O
+│   │   ├── problems.py      # DB-backed problem access + YAML seeding
+│   │   ├── db.py            # Problem agnostic/per-language split helpers
+│   │   ├── models.py        # SQLAlchemy models (Problem, User, Session, ...)
+│   │   ├── extensions.py    # db / login_manager / migrate singletons
+│   │   └── code_runner.py   # Subprocess code execution
+│   ├── routes/              # HTTP layer (Flask Blueprints)
+│   │   ├── auth.py          # Register / login / logout
+│   │   ├── sessions.py      # Session CRUD, chat, code, transcript endpoints
+│   │   ├── problems.py      # Problem list and detail endpoints
+│   │   ├── code.py          # Ad-hoc code execution endpoint
+│   │   ├── realtime.py      # WebRTC SDP proxy for voice mode
+│   │   └── research.py      # Study/tutor chat endpoint
+│   ├── migrations/          # Alembic (Flask-Migrate) migrations
+│   ├── scripts/
+│   │   └── seed_problems.py # Seed the database from the problem YAMLs
+│   ├── templates/           # Legacy server-rendered shell (removed once the
+│   │   └── index.html       #   Next.js frontend reaches parity)
+│   ├── static/              # Legacy Flask-served app assets (same lifecycle)
+│   │   ├── style.css
+│   │   ├── favicon.*
+│   │   └── js/              # Legacy vanilla-JS modules (~2400 lines total)
+│   ├── prompts/             # LLM system prompts (6 files)
+│   ├── problems/            # 150+ YAML problem definitions (canonical source)
+│   ├── tests/               # pytest suite (code runner, problems, DB, schema)
+│   └── .env                 # DATABASE_URL, SECRET_KEY, OpenAI API key (git-ignored)
+├── frontend/                # Next.js + TypeScript web client (consumes the API)
+├── docker-compose.yml       # Local PostgreSQL service (shared infra)
+└── docs/                    # Documentation and screenshots
 ```

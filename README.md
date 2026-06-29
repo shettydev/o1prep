@@ -26,14 +26,19 @@ Most interview platforms are puzzle grinders. O(1) Prep puts you in a real inter
 
 ## Quick Start
 
+The repository is a monorepo: the Python API lives in **`backend/`**, the web client in **`frontend/`**, and shared infrastructure (`docker-compose.yml`) at the root.
+
 ```bash
 git clone <repo-url>
 cd o1prep
+docker compose up -d                  # start PostgreSQL (from the repo root)
+
+cd backend                            # the Python API lives here
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Copy `.env.example` to `.env` and set your values (database URL, a secret key, and your OpenAI key):
+Copy `backend/.env.example` to `backend/.env` and set your values (database URL, a secret key, and your OpenAI key):
 
 ```
 DATABASE_URL=postgresql+psycopg://o1prep:o1prep@localhost:5433/o1prep
@@ -41,19 +46,38 @@ SECRET_KEY=change-me
 OPENAI_API_KEY=sk-your-key-here
 ```
 
-Start PostgreSQL, create the schema, load the problems, and run:
+Create the schema, load the problems, and run — all from `backend/`:
 
 ```bash
-docker compose up -d                  # start PostgreSQL
 export FLASK_APP=app
 flask db upgrade                      # create tables
 python scripts/seed_problems.py       # load the problem library
 python app.py
 ```
 
-Open **http://localhost:5000**, create an account, and start practicing.
+This serves the API (and the legacy server-rendered UI) on **http://localhost:5000**.
 
-> **Prerequisites:** Python 3.11+, Docker (for PostgreSQL), a paid OpenAI API key, and a modern browser (Chrome/Firefox/Safari). Node.js is optional — install it (or set `NODE_BIN`) to run and test solutions in JavaScript.
+### Frontend (Next.js)
+
+The web client is a separate Next.js app in `frontend/` that talks to the Flask
+API. In a second terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev                           # http://localhost:3000
+```
+
+Open **http://localhost:3000**. The dev server proxies `/api/*` to Flask on
+`127.0.0.1:5000` (see `frontend/next.config.ts`), so the session cookie stays
+same-origin and auth works with no CORS setup. Point it elsewhere with
+`API_ORIGIN=http://host:port npm run dev`.
+
+> On macOS, the AirPlay Receiver squats on port 5000 over IPv6 — the proxy
+> targets `127.0.0.1` (IPv4) specifically to avoid it. If you change the Flask
+> port, update `API_ORIGIN`.
+
+> **Prerequisites:** Python 3.11+, Node.js 20+, Docker (for PostgreSQL), a paid OpenAI API key, and a modern browser (Chrome/Firefox/Safari).
 
 ---
 
