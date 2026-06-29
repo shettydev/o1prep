@@ -59,10 +59,18 @@ export function TopBar() {
           </span>
         </button>
 
-        <button onClick={() => openPanel("history")} className="tbtn" title="Past interviews">
+        <button
+          onClick={() => openPanel("history")}
+          className="tbtn"
+          title="Past interviews"
+        >
           ⟲<span className="hidden sm:inline"> history</span>
         </button>
-        <button onClick={() => openPanel("settings")} className="tbtn" title="Engine settings">
+        <button
+          onClick={() => openPanel("settings")}
+          className="tbtn"
+          title="Engine settings"
+        >
           ⚙<span className="hidden sm:inline"> settings</span>
         </button>
 
