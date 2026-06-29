@@ -5,15 +5,21 @@ import { TopBar } from "@/components/TopBar";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { ProblemList } from "@/components/ProblemList";
 import { CommandPalette } from "@/components/CommandPalette";
+import { HistoryDrawer } from "@/components/HistoryDrawer";
+import { ProgressDrawer } from "@/components/ProgressDrawer";
+import { SettingsModal } from "@/components/SettingsModal";
 import { useProblems } from "@/store/problems";
+import { useSettings } from "@/store/settings";
 
 export default function Home() {
   const load = useProblems((s) => s.load);
+  const loadConfig = useSettings((s) => s.loadConfig);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
   useEffect(() => {
     load();
-  }, [load]);
+    loadConfig();
+  }, [load, loadConfig]);
 
   // Global ⌘K / Ctrl+K toggles the command palette.
   useEffect(() => {
@@ -35,6 +41,9 @@ export default function Home() {
         <ProblemList />
       </div>
       {paletteOpen && <CommandPalette onClose={() => setPaletteOpen(false)} />}
+      <HistoryDrawer />
+      <ProgressDrawer />
+      <SettingsModal />
     </main>
   );
 }

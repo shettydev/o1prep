@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useProblems } from "@/store/problems";
 import { useAuth } from "@/store/auth";
+import { useUI } from "@/store/ui";
 
 /**
  * Global top bar for the landing view. Mode toggle + history/settings get fully
@@ -14,6 +15,7 @@ export function TopBar() {
   const done = useProblems((s) => Object.keys(s.attempts).length);
   const email = useAuth((s) => s.email);
   const signOut = useAuth((s) => s.logout);
+  const openPanel = useUI((s) => s.open);
   const [mode, setMode] = useState<"text" | "voice">("text");
 
   return (
@@ -46,14 +48,25 @@ export function TopBar() {
           ))}
         </div>
 
-        {/* Progress chip */}
-        <div className="hidden items-center gap-2 border border-line px-3 py-1.5 text-[11px] text-text-dim sm:flex">
+        {/* Progress chip → progress drawer */}
+        <button
+          onClick={() => openPanel("progress")}
+          className="hidden items-center gap-2 border border-line px-3 py-1.5 text-[11px] text-text-dim hover:border-line-bright hover:text-text sm:flex"
+          title="Progress"
+        >
           <span className="text-green">▸</span>
           <span>
             <span className="text-text">{done}</span>
             <span className="text-text-faint"> / {total}</span> done
           </span>
-        </div>
+        </button>
+
+        <button onClick={() => openPanel("history")} className="tbtn" title="Past interviews">
+          ⟲ history
+        </button>
+        <button onClick={() => openPanel("settings")} className="tbtn" title="Engine settings">
+          ⚙ settings
+        </button>
 
         {/* Signed-in identity + sign out */}
         {email && (

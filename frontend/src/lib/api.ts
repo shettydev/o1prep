@@ -3,6 +3,7 @@ import type {
   FullProblem,
   ProblemSummary,
   RunResult,
+  SessionDetail,
   SessionSummary,
   TestResults,
 } from "./types";
@@ -148,4 +149,15 @@ export function getProblems(): Promise<ProblemSummary[]> {
 
 export function getSessions(): Promise<SessionSummary[]> {
   return apiGet<SessionSummary[]>("/sessions");
+}
+
+export function getSession(id: string): Promise<SessionDetail> {
+  return apiGet<SessionDetail>(`/sessions/${id}`);
+}
+
+export function deleteSession(id: string): Promise<unknown> {
+  return fetch(`/api/sessions/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  }).then((r) => (r.ok ? r.json() : null));
 }

@@ -8,16 +8,24 @@ import { ChatPanel } from "./ChatPanel";
 import { EditorPanel } from "./EditorPanel";
 import { TutorSidebar } from "./TutorSidebar";
 
-export function InterviewView({ problemId }: { problemId: number }) {
+export function InterviewView({
+  problemId,
+  sessionId,
+}: {
+  problemId?: number;
+  sessionId?: string;
+}) {
   const status = useInterview((s) => s.status);
   const error = useInterview((s) => s.error);
   const init = useInterview((s) => s.init);
+  const resume = useInterview((s) => s.resume);
   const reset = useInterview((s) => s.reset);
 
   useEffect(() => {
-    init(problemId);
+    if (sessionId) resume(sessionId);
+    else if (problemId != null) init(problemId);
     return () => reset();
-  }, [problemId, init, reset]);
+  }, [problemId, sessionId, init, resume, reset]);
 
   if (status === "booting") {
     return (

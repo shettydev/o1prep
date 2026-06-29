@@ -14,8 +14,15 @@ export interface ProblemSummary {
 }
 
 export interface SessionSummary {
+  id: string;
+  focus: string;
   problem_id: number | null;
+  problem_title: string | null;
+  started_at: string;
+  message_count: number;
   rating: Rating | null;
+  status: "active" | "completed" | string;
+  mode: "text" | "voice" | string;
 }
 
 /** Interviewer verdict on a past attempt. Drives the status indicator color. */
@@ -43,6 +50,24 @@ export interface FullProblem extends ProblemSummary {
   scenario?: string;
   constraints?: string[];
   examples?: { input?: string; output?: string }[];
+  follow_ups?: string[];
+  explanation?: string;
+  references?: string[];
+  available_languages?: string[];
+}
+
+/** A loaded interview session (GET /api/sessions/:id). */
+export interface SessionDetail {
+  id: string;
+  focus: string;
+  problem_id: number | null;
+  problem_title: string | null;
+  started_at: string;
+  status: string;
+  messages: ChatMessage[];
+  rating: Rating | null;
+  code: string;
+  language: string;
 }
 
 export interface RunResult {
@@ -78,9 +103,14 @@ export interface LanguageMeta {
   file_extension: string;
 }
 
+export interface ModelOption {
+  id: string;
+  label: string;
+}
+
 export interface EngineConfig {
   provider: string;
-  models: string[];
+  models: ModelOption[];
   default_model: string;
   supports_effort: boolean;
   efforts: string[];

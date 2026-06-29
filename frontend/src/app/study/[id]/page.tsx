@@ -1,4 +1,4 @@
-import { ComingSoon } from "@/components/ComingSoon";
+import { StudyView } from "@/components/study/StudyView";
 
 export default async function StudyPage({
   params,
@@ -6,5 +6,5 @@ export default async function StudyPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <ComingSoon module="study" id={Number(id)} />;
+  return <StudyView problemId={Number(id)} />;
 }

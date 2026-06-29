@@ -7,6 +7,7 @@ import type {
 } from "@/lib/types";
 import * as api from "@/lib/api";
 import { streamSSE } from "@/lib/sse";
+import { requestSettings, useSettings } from "@/store/settings";
 
 export type ChatItem =
   | { id: string; role: "user" | "assistant"; content: string }
@@ -43,6 +44,7 @@ interface InterviewState {
 
   // actions
   init: (problemId: number) => Promise<void>;
+  resume: (sessionId: string) => Promise<void>;
   start: () => Promise<void>;
   setCode: (code: string) => void;
   changeLanguage: (lang: string) => Promise<void>;
@@ -114,7 +116,10 @@ export const useInterview = create<InterviewState>((set, get) => ({
     set({ status: "booting", error: null, items: [], tutorItems: [] });
     try {
       const config = await api.getConfig();
-      const language = config.default_language;
+      const savedLang = useSettings.getState().language;
+      const language = config.languages.some((l) => l.id === savedLang)
+        ? savedLang
+        : config.default_language;
       const problem = await api.getProblem(problemId, language).catch(() => null);
       if (!current()) return;
       const session = await api.createSession({
@@ -122,6 +127,7 @@ export const useInterview = create<InterviewState>((set, get) => ({
         mode: "text",
         problem_id: problemId,
         language,
+        ...requestSettings(),
       });
       if (!current()) return;
       set({
@@ -167,6 +173,43 @@ export const useInterview = create<InterviewState>((set, get) => ({
       if (full?.starter_code) starter = full.starter_code;
     }
     set({ code: starter, runResult: null, testResults: null, testError: null });
+  },
+
+  resume: async (sessionId) => {
+    const seq = ++initSeq;
+    const current = () => seq === initSeq;
+    set({ status: "booting", error: null, items: [], tutorItems: [] });
+    try {
+      const config = await api.getConfig();
+      const detail = await api.getSession(sessionId);
+      if (!current()) return;
+      const problem = detail.problem_id
+        ? await api.getProblem(detail.problem_id, detail.language).catch(() => null)
+        : null;
+      if (!current()) return;
+      const language = detail.language || config.default_language;
+      const items: ChatItem[] = detail.messages
+        .filter((m) => m.role !== "system")
+        .map((m) => ({
+          id: nextId(),
+          role: m.role === "assistant" ? "assistant" : "user",
+          content: m.content,
+        }));
+      set({
+        config,
+        language,
+        problem,
+        sessionId: detail.id,
+        code: detail.code || placeholder(language),
+        items,
+        status: "ready",
+      });
+    } catch (e) {
+      set({
+        status: "error",
+        error: e instanceof Error ? e.message : "Could not load that session.",
+      });
+    }
   },
 
   start: async () => {
@@ -300,7 +343,7 @@ export const useInterview = create<InterviewState>((set, get) => ({
     try {
       await streamSSE(
         "/research/chat",
-        { problem_id: problem?.id ?? null, message: text, history },
+        { problem_id: problem?.id ?? null, message: text, history, ...requestSettings() },
         {
           onContent: (full) =>
             set((s) => ({ tutorItems: upsertAssistant(s.tutorItems, aid, full) })),
