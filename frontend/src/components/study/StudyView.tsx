@@ -13,7 +13,16 @@ import { ProblemDetail } from "./ProblemDetail";
 
 const CHAT_MIN = 300;
 const CHAT_MAX = 720;
+const CHAT_WIDTH_DEFAULT = 384; // matches the old w-96 default
+const CHAT_WIDTH_KEY = "studyChatWidth";
 const clamp = (n: number) => Math.max(CHAT_MIN, Math.min(n, CHAT_MAX));
+
+/** Read the persisted chat width (SSR-safe — returns the default on the server). */
+function readChatWidth(): number {
+  if (typeof window === "undefined") return CHAT_WIDTH_DEFAULT;
+  const v = Number(window.localStorage.getItem(CHAT_WIDTH_KEY));
+  return v >= CHAT_MIN && v <= CHAT_MAX ? v : CHAT_WIDTH_DEFAULT;
+}
 
 interface ChatBubble {
   id: number;
@@ -50,9 +59,7 @@ function ResearchChat({ problemId }: { problemId: number }) {
         { problem_id: problemId, message: t, history, ...requestSettings() },
         {
           onContent: (full) =>
-            setItems((prev) =>
-              prev.map((m) => (m.id === aid ? { ...m, content: full } : m)),
-            ),
+            setItems((prev) => prev.map((m) => (m.id === aid ? { ...m, content: full } : m))),
         },
       );
     } catch (e) {
@@ -73,8 +80,8 @@ function ResearchChat({ problemId }: { problemId: number }) {
       <div ref={scrollRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3">
         {items.length === 0 && (
           <p className="text-[12px] leading-relaxed text-text-faint">
-            Ask about this problem — concepts, approaches, complexity, data
-            structures. The tutor guides without giving away the full solution.
+            Ask about this problem — concepts, approaches, complexity, data structures. The tutor
+            guides without giving away the full solution.
           </p>
         )}
         {items.map((m) => (
@@ -91,7 +98,8 @@ function ResearchChat({ problemId }: { problemId: number }) {
                 <Markdown>{m.content}</Markdown>
               ) : (
                 <span className="label text-amber-dim">
-                  thinking<span className="cursor" />
+                  thinking
+                  <span className="cursor" />
                 </span>
               )
             ) : (
@@ -131,7 +139,16 @@ export function StudyView({ problemId }: { problemId: number }) {
   const [problem, setProblem] = useState<FullProblem | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [tab, setTab] = useState<"problem" | "chat">("problem");
-  const [chatWidth, setChatWidth] = useState(384); // matches the old w-96 default
+  const [chatWidth, setChatWidth] = useState(readChatWidth);
+
+  // Persist the chat width so it survives reloads.
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(CHAT_WIDTH_KEY, String(chatWidth));
+    } catch {
+      /* storage unavailable (private mode / quota) — width just won't persist */
+    }
+  }, [chatWidth]);
 
   useEffect(() => {
     let alive = true;
@@ -152,7 +169,8 @@ export function StudyView({ problemId }: { problemId: number }) {
     return (
       <main className="flex min-h-screen items-center justify-center">
         <div className="text-[13px] text-text-dim">
-          <span className="text-amber">$</span> loading problem<span className="cursor" />
+          <span className="text-amber">$</span> loading problem
+          <span className="cursor" />
         </div>
       </main>
     );
@@ -180,10 +198,7 @@ export function StudyView({ problemId }: { problemId: number }) {
         <div className="min-w-0 flex-1 truncate text-center text-[13px] text-text">
           {problem.title}
         </div>
-        <button
-          onClick={() => router.push(`/interview/${problem.id}`)}
-          className="tbtn tbtn-amber"
-        >
+        <button onClick={() => router.push(`/interview/${problem.id}`)} className="tbtn tbtn-amber">
           ▸ practice
         </button>
       </header>
@@ -216,6 +231,7 @@ export function StudyView({ problemId }: { problemId: number }) {
           onDrag={(dx) => setChatWidth((w) => clamp(w - dx))}
         />
         <aside
+          suppressHydrationWarning
           style={{ "--chat-w": `${chatWidth}px` } as React.CSSProperties}
           className={`${tab === "chat" ? "flex" : "hidden"} w-full shrink-0 flex-col bg-bg-inset/40 md:flex md:w-[var(--chat-w)]`}
         >
