@@ -30,17 +30,15 @@ export function TopBar() {
         </span>
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* Mode toggle */}
-        <div className="flex border border-line">
+      <div className="flex items-center gap-1.5 sm:gap-2">
+        {/* Mode toggle — voice is wired in a later phase; cosmetic for now. */}
+        <div className="hidden border border-line sm:flex">
           {(["text", "voice"] as const).map((m) => (
             <button
               key={m}
               onClick={() => setMode(m)}
               className={`px-3 py-1.5 text-[11px] uppercase tracking-wider transition-colors ${
-                mode === m
-                  ? "bg-amber/10 text-amber"
-                  : "text-text-dim hover:text-text"
+                mode === m ? "bg-amber/10 text-amber" : "text-text-dim hover:text-text"
               }`}
             >
               {m}
@@ -62,10 +60,10 @@ export function TopBar() {
         </button>
 
         <button onClick={() => openPanel("history")} className="tbtn" title="Past interviews">
-          ⟲ history
+          ⟲<span className="hidden sm:inline"> history</span>
         </button>
         <button onClick={() => openPanel("settings")} className="tbtn" title="Engine settings">
-          ⚙ settings
+          ⚙<span className="hidden sm:inline"> settings</span>
         </button>
 
         {/* Signed-in identity + sign out */}
@@ -78,7 +76,7 @@ export function TopBar() {
           </span>
         )}
         <button onClick={signOut} className="tbtn" title="Sign out">
-          ⏻ exit
+          ⏻<span className="hidden sm:inline"> exit</span>
         </button>
       </div>
     </header>

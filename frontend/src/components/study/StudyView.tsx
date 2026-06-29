@@ -125,6 +125,7 @@ export function StudyView({ problemId }: { problemId: number }) {
   const router = useRouter();
   const [problem, setProblem] = useState<FullProblem | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [tab, setTab] = useState<"problem" | "chat">("problem");
 
   useEffect(() => {
     let alive = true;
@@ -180,11 +181,32 @@ export function StudyView({ problemId }: { problemId: number }) {
           ▸ practice
         </button>
       </header>
+      {/* Mobile tab switch — detail and chat can't share a narrow viewport. */}
+      <div className="flex border-b border-line md:hidden">
+        {(["problem", "chat"] as const).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`flex-1 py-2 text-[11px] uppercase tracking-wider ${
+              tab === t
+                ? "border-b-2 border-amber text-amber"
+                : "border-b-2 border-transparent text-text-dim"
+            }`}
+          >
+            {t === "problem" ? "▤ problem" : "◆ chat"}
+          </button>
+        ))}
+      </div>
+
       <div className="flex min-h-0 flex-1">
-        <div className="min-w-0 flex-1 overflow-y-auto border-r border-line">
+        <div
+          className={`${tab === "problem" ? "block" : "hidden"} min-w-0 flex-1 overflow-y-auto border-r border-line md:block`}
+        >
           <ProblemDetail problem={problem} />
         </div>
-        <aside className="hidden w-96 shrink-0 flex-col bg-bg-inset/40 md:flex">
+        <aside
+          className={`${tab === "chat" ? "flex" : "hidden"} w-full shrink-0 flex-col bg-bg-inset/40 md:flex md:w-96`}
+        >
           <ResearchChat problemId={problem.id} />
         </aside>
       </div>

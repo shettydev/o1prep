@@ -21,9 +21,19 @@ const vt323 = VT323({
 });
 
 export const metadata: Metadata = {
-  title: "O(1)_PREP // mock interview terminal",
+  title: {
+    default: "O(1)_PREP // mock interview terminal",
+    template: "%s // O(1)_PREP",
+  },
+  applicationName: "O(1) Prep",
   description:
     "A terminal for grinding coding interviews — problems, mock interviews, voice, and an AI tutor.",
+  openGraph: {
+    title: "O(1)_PREP // mock interview terminal",
+    description:
+      "A terminal for grinding coding interviews — problems, mock interviews, and an AI tutor.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

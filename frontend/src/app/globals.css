@@ -364,3 +364,31 @@ kbd {
 .rise {
   animation: rise 0.35s ease both;
 }
+
+/* Hide scrollbars-as-content but keep scroll (used on tab strips). */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* ============================================================================
+   Accessibility: respect reduced-motion — drop the CRT scanlines, the blinking
+   cursor, and all entrance/transition animation for users who ask for it.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .crt-overlay {
+    display: none;
+  }
+  .cursor::after {
+    animation: none;
+  }
+}

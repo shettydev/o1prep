@@ -27,7 +27,7 @@ export function TutorSidebar() {
   };
 
   return (
-    <aside className="flex w-80 shrink-0 flex-col border-l border-line bg-bg-inset/40">
+    <aside className="fixed inset-y-0 right-0 z-40 flex w-full max-w-sm shrink-0 flex-col border-l border-line bg-bg md:static md:z-auto md:w-80 md:bg-bg-inset/40">
       <div className="flex items-center justify-between border-b border-line px-3 py-2">
         <span className="label">◆ tutor</span>
         <button onClick={toggle} className="text-text-dim hover:text-amber" title="Close">
