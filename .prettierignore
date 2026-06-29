@@ -1,0 +1,21 @@
+# Prettier is scoped to the frontend; everything else is ignored.
+# (lint-staged already restricts which files Prettier sees, but this keeps
+#  manual `prettier .` runs from touching the wrong places.)
+
+# Python backend — handled by ruff, not Prettier
+backend/
+
+# Dependencies & build output
+node_modules/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/next-env.d.ts
+**/*.tsbuildinfo
+package-lock.json
+frontend/package-lock.json
+
+# Generated / data dirs
+user_data/
+.pgdata/
+.tmp/

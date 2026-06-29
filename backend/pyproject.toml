@@ -16,3 +16,8 @@ select = ["E", "F", "W", "I"]
 ignore = [
     "E501",  # line length is enforced loosely; long prompt/SQL strings are fine
 ]
+
+[tool.ruff.format]
+# Black-compatible defaults, applied to staged .py files via the pre-commit hook.
+quote-style = "double"
+indent-style = "space"
