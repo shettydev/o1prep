@@ -81,14 +81,22 @@ python scripts/seed_problems.py   # load problems from YAML
 python app.py
 ```
 
-One-time, from the repo root, install the Git hook tooling (requires Node 18+):
+One-time, from the repo root, install the JavaScript tooling. This repo uses
+[pnpm](https://pnpm.io/) (a pnpm workspace covers the root tooling and the
+`frontend/` app). Enable it via Corepack, which ships with Node 18+:
 
 ```bash
-npm install   # sets up Husky pre-commit + commit-msg hooks
+corepack enable               # makes the pinned pnpm version available
+pnpm install                  # installs frontend deps + sets up Git hooks
 ```
 
-This activates auto-formatting and commit-message validation on every commit
-(see [Git hooks](#git-hooks) and [Commit messages](#commit-messages) below).
+`pnpm install` also activates auto-formatting and commit-message validation on
+every commit (see [Git hooks](#git-hooks) and [Commit messages](#commit-messages)
+below). The pnpm version is pinned via the `packageManager` field in the root
+`package.json`.
+
+The frontend can then be run from the repo root: `pnpm dev` (or `pnpm build` /
+`pnpm lint`), which proxy to the `frontend` workspace.
 
 ### Running tests
 
@@ -127,7 +135,7 @@ sure both pass locally first.
 
 ### Git hooks
 
-After `npm install` (repo root), [Husky](https://typicode.github.io/husky/)
+After `pnpm install` (repo root), [Husky](https://typicode.github.io/husky/)
 installs two hooks that run automatically:
 
 - **`pre-commit`** — runs [lint-staged](https://github.com/lint-staged/lint-staged)
