@@ -34,9 +34,11 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col">
+    <main className="flex min-h-screen flex-col lg:h-screen lg:min-h-0 lg:overflow-hidden">
       <TopBar />
-      <div className="flex flex-1 flex-col lg:flex-row">
+      {/* On desktop the page is pinned to the viewport and each panel scrolls
+          on its own; on mobile it falls back to normal page scroll. */}
+      <div className="flex flex-1 flex-col lg:min-h-0 lg:flex-row">
         <FilterSidebar onOpenPalette={() => setPaletteOpen(true)} />
         <ProblemList />
       </div>

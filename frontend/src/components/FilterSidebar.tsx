@@ -39,7 +39,7 @@ export function FilterSidebar({ onOpenPalette }: { onOpenPalette: () => void }) 
   };
 
   return (
-    <aside className="flex w-full shrink-0 flex-col gap-5 border-r border-line bg-bg-inset/40 p-4 lg:w-72">
+    <aside className="flex w-full shrink-0 flex-col gap-5 border-r border-line bg-bg-inset/40 p-4 lg:h-full lg:w-72 lg:overflow-y-auto">
       {/* Search */}
       <div className="space-y-2">
         <div className="flex items-center border border-line bg-bg-inset px-2.5 focus-within:border-amber">

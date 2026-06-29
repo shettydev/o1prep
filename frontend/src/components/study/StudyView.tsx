@@ -8,7 +8,12 @@ import { getProblem } from "@/lib/api";
 import { streamSSE } from "@/lib/sse";
 import { requestSettings } from "@/store/settings";
 import { Markdown } from "@/components/interview/Markdown";
+import { ResizeHandle } from "@/components/ResizeHandle";
 import { ProblemDetail } from "./ProblemDetail";
+
+const CHAT_MIN = 300;
+const CHAT_MAX = 720;
+const clamp = (n: number) => Math.max(CHAT_MIN, Math.min(n, CHAT_MAX));
 
 interface ChatBubble {
   id: number;
@@ -126,6 +131,7 @@ export function StudyView({ problemId }: { problemId: number }) {
   const [problem, setProblem] = useState<FullProblem | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
   const [tab, setTab] = useState<"problem" | "chat">("problem");
+  const [chatWidth, setChatWidth] = useState(384); // matches the old w-96 default
 
   useEffect(() => {
     let alive = true;
@@ -204,8 +210,14 @@ export function StudyView({ problemId }: { problemId: number }) {
         >
           <ProblemDetail problem={problem} />
         </div>
+        {/* Drag to resize the chat panel (desktop only — mobile is tabbed). */}
+        <ResizeHandle
+          className="hidden md:block"
+          onDrag={(dx) => setChatWidth((w) => clamp(w - dx))}
+        />
         <aside
-          className={`${tab === "chat" ? "flex" : "hidden"} w-full shrink-0 flex-col bg-bg-inset/40 md:flex md:w-96`}
+          style={{ "--chat-w": `${chatWidth}px` } as React.CSSProperties}
+          className={`${tab === "chat" ? "flex" : "hidden"} w-full shrink-0 flex-col bg-bg-inset/40 md:flex md:w-[var(--chat-w)]`}
         >
           <ResearchChat problemId={problem.id} />
         </aside>

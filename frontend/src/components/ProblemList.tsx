@@ -31,7 +31,7 @@ export function ProblemList() {
   );
 
   return (
-    <section className="min-w-0 flex-1 p-4 sm:p-6">
+    <section className="min-w-0 flex-1 p-4 sm:p-6 lg:h-full lg:min-h-0 lg:overflow-y-auto">
       <div className="mb-4 flex items-center justify-between border-b border-line pb-2">
         <span className="label">
           {loading ? "loading…" : `${visible.length} problem${visible.length === 1 ? "" : "s"}`}
