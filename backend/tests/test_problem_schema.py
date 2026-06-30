@@ -44,7 +44,9 @@ def test_problem_is_valid(path):
         assert data.get(field) not in (None, ""), f"{name}: missing required field '{field}'"
 
     assert isinstance(data["id"], int), f"{name}: 'id' must be an integer"
-    assert isinstance(data["category"], str) and data["category"].strip(), f"{name}: 'category' must be a non-empty string"
+    assert isinstance(data["category"], str) and data["category"].strip(), (
+        f"{name}: 'category' must be a non-empty string"
+    )
     assert data["difficulty"] in VALID_DIFFICULTIES, f"{name}: difficulty must be one of {VALID_DIFFICULTIES}"
 
     test_type = data["test_type"]

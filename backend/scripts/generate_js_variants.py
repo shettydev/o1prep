@@ -82,10 +82,8 @@ def _build_user_prompt(problem):
         "python_starter_code": problem.get("starter_code", ""),
         "python_test_cases": lang_fields.get("test_cases", []),
     }
-    return (
-        "Translate this Python problem to JavaScript per the rules. "
-        "Return ONLY the JSON object.\n\n"
-        + json.dumps(payload, indent=2)
+    return "Translate this Python problem to JavaScript per the rules. Return ONLY the JSON object.\n\n" + json.dumps(
+        payload, indent=2
     )
 
 
@@ -111,7 +109,7 @@ def _extract_json_object(text):
             depth -= 1
             if depth == 0:
                 try:
-                    return json.loads(s[start:i + 1])
+                    return json.loads(s[start : i + 1])
                 except Exception:
                     return None
     return None
@@ -120,14 +118,21 @@ def _extract_json_object(text):
 def _ask_model(problem):
     """One-shot Claude CLI call returning the parsed JSON variant, or None."""
     cmd = [
-        config.CLAUDE_BIN, "-p",
-        "--model", config.CLAUDE_MODEL,
-        "--max-turns", "1",
-        "--setting-sources", "",
-        "--tools", "",
+        config.CLAUDE_BIN,
+        "-p",
+        "--model",
+        config.CLAUDE_MODEL,
+        "--max-turns",
+        "1",
+        "--setting-sources",
+        "",
+        "--tools",
+        "",
         "--no-session-persistence",
-        "--output-format", "json",
-        "--system-prompt", SYSTEM_PROMPT,
+        "--output-format",
+        "json",
+        "--system-prompt",
+        SYSTEM_PROMPT,
     ]
     try:
         proc = subprocess.run(
@@ -195,9 +200,7 @@ def main():
             print(f"  FAIL [{pid}] {title} — {detail}")
             failed.append(pid)
 
-    print(
-        f"\nDone. {len(succeeded)} written, {len(failed)} failed, {skipped} already had a JS variant."
-    )
+    print(f"\nDone. {len(succeeded)} written, {len(failed)} failed, {skipped} already had a JS variant.")
     if failed:
         print("Failed ids (re-run to retry):", ",".join(str(i) for i in failed))
     if succeeded and not args.dry_run:

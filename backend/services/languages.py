@@ -6,29 +6,29 @@ and helpers — no subprocess or execution logic lives here. Runners
 resolve language ids through this module so the allowlist is defined once.
 """
 
-DEFAULT_LANGUAGE = 'python'
+DEFAULT_LANGUAGE = "python"
 
 LANGUAGES = {
-    'python': {
-        'id': 'python',
-        'label': 'Python',
-        'codemirror_mode': 'python',
-        'file_extension': '.py',
-        'starter_code_key': 'python',
+    "python": {
+        "id": "python",
+        "label": "Python",
+        "codemirror_mode": "python",
+        "file_extension": ".py",
+        "starter_code_key": "python",
     },
-    'javascript': {
-        'id': 'javascript',
-        'label': 'JavaScript',
-        'codemirror_mode': 'javascript',
-        'file_extension': '.js',
-        'starter_code_key': 'javascript',
+    "javascript": {
+        "id": "javascript",
+        "label": "JavaScript",
+        "codemirror_mode": "javascript",
+        "file_extension": ".js",
+        "starter_code_key": "javascript",
     },
-    'typescript': {
-        'id': 'typescript',
-        'label': 'TypeScript',
-        'codemirror_mode': 'text/typescript',
-        'file_extension': '.ts',
-        'starter_code_key': 'typescript',
+    "typescript": {
+        "id": "typescript",
+        "label": "TypeScript",
+        "codemirror_mode": "text/typescript",
+        "file_extension": ".ts",
+        "starter_code_key": "typescript",
     },
 }
 
@@ -47,7 +47,7 @@ def get(language) -> dict:
 
 def label(language) -> str:
     """Human-readable name for a language id (resolves unknown ids to the default)."""
-    return get(language)['label']
+    return get(language)["label"]
 
 
 def all_languages() -> list:

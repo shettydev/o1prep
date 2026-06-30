@@ -10,6 +10,7 @@ from services import code_runner
 
 # ── Function-based harness ──────────────────────────────────────────────
 
+
 def test_function_pass_with_kwargs():
     code = "def add(a, b):\n    return a + b\n"
     result = code_runner.run(code, "add", [{"input": {"a": 1, "b": 2}, "expected": 3}])
@@ -51,6 +52,7 @@ def test_function_unexpected_error_fails():
 
 # ── Top-level failure modes ─────────────────────────────────────────────
 
+
 def test_syntax_error_reports_failure():
     code = "def bad(:\n    pass\n"
     result = code_runner.run(code, "bad", [{"args": [], "expected": 1}])
@@ -74,6 +76,7 @@ def test_traceback_strips_temp_path():
 
 
 # ── Class-based harness ─────────────────────────────────────────────────
+
 
 def test_class_ops_sequence_passes():
     code = (
@@ -107,6 +110,7 @@ def test_class_init_args_and_failure_short_circuits():
 
 
 # ── Result formatting ───────────────────────────────────────────────────
+
 
 def test_format_results_for_context_summary():
     code = "def add(a, b):\n    return a + b\n"

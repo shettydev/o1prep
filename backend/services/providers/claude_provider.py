@@ -18,6 +18,7 @@ model runs purely as our interviewer/tutor persona.
 Note: the CLI exposes no temperature or max_tokens knobs, so those arguments are
 accepted for signature parity with the OpenAI provider but ignored.
 """
+
 import json
 import os
 import re
@@ -29,7 +30,7 @@ import time
 import config
 
 # Matches the CLI's not-logged-in / bad-credential result text.
-_LOGIN_ERR = re.compile(r'(not logged in|please run /login|invalid api key|/login\b)', re.I)
+_LOGIN_ERR = re.compile(r"(not logged in|please run /login|invalid api key|/login\b)", re.I)
 
 # Appended to every system prompt. We render prior turns as a labelled
 # transcript inside one user message, so this stops the model echoing a
@@ -42,11 +43,11 @@ _REPLY_GUARD = (
 
 # Models and reasoning-effort levels selectable from the UI.
 MODELS = [
-    {'id': 'sonnet', 'label': 'Sonnet — balanced'},
-    {'id': 'opus', 'label': 'Opus — most capable'},
-    {'id': 'haiku', 'label': 'Haiku — fastest'},
+    {"id": "sonnet", "label": "Sonnet — balanced"},
+    {"id": "opus", "label": "Opus — most capable"},
+    {"id": "haiku", "label": "Haiku — fastest"},
 ]
-EFFORTS = ['low', 'medium', 'high', 'max']
+EFFORTS = ["low", "medium", "high", "max"]
 SUPPORTS_EFFORT = True
 
 
@@ -63,7 +64,7 @@ def default_effort():
 
 
 def valid_model(model):
-    return any(m['id'] == model for m in MODELS)
+    return any(m["id"] == model for m in MODELS)
 
 
 def valid_effort(effort):
@@ -80,8 +81,8 @@ def get_client(model=None, effort=None):
 
 def _split_messages(messages):
     """Split OpenAI-style messages into (system_text, conversation_turns)."""
-    system_parts = [m['content'] for m in messages if m.get('role') == 'system']
-    convo = [m for m in messages if m.get('role') != 'system']
+    system_parts = [m["content"] for m in messages if m.get("role") == "system"]
+    convo = [m for m in messages if m.get("role") != "system"]
     return "\n\n".join(p for p in system_parts if p), convo
 
 
@@ -92,11 +93,11 @@ def _render_prompt(convo):
     model's side), so we render it as a labelled transcript. A lone user turn
     (e.g. the interview opener) is passed through verbatim.
     """
-    if len(convo) == 1 and convo[0].get('role') == 'user':
-        return convo[0].get('content', '')
+    if len(convo) == 1 and convo[0].get("role") == "user":
+        return convo[0].get("content", "")
     lines = []
     for m in convo:
-        label = 'Assistant' if m.get('role') == 'assistant' else 'User'
+        label = "Assistant" if m.get("role") == "assistant" else "User"
         lines.append(f"{label}: {m.get('content', '')}")
     return "\n\n".join(lines)
 
@@ -111,11 +112,11 @@ def _result_text(out):
         return None
     if isinstance(data, list):
         for item in reversed(data):
-            if isinstance(item, dict) and item.get('type') == 'result':
-                return None if item.get('is_error') else (item.get('result') or '')
+            if isinstance(item, dict) and item.get("type") == "result":
+                return None if item.get("is_error") else (item.get("result") or "")
         return None
     if isinstance(data, dict):
-        return None if data.get('is_error') else (data.get('result') or '')
+        return None if data.get("is_error") else (data.get("result") or "")
     return None
 
 
@@ -125,25 +126,25 @@ def _extract_json_object(text):
     if not text:
         return None
     s = text.strip()
-    if s.startswith('```'):
-        s = re.sub(r'^```[a-zA-Z]*\n?', '', s)
-        s = re.sub(r'\n?```$', '', s).strip()
+    if s.startswith("```"):
+        s = re.sub(r"^```[a-zA-Z]*\n?", "", s)
+        s = re.sub(r"\n?```$", "", s).strip()
     try:
         return json.loads(s)
     except Exception:
         pass
-    start = s.find('{')
+    start = s.find("{")
     if start == -1:
         return None
     depth = 0
     for i in range(start, len(s)):
-        if s[i] == '{':
+        if s[i] == "{":
             depth += 1
-        elif s[i] == '}':
+        elif s[i] == "}":
             depth -= 1
             if depth == 0:
                 try:
-                    return json.loads(s[start:i + 1])
+                    return json.loads(s[start : i + 1])
                 except Exception:
                     return None
     return None
@@ -156,21 +157,27 @@ class ClaudeClient:
 
     def _base_cmd(self, system, stream):
         cmd = [
-            config.CLAUDE_BIN, '-p',
-            '--model', self.model,
-            '--max-turns', '1',
-            '--setting-sources', '',
-            '--tools', '',
-            '--no-session-persistence',
-            '--output-format', 'stream-json' if stream else 'json',
+            config.CLAUDE_BIN,
+            "-p",
+            "--model",
+            self.model,
+            "--max-turns",
+            "1",
+            "--setting-sources",
+            "",
+            "--tools",
+            "",
+            "--no-session-persistence",
+            "--output-format",
+            "stream-json" if stream else "json",
         ]
         if self.effort:
-            cmd += ['--effort', self.effort]
+            cmd += ["--effort", self.effort]
         if stream:
             # stream-json output requires --verbose
-            cmd += ['--verbose', '--include-partial-messages']
+            cmd += ["--verbose", "--include-partial-messages"]
         if system:
-            cmd += ['--system-prompt', system + _REPLY_GUARD]
+            cmd += ["--system-prompt", system + _REPLY_GUARD]
         return cmd
 
     def _popen(self, cmd):
@@ -207,11 +214,11 @@ class ClaudeClient:
 
         deadline = time.monotonic() + config.CLAUDE_TIMEOUT
         streamed = False
-        final_text = ''
+        final_text = ""
         try:
             for raw in proc.stdout:
                 if time.monotonic() > deadline:
-                    raise RuntimeError('Claude Code timed out.')
+                    raise RuntimeError("Claude Code timed out.")
                 line = raw.strip()
                 if not line:
                     continue
@@ -220,40 +227,38 @@ class ClaudeClient:
                 except json.JSONDecodeError:
                     continue
 
-                kind = obj.get('type')
-                if kind == 'stream_event':
-                    event = obj.get('event', {})
-                    if event.get('type') == 'content_block_delta':
-                        delta = event.get('delta', {})
-                        if delta.get('type') == 'text_delta' and delta.get('text'):
+                kind = obj.get("type")
+                if kind == "stream_event":
+                    event = obj.get("event", {})
+                    if event.get("type") == "content_block_delta":
+                        delta = event.get("delta", {})
+                        if delta.get("type") == "text_delta" and delta.get("text"):
                             streamed = True
-                            yield delta['text']
-                elif kind == 'assistant':
-                    blocks = obj.get('message', {}).get('content', [])
-                    text = ''.join(b.get('text', '') for b in blocks if b.get('type') == 'text')
+                            yield delta["text"]
+                elif kind == "assistant":
+                    blocks = obj.get("message", {}).get("content", [])
+                    text = "".join(b.get("text", "") for b in blocks if b.get("type") == "text")
                     if text:
                         final_text = text
-                elif kind == 'result':
-                    final_text = obj.get('result') or final_text
-                    if obj.get('is_error'):
-                        raise RuntimeError(final_text or 'Claude Code returned an error.')
+                elif kind == "result":
+                    final_text = obj.get("result") or final_text
+                    if obj.get("is_error"):
+                        raise RuntimeError(final_text or "Claude Code returned an error.")
                     break
 
             # Fallback: if no partial deltas arrived, emit the assembled text
             # (and turn a login/credential message into a clear error).
             if not streamed:
-                text = (final_text or '').strip()
+                text = (final_text or "").strip()
                 if _LOGIN_ERR.search(text):
-                    raise RuntimeError(
-                        "Claude Code isn't signed in. Run `claude` once in a terminal to log in."
-                    )
+                    raise RuntimeError("Claude Code isn't signed in. Run `claude` once in a terminal to log in.")
                 if text:
                     yield text
         finally:
             self._cleanup(proc)
 
     def generate_test_cases(self, messages):
-        convo = [m for m in messages if m.get('role') != 'system']
+        convo = [m for m in messages if m.get("role") != "system"]
         prompt = _render_prompt(convo)
         proc = self._popen(self._base_cmd(config.TEST_GEN_PROMPT, stream=False))
         try:
@@ -269,8 +274,8 @@ class ClaudeClient:
         data = _extract_json_object(result_text)
         if not data:
             return None, []
-        fn = data.get('function_name')
-        cases = data.get('test_cases', [])
+        fn = data.get("function_name")
+        cases = data.get("test_cases", [])
         if not fn or not cases:
             return None, []
         return fn, cases

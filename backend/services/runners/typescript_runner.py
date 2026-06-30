@@ -23,8 +23,8 @@ def _unlink(path):
 
 
 class TypeScriptRunner(base.Runner):
-    language = 'typescript'
-    file_extension = '.ts'
+    language = "typescript"
+    file_extension = ".ts"
 
     def _command(self, path):
         return list(config.TS_CMD) + [path]
@@ -36,30 +36,30 @@ class TypeScriptRunner(base.Runner):
         )
 
     def run_program(self, source, timeout=config.CODE_TIMEOUT):
-        path = base.write_temp(source, suffix=self.file_extension, prefix='codeprep_run_')
+        path = base.write_temp(source, suffix=self.file_extension, prefix="codeprep_run_")
         try:
             result = base.run_subprocess(self._command(path), timeout=timeout)
-            return {'stdout': result.stdout, 'stderr': result.stderr, 'exit_code': result.returncode}
+            return {"stdout": result.stdout, "stderr": result.stderr, "exit_code": result.returncode}
         except _Timeout:
-            return {'stdout': '', 'stderr': f'Timeout: code took too long (>{timeout}s)', 'exit_code': 1}
+            return {"stdout": "", "stderr": f"Timeout: code took too long (>{timeout}s)", "exit_code": 1}
         except FileNotFoundError:
-            return {'stdout': '', 'stderr': self._missing_toolchain_msg(), 'exit_code': 1}
+            return {"stdout": "", "stderr": self._missing_toolchain_msg(), "exit_code": 1}
         except Exception as e:
-            return {'stdout': '', 'stderr': f'Runner error: {e}', 'exit_code': 1}
+            return {"stdout": "", "stderr": f"Runner error: {e}", "exit_code": 1}
         finally:
             _unlink(path)
 
-    def run_tests(self, user_code, target_name, test_cases, test_type='function', timeout=config.CODE_TIMEOUT):
+    def run_tests(self, user_code, target_name, test_cases, test_type="function", timeout=config.CODE_TIMEOUT):
         harness = build_harness(user_code, target_name, test_cases, test_type)
-        path = base.write_temp(harness, suffix=self.file_extension, prefix='codeprep_')
+        path = base.write_temp(harness, suffix=self.file_extension, prefix="codeprep_")
         try:
             result = base.run_subprocess(self._command(path), timeout=timeout)
             return base.parse_harness_output(result.stdout, result.stderr, result.returncode)
         except _Timeout:
-            return {'success': False, 'results': [], 'error': f'Timeout: code took too long to execute (>{timeout}s)'}
+            return {"success": False, "results": [], "error": f"Timeout: code took too long to execute (>{timeout}s)"}
         except FileNotFoundError:
-            return {'success': False, 'results': [], 'error': self._missing_toolchain_msg()}
+            return {"success": False, "results": [], "error": self._missing_toolchain_msg()}
         except Exception as e:
-            return {'success': False, 'results': [], 'error': f'Runner error: {e}'}
+            return {"success": False, "results": [], "error": f"Runner error: {e}"}
         finally:
             _unlink(path)

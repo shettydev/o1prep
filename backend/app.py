@@ -6,9 +6,9 @@ from services.extensions import db, login_manager, migrate
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = config.SECRET_KEY
-    app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URL
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config["SECRET_KEY"] = config.SECRET_KEY
+    app.config["SQLALCHEMY_DATABASE_URI"] = config.DATABASE_URL
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
     login_manager.init_app(app)
@@ -26,15 +26,16 @@ def create_app():
     @login_manager.unauthorized_handler
     def unauthorized():
         # The frontend is a fetch/SSE SPA, so return JSON 401 rather than a redirect.
-        if request.path.startswith('/api/'):
-            return jsonify({'error': 'Authentication required'}), 401
-        return render_template('index.html')
+        if request.path.startswith("/api/"):
+            return jsonify({"error": "Authentication required"}), 401
+        return render_template("index.html")
 
-    @app.route('/')
+    @app.route("/")
     def index():
-        return render_template('index.html')
+        return render_template("index.html")
 
     from routes import all_blueprints
+
     for bp in all_blueprints:
         app.register_blueprint(bp)
 
@@ -44,5 +45,5 @@ def create_app():
 app = create_app()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=config.FLASK_DEBUG, port=config.FLASK_PORT)

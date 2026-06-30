@@ -3,6 +3,7 @@
 Carries the same behaviour the app shipped with: streaming chat for the
 interviewer/tutor and JSON-mode test-case generation.
 """
+
 import json
 import os
 
@@ -10,8 +11,8 @@ import config
 
 # Models selectable from the UI. OpenAI has no reasoning-effort knob here.
 MODELS = [
-    {'id': 'gpt-4o', 'label': 'GPT-4o'},
-    {'id': 'gpt-4o-mini', 'label': 'GPT-4o mini — faster'},
+    {"id": "gpt-4o", "label": "GPT-4o"},
+    {"id": "gpt-4o-mini", "label": "GPT-4o mini — faster"},
 ]
 EFFORTS = []
 SUPPORTS_EFFORT = False
@@ -26,12 +27,13 @@ def default_effort():
 
 
 def valid_model(model):
-    return any(m['id'] == model for m in MODELS)
+    return any(m["id"] == model for m in MODELS)
 
 
 class OpenAIClient:
     def __init__(self, api_key, model=None):
         from openai import OpenAI  # lazy: only needed when this provider is used
+
         self._client = OpenAI(api_key=api_key)
         self.model = model or config.CHAT_MODEL
 
@@ -53,16 +55,16 @@ class OpenAIClient:
             response = self._client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {'role': 'system', 'content': config.TEST_GEN_PROMPT},
-                    *[m for m in messages if m['role'] != 'system'],
+                    {"role": "system", "content": config.TEST_GEN_PROMPT},
+                    *[m for m in messages if m["role"] != "system"],
                 ],
-                response_format={'type': 'json_object'},
+                response_format={"type": "json_object"},
                 temperature=config.TEST_GEN_TEMPERATURE,
                 max_tokens=config.TEST_GEN_MAX_TOKENS,
             )
             result = json.loads(response.choices[0].message.content)
-            fn = result.get('function_name')
-            cases = result.get('test_cases', [])
+            fn = result.get("function_name")
+            cases = result.get("test_cases", [])
             if not fn or not cases:
                 return None, []
             return fn, cases
@@ -71,7 +73,7 @@ class OpenAIClient:
 
 
 def get_client(model=None, effort=None):
-    api_key = os.environ.get('OPENAI_API_KEY', '')
+    api_key = os.environ.get("OPENAI_API_KEY", "")
     if not api_key:
         return None
     m = model if valid_model(model) else config.CHAT_MODEL

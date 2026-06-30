@@ -7,36 +7,36 @@ load_dotenv()
 
 BASE_DIR = os.path.dirname(__file__)
 
-PROBLEMS_DIR = os.path.join(BASE_DIR, 'problems')
-PROMPTS_DIR = os.path.join(BASE_DIR, 'prompts')
+PROBLEMS_DIR = os.path.join(BASE_DIR, "problems")
+PROMPTS_DIR = os.path.join(BASE_DIR, "prompts")
 
 # PostgreSQL connection. Problems and sessions both live in the database
 # (problems seeded from the canonical YAML files in PROBLEMS_DIR). Override with
 # DATABASE_URL in the environment; tests point it at a throwaway test database.
 DATABASE_URL = os.environ.get(
-    'DATABASE_URL',
-    'postgresql+psycopg://o1prep:o1prep@localhost:5433/o1prep',
+    "DATABASE_URL",
+    "postgresql+psycopg://o1prep:o1prep@localhost:5433/o1prep",
 )
 
 # Secret key for signed session cookies (Flask-Login). MUST be set to a strong
 # random value in any real deployment.
-SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-change-me")
 
 # AI provider for text interviews and the tutor: 'claude' drives the locally
 # installed Claude Code CLI using your existing login (no API key); 'openai'
 # uses the OpenAI API. Voice mode always uses OpenAI Realtime regardless.
-AI_PROVIDER = os.environ.get('AI_PROVIDER', 'claude').strip().lower()
+AI_PROVIDER = os.environ.get("AI_PROVIDER", "claude").strip().lower()
 
 # Claude Code CLI provider
-CLAUDE_BIN = os.environ.get('CLAUDE_BIN', 'claude')
-CLAUDE_MODEL = os.environ.get('CLAUDE_MODEL', 'sonnet')
-CLAUDE_EFFORT = os.environ.get('CLAUDE_EFFORT', 'high').strip().lower()
-CLAUDE_TIMEOUT = int(os.environ.get('CLAUDE_TIMEOUT', '180'))
+CLAUDE_BIN = os.environ.get("CLAUDE_BIN", "claude")
+CLAUDE_MODEL = os.environ.get("CLAUDE_MODEL", "sonnet")
+CLAUDE_EFFORT = os.environ.get("CLAUDE_EFFORT", "high").strip().lower()
+CLAUDE_TIMEOUT = int(os.environ.get("CLAUDE_TIMEOUT", "180"))
 
 # OpenAI models
-CHAT_MODEL = 'gpt-4o'
-REALTIME_MODEL = 'gpt-4o-realtime-preview'
-TRANSCRIPTION_MODEL = 'gpt-4o-mini-transcribe'
+CHAT_MODEL = "gpt-4o"
+REALTIME_MODEL = "gpt-4o-realtime-preview"
+TRANSCRIPTION_MODEL = "gpt-4o-mini-transcribe"
 
 # Chat parameters
 CHAT_TEMPERATURE = 0.7
@@ -51,13 +51,13 @@ TEST_GEN_MAX_TOKENS = 2000
 # Node/TS toolchain (argument list only, never shell=True). Override the binaries
 # via the environment when they are not on PATH.
 CODE_TIMEOUT = 5
-NODE_BIN = os.environ.get('NODE_BIN', 'node')
+NODE_BIN = os.environ.get("NODE_BIN", "node")
 # TypeScript executor as an argument list (default: `tsx <file>`).
-TS_CMD = os.environ.get('TS_CMD', 'tsx').split()
+TS_CMD = os.environ.get("TS_CMD", "tsx").split()
 
 # Voice / Realtime
-REALTIME_API_URL = 'https://api.openai.com/v1/realtime/calls'
-VOICE_NAME = 'ash'
+REALTIME_API_URL = "https://api.openai.com/v1/realtime/calls"
+VOICE_NAME = "ash"
 VAD_THRESHOLD = 0.5
 VAD_PREFIX_PADDING_MS = 300
 VAD_SILENCE_DURATION_MS = 500
@@ -68,19 +68,19 @@ FLASK_DEBUG = True
 
 # SSE headers reused by all streaming endpoints
 SSE_HEADERS = {
-    'Cache-Control': 'no-cache',
-    'X-Accel-Buffering': 'no',
+    "Cache-Control": "no-cache",
+    "X-Accel-Buffering": "no",
 }
 
 
 def _load_prompt(filename):
-    with open(os.path.join(PROMPTS_DIR, filename), encoding='utf-8') as f:
+    with open(os.path.join(PROMPTS_DIR, filename), encoding="utf-8") as f:
         return f.read()
 
 
-SYSTEM_PROMPT = _load_prompt('interviewer.txt')
-SESSION_CONFIG = _load_prompt('session_config.txt')
-FOCUS_PROMPTS = json.loads(_load_prompt('focus_prompts.json'))
-TEST_GEN_PROMPT = _load_prompt('test_generation.txt')
-VOICE_SYSTEM_PROMPT = _load_prompt('voice_interviewer.txt')
-TUTOR_SYSTEM_PROMPT = _load_prompt('tutor.txt')
+SYSTEM_PROMPT = _load_prompt("interviewer.txt")
+SESSION_CONFIG = _load_prompt("session_config.txt")
+FOCUS_PROMPTS = json.loads(_load_prompt("focus_prompts.json"))
+TEST_GEN_PROMPT = _load_prompt("test_generation.txt")
+VOICE_SYSTEM_PROMPT = _load_prompt("voice_interviewer.txt")
+TUTOR_SYSTEM_PROMPT = _load_prompt("tutor.txt")

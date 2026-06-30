@@ -64,6 +64,7 @@ def test_session_system_prompt_uses_selected_language(auth_client):
     # responds in JavaScript rather than the hardcoded Python default.
     from services.extensions import db
     from services.models import Session
+
     sid = auth_client.post(
         "/api/sessions",
         json={"problem_id": 1, "mode": "text", "language": "javascript"},
@@ -76,6 +77,7 @@ def test_session_system_prompt_uses_selected_language(auth_client):
 def test_session_system_prompt_defaults_to_python(auth_client):
     from services.extensions import db
     from services.models import Session
+
     sid = auth_client.post("/api/sessions", json={"problem_id": 1, "mode": "text"}).get_json()["id"]
     system = db.session.get(Session, sid).data["messages"][0]["content"]
     assert "language: Python" in system

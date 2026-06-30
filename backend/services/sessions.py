@@ -17,16 +17,16 @@ from services.models import Session
 def create(focus, mode, problem_id, problem_title, system_message, user_id):
     session_id = str(uuid.uuid4())[:8]
     session = {
-        'id': session_id,
-        'user_id': user_id,
-        'focus': focus,
-        'mode': mode,
-        'problem_id': problem_id,
-        'problem_title': problem_title,
-        'started_at': datetime.now().isoformat(),
-        'status': 'active',
-        'messages': [{'role': 'system', 'content': system_message}],
-        'rating': None,
+        "id": session_id,
+        "user_id": user_id,
+        "focus": focus,
+        "mode": mode,
+        "problem_id": problem_id,
+        "problem_title": problem_title,
+        "started_at": datetime.now().isoformat(),
+        "status": "active",
+        "messages": [{"role": "system", "content": system_message}],
+        "rating": None,
     }
     save(session)
     return session
@@ -34,9 +34,9 @@ def create(focus, mode, problem_id, problem_title, system_message, user_id):
 
 def save(session):
     """Insert or update a session row from its dict (reassigns JSONB data)."""
-    row = db.session.get(Session, session['id'])
+    row = db.session.get(Session, session["id"])
     if row is None:
-        row = Session(id=session['id'], user_id=session['user_id'], data=session)
+        row = Session(id=session["id"], user_id=session["user_id"], data=session)
         db.session.add(row)
     else:
         row.data = session
@@ -52,26 +52,23 @@ def load(session_id, user_id):
 
 
 def list_all(user_id):
-    rows = (
-        db.session.query(Session)
-        .filter_by(user_id=user_id)
-        .order_by(Session.created_at.desc())
-        .all()
-    )
+    rows = db.session.query(Session).filter_by(user_id=user_id).order_by(Session.created_at.desc()).all()
     results = []
     for row in rows:
         s = row.data
-        results.append({
-            'id': s['id'],
-            'focus': s.get('focus', 'general'),
-            'problem_id': s.get('problem_id'),
-            'problem_title': s.get('problem_title'),
-            'started_at': s['started_at'],
-            'message_count': len([m for m in s['messages'] if m['role'] != 'system']),
-            'rating': s.get('rating'),
-            'status': s.get('status', 'active'),
-            'mode': s.get('mode', 'text'),
-        })
+        results.append(
+            {
+                "id": s["id"],
+                "focus": s.get("focus", "general"),
+                "problem_id": s.get("problem_id"),
+                "problem_title": s.get("problem_title"),
+                "started_at": s["started_at"],
+                "message_count": len([m for m in s["messages"] if m["role"] != "system"]),
+                "rating": s.get("rating"),
+                "status": s.get("status", "active"),
+                "mode": s.get("mode", "text"),
+            }
+        )
     return results
 
 

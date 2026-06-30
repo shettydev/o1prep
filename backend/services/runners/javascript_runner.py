@@ -21,7 +21,7 @@ from subprocess import TimeoutExpired as _Timeout
 import config
 from services.runners import base
 
-_JS_HELPERS = '''
+_JS_HELPERS = """
 function __deepEqual(a, b) {
   if (a === b) return true;
   if (a == null && b == null) return true; // null/undefined interchangeable
@@ -63,10 +63,10 @@ function __fmtErr(e) {
 }
 function __nz(v) { return v === undefined ? null : v; }
 function __show(v) { try { return JSON.stringify(v); } catch (e) { return String(v); } }
-'''
+"""
 
 
-_FUNCTION_HARNESS = '''
+_FUNCTION_HARNESS = """
 // ── User code ──
 __USER_CODE__
 
@@ -106,10 +106,10 @@ __USER_CODE__
   }
   console.log('__RESULTS__' + JSON.stringify(results));
 })();
-'''
+"""
 
 
-_CLASS_HARNESS = '''
+_CLASS_HARNESS = """
 // ── User code ──
 __USER_CODE__
 
@@ -184,18 +184,17 @@ __USER_CODE__
   }
   console.log('__RESULTS__' + JSON.stringify(results));
 })();
-'''
+"""
 
 
 def build_harness(user_code, target_name, test_cases, test_type):
     """Build runnable JS harness source. Shared with the TypeScript runner."""
-    template = _CLASS_HARNESS if test_type == 'class' else _FUNCTION_HARNESS
+    template = _CLASS_HARNESS if test_type == "class" else _FUNCTION_HARNESS
     return (
-        template
-        .replace('__JS_HELPERS__', _JS_HELPERS)
-        .replace('__TESTS_JSON__', json.dumps(test_cases))
-        .replace('__TARGET_JSON__', json.dumps(target_name))
-        .replace('__USER_CODE__', user_code)
+        template.replace("__JS_HELPERS__", _JS_HELPERS)
+        .replace("__TESTS_JSON__", json.dumps(test_cases))
+        .replace("__TARGET_JSON__", json.dumps(target_name))
+        .replace("__USER_CODE__", user_code)
     )
 
 
@@ -207,8 +206,8 @@ def _unlink(path):
 
 
 class JavaScriptRunner(base.Runner):
-    language = 'javascript'
-    file_extension = '.js'
+    language = "javascript"
+    file_extension = ".js"
 
     def _command(self, path):
         return [config.NODE_BIN, path]
@@ -220,30 +219,30 @@ class JavaScriptRunner(base.Runner):
         )
 
     def run_program(self, source, timeout=config.CODE_TIMEOUT):
-        path = base.write_temp(source, suffix=self.file_extension, prefix='codeprep_run_')
+        path = base.write_temp(source, suffix=self.file_extension, prefix="codeprep_run_")
         try:
             result = base.run_subprocess(self._command(path), timeout=timeout)
-            return {'stdout': result.stdout, 'stderr': result.stderr, 'exit_code': result.returncode}
+            return {"stdout": result.stdout, "stderr": result.stderr, "exit_code": result.returncode}
         except _Timeout:
-            return {'stdout': '', 'stderr': f'Timeout: code took too long (>{timeout}s)', 'exit_code': 1}
+            return {"stdout": "", "stderr": f"Timeout: code took too long (>{timeout}s)", "exit_code": 1}
         except FileNotFoundError:
-            return {'stdout': '', 'stderr': self._missing_toolchain_msg(), 'exit_code': 1}
+            return {"stdout": "", "stderr": self._missing_toolchain_msg(), "exit_code": 1}
         except Exception as e:
-            return {'stdout': '', 'stderr': f'Runner error: {e}', 'exit_code': 1}
+            return {"stdout": "", "stderr": f"Runner error: {e}", "exit_code": 1}
         finally:
             _unlink(path)
 
-    def run_tests(self, user_code, target_name, test_cases, test_type='function', timeout=config.CODE_TIMEOUT):
+    def run_tests(self, user_code, target_name, test_cases, test_type="function", timeout=config.CODE_TIMEOUT):
         harness = build_harness(user_code, target_name, test_cases, test_type)
-        path = base.write_temp(harness, suffix=self.file_extension, prefix='codeprep_')
+        path = base.write_temp(harness, suffix=self.file_extension, prefix="codeprep_")
         try:
             result = base.run_subprocess(self._command(path), timeout=timeout)
             return base.parse_harness_output(result.stdout, result.stderr, result.returncode)
         except _Timeout:
-            return {'success': False, 'results': [], 'error': f'Timeout: code took too long to execute (>{timeout}s)'}
+            return {"success": False, "results": [], "error": f"Timeout: code took too long to execute (>{timeout}s)"}
         except FileNotFoundError:
-            return {'success': False, 'results': [], 'error': self._missing_toolchain_msg()}
+            return {"success": False, "results": [], "error": self._missing_toolchain_msg()}
         except Exception as e:
-            return {'success': False, 'results': [], 'error': f'Runner error: {e}'}
+            return {"success": False, "results": [], "error": f"Runner error: {e}"}
         finally:
             _unlink(path)

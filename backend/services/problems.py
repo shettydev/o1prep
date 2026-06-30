@@ -23,8 +23,8 @@ from services.models import Problem, ProblemLanguage
 def load_yaml_problems():
     """Read every problem YAML from disk (the canonical source)."""
     problems = []
-    for path in sorted(glob(os.path.join(PROBLEMS_DIR, '*.yaml'))):
-        with open(path, encoding='utf-8') as f:
+    for path in sorted(glob(os.path.join(PROBLEMS_DIR, "*.yaml"))):
+        with open(path, encoding="utf-8") as f:
             problems.append(yaml.safe_load(f))
     return problems
 
@@ -55,28 +55,34 @@ def seed(force=False):
         db.session.query(Problem).delete()
         db.session.flush()
     for problem in yaml_problems:
-        extra_languages = problem.pop('languages', None) or {}
+        extra_languages = problem.pop("languages", None) or {}
         agnostic, language = split_problem(problem)
-        db.session.merge(Problem(
-            id=problem['id'],
-            title=problem.get('title', ''),
-            category=problem.get('category', ''),
-            difficulty=problem.get('difficulty', ''),
-            data=agnostic,
-        ))
-        db.session.merge(ProblemLanguage(
-            problem_id=problem['id'],
-            language=DEFAULT_LANGUAGE,
-            data=language,
-        ))
+        db.session.merge(
+            Problem(
+                id=problem["id"],
+                title=problem.get("title", ""),
+                category=problem.get("category", ""),
+                difficulty=problem.get("difficulty", ""),
+                data=agnostic,
+            )
+        )
+        db.session.merge(
+            ProblemLanguage(
+                problem_id=problem["id"],
+                language=DEFAULT_LANGUAGE,
+                data=language,
+            )
+        )
         for lang_id, lang_fields in extra_languages.items():
             # Keep only the per-language keys so the row mirrors the default one.
             lang_data = {k: v for k, v in (lang_fields or {}).items() if k in LANGUAGE_KEYS}
-            db.session.merge(ProblemLanguage(
-                problem_id=problem['id'],
-                language=lang_id,
-                data=lang_data,
-            ))
+            db.session.merge(
+                ProblemLanguage(
+                    problem_id=problem["id"],
+                    language=lang_id,
+                    data=lang_data,
+                )
+            )
     db.session.commit()
     return len(yaml_problems)
 
@@ -119,52 +125,47 @@ def available_languages(problem_id):
 
 def serialize_for_list(problem):
     return {
-        'id': problem['id'],
-        'title': problem['title'],
-        'category': problem['category'],
-        'difficulty': problem['difficulty'],
-        'summary': problem.get('summary', ''),
-        'starter_code': problem.get('starter_code', ''),
-        'key_skills': problem.get('key_skills', []),
+        "id": problem["id"],
+        "title": problem["title"],
+        "category": problem["category"],
+        "difficulty": problem["difficulty"],
+        "summary": problem.get("summary", ""),
+        "starter_code": problem.get("starter_code", ""),
+        "key_skills": problem.get("key_skills", []),
     }
 
 
 def serialize_full(problem, language=DEFAULT_LANGUAGE, available=None):
     return {
-        'id': problem['id'],
-        'title': problem['title'],
-        'category': problem['category'],
-        'difficulty': problem['difficulty'],
-        'summary': problem.get('summary', ''),
-        'description': problem.get('description', ''),
-        'scenario': problem.get('scenario', ''),
-        'constraints': problem.get('constraints', []),
-        'examples': problem.get('examples', []),
-        'key_skills': problem.get('key_skills', []),
-        'follow_ups': problem.get('follow_ups', []),
-        'starter_code': problem.get('starter_code', ''),
-        'explanation': problem.get('explanation', ''),
-        'references': problem.get('references', []),
-        'language': language,
-        'available_languages': available if available is not None else [language],
+        "id": problem["id"],
+        "title": problem["title"],
+        "category": problem["category"],
+        "difficulty": problem["difficulty"],
+        "summary": problem.get("summary", ""),
+        "description": problem.get("description", ""),
+        "scenario": problem.get("scenario", ""),
+        "constraints": problem.get("constraints", []),
+        "examples": problem.get("examples", []),
+        "key_skills": problem.get("key_skills", []),
+        "follow_ups": problem.get("follow_ups", []),
+        "starter_code": problem.get("starter_code", ""),
+        "explanation": problem.get("explanation", ""),
+        "references": problem.get("references", []),
+        "language": language,
+        "available_languages": available if available is not None else [language],
     }
 
 
 def build_problem_block(problem, language=DEFAULT_LANGUAGE):
-    follow_ups = "\n".join(f"- {f}" for f in problem.get('follow_ups', []))
-    constraints = "\n".join(f"- {c}" for c in problem.get('constraints', []))
+    follow_ups = "\n".join(f"- {f}" for f in problem.get("follow_ups", []))
+    constraints = "\n".join(f"- {c}" for c in problem.get("constraints", []))
     examples = []
-    for example in problem.get('examples', [])[:2]:
-        examples.append(
-            "Input:\n"
-            f"{example.get('input', '').strip()}\n\n"
-            "Output:\n"
-            f"{example.get('output', '').strip()}"
-        )
+    for example in problem.get("examples", [])[:2]:
+        examples.append(f"Input:\n{example.get('input', '').strip()}\n\nOutput:\n{example.get('output', '').strip()}")
     examples_block = "\n\n".join(examples)
 
     interface_block = ""
-    if problem.get('starter_code'):
+    if problem.get("starter_code"):
         interface_block = (
             "\n\nRequired interface (the candidate's code should match this shape):"
             f"\n```{language}\n{problem['starter_code']}\n```"
@@ -188,7 +189,7 @@ def build_problem_block(problem, language=DEFAULT_LANGUAGE):
 
 def build_study_context(problem):
     """Build the problem context string used by the research/tutor chat."""
-    constraints = "\n".join(f"- {c}" for c in problem.get('constraints', []))
+    constraints = "\n".join(f"- {c}" for c in problem.get("constraints", []))
     context = (
         f"\n\nThe student is studying this problem:"
         f"\n\nTitle: {problem['title']}"
@@ -199,9 +200,9 @@ def build_study_context(problem):
         f"\n\nConstraints:\n{constraints}"
         f"\n\nKey skills: {', '.join(problem.get('key_skills', []))}"
     )
-    if problem.get('explanation'):
+    if problem.get("explanation"):
         context += f"\n\nReference explanation (use to inform your answers):\n{problem['explanation']}"
-    if problem.get('references'):
-        refs = "\n".join(f"- {ref}" for ref in problem['references'])
+    if problem.get("references"):
+        refs = "\n".join(f"- {ref}" for ref in problem["references"])
         context += f"\n\nReference topics and study material:\n{refs}"
     return context

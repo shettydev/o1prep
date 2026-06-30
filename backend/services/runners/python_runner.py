@@ -14,7 +14,7 @@ from subprocess import TimeoutExpired as _Timeout
 import config
 from services.runners import base
 
-HARNESS_TEMPLATE = '''
+HARNESS_TEMPLATE = """
 import asyncio
 import json
 import sys
@@ -71,10 +71,10 @@ for _i, _tc in enumerate(_tests):
         _results.append({"index": _i, "label": _label, "input": _inp, "expected": _exp, "actual": None, "passed": _passed, "error": None if _passed else _err, "expected_error": _exp_err, "call": _callable})
 
 print("__RESULTS__" + json.dumps(_results, default=str))
-'''
+"""
 
 
-CLASS_HARNESS_TEMPLATE = '''
+CLASS_HARNESS_TEMPLATE = """
 import asyncio
 import json
 import sys
@@ -203,21 +203,21 @@ for _i, _tc in enumerate(_tests):
         continue
 
 print("__RESULTS__" + json.dumps(_results, default=str))
-'''
+"""
 
 
 def _clean_traceback(lines):
     """Strip temp file paths from traceback to show cleaner errors."""
     cleaned = []
     for line in lines:
-        if 'codeprep_' in line and 'File "' in line:
-            line = line.replace(line.split('"')[1], '<your code>')
+        if "codeprep_" in line and 'File "' in line:
+            line = line.replace(line.split('"')[1], "<your code>")
         cleaned.append(line)
-    return '\n'.join(cleaned)
+    return "\n".join(cleaned)
 
 
 def _timeout_result(timeout):
-    return f'Timeout: code took too long to execute (>{timeout}s)'
+    return f"Timeout: code took too long to execute (>{timeout}s)"
 
 
 def _unlink(path):
@@ -228,45 +228,43 @@ def _unlink(path):
 
 
 class PythonRunner(base.Runner):
-    language = 'python'
+    language = "python"
 
     def run_program(self, source, timeout=config.CODE_TIMEOUT):
-        path = base.write_temp(source, suffix='.py', prefix='codeprep_run_')
+        path = base.write_temp(source, suffix=".py", prefix="codeprep_run_")
         try:
             result = base.run_subprocess([sys.executable, path], timeout=timeout)
-            return {'stdout': result.stdout, 'stderr': result.stderr, 'exit_code': result.returncode}
+            return {"stdout": result.stdout, "stderr": result.stderr, "exit_code": result.returncode}
         except _Timeout:
-            return {'stdout': '', 'stderr': f'Timeout: code took too long (>{timeout}s)', 'exit_code': 1}
+            return {"stdout": "", "stderr": f"Timeout: code took too long (>{timeout}s)", "exit_code": 1}
         except Exception as e:
-            return {'stdout': '', 'stderr': f'Runner error: {e}', 'exit_code': 1}
+            return {"stdout": "", "stderr": f"Runner error: {e}", "exit_code": 1}
         finally:
             _unlink(path)
 
-    def run_tests(self, user_code, target_name, test_cases, test_type='function', timeout=config.CODE_TIMEOUT):
-        if test_type == 'class':
+    def run_tests(self, user_code, target_name, test_cases, test_type="function", timeout=config.CODE_TIMEOUT):
+        if test_type == "class":
             harness = (
-                CLASS_HARNESS_TEMPLATE
-                .replace('__USER_CODE__', user_code)
-                .replace('__CLASS_NAME_REPR__', repr(target_name))
-                .replace('__TEST_CASES_JSON_REPR__', repr(json.dumps(test_cases)))
+                CLASS_HARNESS_TEMPLATE.replace("__USER_CODE__", user_code)
+                .replace("__CLASS_NAME_REPR__", repr(target_name))
+                .replace("__TEST_CASES_JSON_REPR__", repr(json.dumps(test_cases)))
             )
         else:
             harness = (
-                HARNESS_TEMPLATE
-                .replace('__USER_CODE__', user_code)
-                .replace('__FUNCTION_NAME_REPR__', repr(target_name))
-                .replace('__TEST_CASES_JSON_REPR__', repr(json.dumps(test_cases)))
+                HARNESS_TEMPLATE.replace("__USER_CODE__", user_code)
+                .replace("__FUNCTION_NAME_REPR__", repr(target_name))
+                .replace("__TEST_CASES_JSON_REPR__", repr(json.dumps(test_cases)))
             )
         return self._run_harness(harness, timeout)
 
     def _run_harness(self, harness, timeout=config.CODE_TIMEOUT):
-        path = base.write_temp(harness, suffix='.py', prefix='codeprep_')
+        path = base.write_temp(harness, suffix=".py", prefix="codeprep_")
         try:
             result = base.run_subprocess([sys.executable, path], timeout=timeout)
             return base.parse_harness_output(result.stdout, result.stderr, result.returncode, _clean_traceback)
         except _Timeout:
-            return {'success': False, 'results': [], 'error': _timeout_result(timeout)}
+            return {"success": False, "results": [], "error": _timeout_result(timeout)}
         except Exception as e:
-            return {'success': False, 'results': [], 'error': f'Runner error: {e}'}
+            return {"success": False, "results": [], "error": f"Runner error: {e}"}
         finally:
             _unlink(path)

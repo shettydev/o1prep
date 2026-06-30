@@ -24,7 +24,7 @@ def _utcnow():
 
 
 class Problem(db.Model):
-    __tablename__ = 'problems'
+    __tablename__ = "problems"
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text, nullable=False)
@@ -33,25 +33,23 @@ class Problem(db.Model):
     data = db.Column(JSONB, nullable=False)
 
     languages = db.relationship(
-        'ProblemLanguage',
-        backref='problem',
-        cascade='all, delete-orphan',
-        lazy='selectin',
+        "ProblemLanguage",
+        backref="problem",
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )
 
 
 class ProblemLanguage(db.Model):
-    __tablename__ = 'problem_languages'
+    __tablename__ = "problem_languages"
 
-    problem_id = db.Column(
-        db.Integer, db.ForeignKey('problems.id', ondelete='CASCADE'), primary_key=True
-    )
+    problem_id = db.Column(db.Integer, db.ForeignKey("problems.id", ondelete="CASCADE"), primary_key=True)
     language = db.Column(db.Text, primary_key=True)
     data = db.Column(JSONB, nullable=False)
 
 
 class User(UserMixin, db.Model):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.Text, unique=True, nullable=False, index=True)
@@ -59,10 +57,10 @@ class User(UserMixin, db.Model):
     created_at = db.Column(db.DateTime(timezone=True), default=_utcnow, nullable=False)
 
     sessions = db.relationship(
-        'Session',
-        backref='user',
-        cascade='all, delete-orphan',
-        lazy='selectin',
+        "Session",
+        backref="user",
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )
 
     def set_password(self, password):
@@ -73,11 +71,9 @@ class User(UserMixin, db.Model):
 
 
 class Session(db.Model):
-    __tablename__ = 'sessions'
+    __tablename__ = "sessions"
 
     id = db.Column(db.String(8), primary_key=True)
-    user_id = db.Column(
-        db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False, index=True
-    )
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     created_at = db.Column(db.DateTime(timezone=True), default=_utcnow, nullable=False, index=True)
     data = db.Column(JSONB, nullable=False)

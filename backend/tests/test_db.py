@@ -45,8 +45,7 @@ def test_get_by_id_is_lossless_vs_yaml():
     # test_db_test_cases_run_identically. The optional `languages:` block is a
     # seeding directive for additional-language rows, not part of the
     # default-language problem dict, so it is excluded from the comparison.
-    yaml_problems = {p["id"]: {k: v for k, v in p.items() if k != "languages"}
-                     for p in problems.load_yaml_problems()}
+    yaml_problems = {p["id"]: {k: v for k, v in p.items() if k != "languages"} for p in problems.load_yaml_problems()}
     mismatches = [pid for pid, y in yaml_problems.items() if problems.get_by_id(pid) != _json_norm(y)]
     assert not mismatches, f"DB reconstruction diverged from YAML for ids: {mismatches}"
 
@@ -64,8 +63,9 @@ def test_db_test_cases_run_identically():
         if y.get("test_type") != "function":
             continue
         dummy = f"def {y['function_name']}(*a, **k):\n    return None\n"
-        assert code_runner.run(dummy, y["function_name"], y["test_cases"]) == \
-            code_runner.run(dummy, g["function_name"], g["test_cases"])
+        assert code_runner.run(dummy, y["function_name"], y["test_cases"]) == code_runner.run(
+            dummy, g["function_name"], g["test_cases"]
+        )
 
 
 def test_reconstructed_class_problem_has_class_fields():

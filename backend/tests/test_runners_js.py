@@ -22,38 +22,40 @@ pytestmark = pytest.mark.skipif(
     reason="Node.js not installed; set NODE_BIN to run JS runner tests",
 )
 
-js = get_runner('javascript')
-py = get_runner('python')
+js = get_runner("javascript")
+py = get_runner("python")
 
 
 # ── Registry ────────────────────────────────────────────────────────────
 
+
 def test_registry_resolves_supported_languages():
-    assert get_runner('javascript').language == 'javascript'
-    assert get_runner('python').language == 'python'
-    assert get_runner('typescript').language == 'typescript'
+    assert get_runner("javascript").language == "javascript"
+    assert get_runner("python").language == "python"
+    assert get_runner("typescript").language == "typescript"
 
 
 def test_registry_rejects_unknown_language():
     with pytest.raises(UnsupportedLanguageError):
-        get_runner('cobol')
+        get_runner("cobol")
 
 
 def test_languages_registry_metadata():
-    assert languages.is_supported('javascript')
-    assert not languages.is_supported('cobol')
-    assert languages.resolve('cobol') == 'python'
-    assert languages.get('javascript')['codemirror_mode'] == 'javascript'
-    assert [m['id'] for m in languages.all_languages()][0] == 'python'
+    assert languages.is_supported("javascript")
+    assert not languages.is_supported("cobol")
+    assert languages.resolve("cobol") == "python"
+    assert languages.get("javascript")["codemirror_mode"] == "javascript"
+    assert [m["id"] for m in languages.all_languages()][0] == "python"
 
 
 def test_languages_label():
-    assert languages.label('javascript') == 'JavaScript'
-    assert languages.label('python') == 'Python'
-    assert languages.label('cobol') == 'Python'  # unknown resolves to default
+    assert languages.label("javascript") == "JavaScript"
+    assert languages.label("python") == "Python"
+    assert languages.label("cobol") == "Python"  # unknown resolves to default
 
 
 # ── Function-style JS ───────────────────────────────────────────────────
+
 
 def test_js_function_pass_with_positional_args():
     code = "function mul(a, b) { return a * b; }"
@@ -119,6 +121,7 @@ def test_js_missing_function_reports_error():
 
 # ── Top-level failure modes ─────────────────────────────────────────────
 
+
 def test_js_syntax_error_reports_failure():
     code = "function bad( { return; }"
     result = js.run_tests(code, "bad", [{"args": [], "expected": 1}], "function")
@@ -135,13 +138,9 @@ def test_js_timeout_is_caught():
 
 # ── Class-style JS ──────────────────────────────────────────────────────
 
+
 def test_js_class_ops_sequence_passes():
-    code = (
-        "class Counter {\n"
-        "  constructor() { this.n = 0; }\n"
-        "  inc() { this.n += 1; return this.n; }\n"
-        "}"
-    )
+    code = "class Counter {\n  constructor() { this.n = 0; }\n  inc() { this.n += 1; return this.n; }\n}"
     tc = {"label": "basic", "init_args": [], "ops": ["inc", "inc"], "op_args": [[], []], "expected": [1, 2]}
     result = js.run_tests(code, "Counter", [tc], "class")
     assert result["success"] is True
@@ -149,12 +148,7 @@ def test_js_class_ops_sequence_passes():
 
 
 def test_js_class_init_args_and_failure_short_circuits():
-    code = (
-        "class Bag {\n"
-        "  constructor(cap) { this.cap = cap; }\n"
-        "  size() { return this.cap; }\n"
-        "}"
-    )
+    code = "class Bag {\n  constructor(cap) { this.cap = cap; }\n  size() { return this.cap; }\n}"
     tc = {"label": "wrong", "init_args": [3], "ops": ["size"], "op_args": [[]], "expected": [999]}
     result = js.run_tests(code, "Bag", [tc], "class")
     assert result["results"][0]["passed"] is False
@@ -182,6 +176,7 @@ def test_js_class_ref_resolution_across_steps():
 
 
 # ── Cross-runner parity ─────────────────────────────────────────────────
+
 
 def test_parity_same_cases_same_verdict():
     # Identical generic test cases must yield identical pass/fail across runtimes.

@@ -16,14 +16,14 @@ class UnsupportedLanguageError(ValueError):
 
 
 _RUNNERS = {
-    'python': PythonRunner(),
-    'javascript': JavaScriptRunner(),
-    'typescript': TypeScriptRunner(),
+    "python": PythonRunner(),
+    "javascript": JavaScriptRunner(),
+    "typescript": TypeScriptRunner(),
 }
 
 
 def get_runner(language):
     """Return the runner for a supported language id, else raise."""
     if not languages.is_supported(language):
-        raise UnsupportedLanguageError(f'Unsupported language: {language!r}')
+        raise UnsupportedLanguageError(f"Unsupported language: {language!r}")
     return _RUNNERS[language]

@@ -10,6 +10,7 @@ Public API (unchanged from the original OpenAI-only module):
   sse_stream(client, messages, temp, max_toks)   -> generator of SSE data lines
   generate_test_cases(client, messages)          -> (function_name, test_cases)
 """
+
 import json
 
 import config
@@ -17,7 +18,7 @@ from services.providers import claude_provider, openai_provider
 
 
 def _provider():
-    if config.AI_PROVIDER == 'claude':
+    if config.AI_PROVIDER == "claude":
         return claude_provider
     return openai_provider
 
@@ -31,23 +32,23 @@ def config_info():
     reasoning effort applies, and the current defaults."""
     p = _provider()
     return {
-        'provider': config.AI_PROVIDER,
-        'models': p.MODELS,
-        'default_model': p.default_model(),
-        'supports_effort': p.SUPPORTS_EFFORT,
-        'efforts': p.EFFORTS,
-        'default_effort': p.default_effort(),
+        "provider": config.AI_PROVIDER,
+        "models": p.MODELS,
+        "default_model": p.default_model(),
+        "supports_effort": p.SUPPORTS_EFFORT,
+        "efforts": p.EFFORTS,
+        "default_effort": p.default_effort(),
     }
 
 
 def missing_client_message():
     """Human-readable reason the current provider isn't usable, for API errors."""
-    if config.AI_PROVIDER == 'claude':
+    if config.AI_PROVIDER == "claude":
         return (
-            'Claude Code CLI not found. Install it from '
-            'https://claude.com/claude-code and run `claude` once to sign in.'
+            "Claude Code CLI not found. Install it from "
+            "https://claude.com/claude-code and run `claude` once to sign in."
         )
-    return 'OPENAI_API_KEY not set. Run: export OPENAI_API_KEY=your_key'
+    return "OPENAI_API_KEY not set. Run: export OPENAI_API_KEY=your_key"
 
 
 def stream_chat(client, messages, temperature=None, max_tokens=None):

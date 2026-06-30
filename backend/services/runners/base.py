@@ -21,13 +21,13 @@ import os
 import subprocess
 import tempfile
 
-RESULTS_MARKER = '__RESULTS__'
+RESULTS_MARKER = "__RESULTS__"
 
 
 def write_temp(source, suffix, prefix):
     """Write `source` to a temp file and return its path. Caller unlinks."""
     fd, path = tempfile.mkstemp(suffix=suffix, prefix=prefix)
-    with os.fdopen(fd, 'w') as f:
+    with os.fdopen(fd, "w") as f:
         f.write(source)
     return path
 
@@ -44,22 +44,22 @@ def parse_harness_output(stdout, stderr, returncode, clean_fn=None):
     a top-level failure (syntax error, crash, no output).
     """
     if returncode != 0 and RESULTS_MARKER not in stdout:
-        error_msg = stderr.strip() or f'Process exited with code {returncode}'
+        error_msg = stderr.strip() or f"Process exited with code {returncode}"
         if clean_fn:
-            error_msg = clean_fn(error_msg.split('\n'))
-        return {'success': False, 'results': [], 'error': error_msg}
+            error_msg = clean_fn(error_msg.split("\n"))
+        return {"success": False, "results": [], "error": error_msg}
 
     if RESULTS_MARKER in stdout:
         json_str = stdout.split(RESULTS_MARKER, 1)[1].strip()
-        return {'success': True, 'results': json.loads(json_str), 'error': None}
+        return {"success": True, "results": json.loads(json_str), "error": None}
 
-    return {'success': False, 'results': [], 'error': stderr.strip() or 'No output from test harness'}
+    return {"success": False, "results": [], "error": stderr.strip() or "No output from test harness"}
 
 
 class Runner:
     """Abstract language runner. Concrete subclasses implement the two entry points."""
 
-    language: str = ''
+    language: str = ""
 
     def run_program(self, source: str, timeout: int) -> dict:
         raise NotImplementedError
