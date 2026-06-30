@@ -81,10 +81,7 @@ export function ProblemDetail({ problem }: { problem: FullProblem }) {
         <Section title="Key Concepts">
           <div className="flex flex-wrap gap-1.5">
             {problem.key_skills.map((s) => (
-              <span
-                key={s}
-                className="border border-line px-2 py-0.5 text-[11px] text-text-dim"
-              >
+              <span key={s} className="border border-line px-2 py-0.5 text-[11px] text-text-dim">
                 {s}
               </span>
             ))}

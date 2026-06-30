@@ -14,11 +14,7 @@ export interface SSECallbacks {
  *
  * Port of the old readSSEStream (static/js/utils.js) onto fetch + ReadableStream.
  */
-export async function streamSSE(
-  path: string,
-  body: unknown,
-  cb: SSECallbacks,
-): Promise<string> {
+export async function streamSSE(path: string, body: unknown, cb: SSECallbacks): Promise<string> {
   const res = await fetch(`/api${path}`, {
     method: "POST",
     credentials: "include",

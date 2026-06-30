@@ -1,10 +1,5 @@
 import { create } from "zustand";
-import type {
-  EngineConfig,
-  FullProblem,
-  RunResult,
-  TestResults,
-} from "@/lib/types";
+import type { EngineConfig, FullProblem, RunResult, TestResults } from "@/lib/types";
 import * as api from "@/lib/api";
 import { streamSSE } from "@/lib/sse";
 import { requestSettings, useSettings } from "@/store/settings";
@@ -142,8 +137,7 @@ export const useInterview = create<InterviewState>((set, get) => ({
     } catch (e) {
       set({
         status: "error",
-        error:
-          e instanceof Error ? e.message : "Could not start the interview session.",
+        error: e instanceof Error ? e.message : "Could not start the interview session.",
       });
     }
   },

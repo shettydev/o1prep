@@ -41,25 +41,24 @@ function OutputPanel() {
 
       {open && (
         <div className="max-h-[34vh] min-h-[120px] overflow-y-auto p-3 text-[12px]">
-          {running && <div className="text-amber">running…<span className="cursor" /></div>}
+          {running && (
+            <div className="text-amber">
+              running…
+              <span className="cursor" />
+            </div>
+          )}
 
           {!running && tab === "output" && (
             <pre className="whitespace-pre-wrap break-words">
               {runResult ? (
                 <>
-                  {runResult.stdout && (
-                    <span className="text-text">{runResult.stdout}</span>
-                  )}
-                  {runResult.stderr && (
-                    <span className="text-red">{runResult.stderr}</span>
-                  )}
+                  {runResult.stdout && <span className="text-text">{runResult.stdout}</span>}
+                  {runResult.stderr && <span className="text-red">{runResult.stderr}</span>}
                   {!runResult.stdout && !runResult.stderr && (
                     <span className="text-text-faint">(no output)</span>
                   )}
                   {"\n"}
-                  <span
-                    className={runResult.exit_code === 0 ? "text-green" : "text-red"}
-                  >
+                  <span className={runResult.exit_code === 0 ? "text-green" : "text-red"}>
                     {"> process exited with code " + runResult.exit_code}
                   </span>
                 </>
@@ -72,9 +71,7 @@ function OutputPanel() {
           {!running && tab === "tests" && (
             <>
               {testError && (
-                <div className="border border-red/40 bg-red/5 px-3 py-2 text-red">
-                  {testError}
-                </div>
+                <div className="border border-red/40 bg-red/5 px-3 py-2 text-red">{testError}</div>
               )}
               {testResults && <TestResults data={testResults} />}
               {!testError && !testResults && (

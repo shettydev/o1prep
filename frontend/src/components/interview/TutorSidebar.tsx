@@ -38,8 +38,8 @@ export function TutorSidebar() {
       <div ref={scrollRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto p-3">
         {items.length === 0 && (
           <p className="text-[12px] leading-relaxed text-text-faint">
-            Ask for hints, concept explanations, or complexity guidance. The tutor
-            won&apos;t give away the solution.
+            Ask for hints, concept explanations, or complexity guidance. The tutor won&apos;t give
+            away the solution.
           </p>
         )}
         {items.map((m) =>
@@ -62,7 +62,8 @@ export function TutorSidebar() {
         )}
         {streaming && items[items.length - 1]?.role !== "assistant" && (
           <div className="label text-amber-dim">
-            thinking<span className="cursor" />
+            thinking
+            <span className="cursor" />
           </div>
         )}
       </div>

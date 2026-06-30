@@ -31,12 +31,7 @@ export type Rating = "hire" | "lean_hire" | "no_hire" | "lean_no_hire" | string;
 /** problem_id -> the most recent attempt's rating. */
 export type AttemptMap = Record<number, { rating: Rating | null }>;
 
-export type SortKey =
-  | "default"
-  | "difficulty-asc"
-  | "difficulty-desc"
-  | "unattempted"
-  | "alpha";
+export type SortKey = "default" | "difficulty-asc" | "difficulty-desc" | "unattempted" | "alpha";
 
 // ── Interview / editor ──
 

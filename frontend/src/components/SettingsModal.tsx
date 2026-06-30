@@ -33,8 +33,8 @@ function SettingsForm({ config, onClose }: { config: EngineConfig; onClose: () =
   return (
     <div>
       <p className="mb-3 text-[12px] text-text-dim">
-        provider: <span className="text-amber">{config.provider}</span>. applies to new
-        interviews and tutor chats.
+        provider: <span className="text-amber">{config.provider}</span>. applies to new interviews
+        and tutor chats.
       </p>
 
       <div className="divide-y divide-line">

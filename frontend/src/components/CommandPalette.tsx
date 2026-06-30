@@ -94,9 +94,7 @@ export function CommandPalette({ onClose }: { onClose: () => void }) {
 
         <div ref={listRef} className="max-h-[52vh] overflow-y-auto py-1">
           {results.length === 0 && (
-            <div className="px-4 py-6 text-center text-[13px] text-text-faint">
-              no matches
-            </div>
+            <div className="px-4 py-6 text-center text-[13px] text-text-faint">no matches</div>
           )}
           {results.map((p, i) => (
             <div
@@ -108,12 +106,8 @@ export function CommandPalette({ onClose }: { onClose: () => void }) {
                 i === index ? "bg-amber/10" : ""
               }`}
             >
-              <span
-                className={`w-1 self-stretch ${i === index ? "bg-amber" : "bg-transparent"}`}
-              />
-              <span className="text-[10px] text-text-faint">
-                {problemCode(p.id)}
-              </span>
+              <span className={`w-1 self-stretch ${i === index ? "bg-amber" : "bg-transparent"}`} />
+              <span className="text-[10px] text-text-faint">{problemCode(p.id)}</span>
               <span className="flex-1 truncate text-text">{p.title}</span>
               <DifficultyBadge difficulty={p.difficulty} />
             </div>

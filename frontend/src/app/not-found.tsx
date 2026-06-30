@@ -6,7 +6,7 @@ export default function NotFound() {
       <div className="font-display glow-strong text-5xl text-amber">404</div>
       <div className="w-full max-w-md border border-line bg-bg-raised p-5 text-left">
         <pre className="text-[13px] leading-relaxed text-text-dim">
-{`$ cd ./requested-route
+          {`$ cd ./requested-route
   bash: no such file or directory`}
           <span className="cursor" />
         </pre>

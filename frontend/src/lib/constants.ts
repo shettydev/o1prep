@@ -53,9 +53,7 @@ export function problemCode(id: number): string {
 }
 
 /** Maps a verdict rating to a signal color token (Easy/green, etc.). */
-export function ratingTone(
-  rating: string | null | undefined,
-): "green" | "yellow" | "red" | "dim" {
+export function ratingTone(rating: string | null | undefined): "green" | "yellow" | "red" | "dim" {
   if (!rating) return "dim";
   const r = rating.toLowerCase();
   if (r.includes("no_hire") || r.includes("no hire")) {

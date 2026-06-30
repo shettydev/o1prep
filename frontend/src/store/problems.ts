@@ -1,10 +1,5 @@
 import { create } from "zustand";
-import type {
-  AttemptMap,
-  Difficulty,
-  ProblemSummary,
-  SortKey,
-} from "@/lib/types";
+import type { AttemptMap, Difficulty, ProblemSummary, SortKey } from "@/lib/types";
 import { categoryLabel, DIFFICULTY_ORDER } from "@/lib/constants";
 import { getProblems, getSessions } from "@/lib/api";
 

@@ -42,9 +42,7 @@ export function ProblemCard({
             <DifficultyBadge difficulty={problem.difficulty} />
           </div>
 
-          <p className="mt-1 line-clamp-1 text-[12px] text-text-dim">
-            {problem.summary}
-          </p>
+          <p className="mt-1 line-clamp-1 text-[12px] text-text-dim">{problem.summary}</p>
 
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
             <span className="text-[10px] uppercase tracking-wider text-amber-dim">

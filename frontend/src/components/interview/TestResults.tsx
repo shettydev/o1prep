@@ -31,9 +31,7 @@ function CaseRow({
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center gap-2 px-2.5 py-1.5 text-left text-[12px] hover:bg-bg-hover"
       >
-        <span className={r.passed ? "text-green" : "text-red"}>
-          {r.passed ? "✔" : "✖"}
-        </span>
+        <span className={r.passed ? "text-green" : "text-red"}>{r.passed ? "✔" : "✖"}</span>
         <code className="truncate text-text">{formatCall(r, displayName, index)}</code>
         <span className="ml-auto shrink-0 text-text-faint">→ {expectedValue}</span>
         <span className="shrink-0 text-text-faint">{open ? "▴" : "▾"}</span>

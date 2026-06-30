@@ -43,8 +43,7 @@ async function apiPost<T>(path: string, body: unknown): Promise<T> {
   });
   const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
   if (!res.ok) {
-    const msg =
-      typeof data.error === "string" ? data.error : `Request failed (${res.status})`;
+    const msg = typeof data.error === "string" ? data.error : `Request failed (${res.status})`;
     throw new ApiError(res.status, msg);
   }
   return data as T;
@@ -59,8 +58,7 @@ async function apiPut<T>(path: string, body: unknown): Promise<T> {
   });
   const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
   if (!res.ok) {
-    const msg =
-      typeof data.error === "string" ? data.error : `Request failed (${res.status})`;
+    const msg = typeof data.error === "string" ? data.error : `Request failed (${res.status})`;
     throw new ApiError(res.status, msg);
   }
   return data as T;
@@ -119,10 +117,7 @@ export function runCode(code: string, language: string): Promise<RunResult> {
   return apiPost<RunResult>("/run", { code, language });
 }
 
-export function runTests(
-  sessionId: string,
-  code: string,
-): Promise<TestResults> {
+export function runTests(sessionId: string, code: string): Promise<TestResults> {
   return apiPost<TestResults>(`/sessions/${sessionId}/run-tests`, { code });
 }
 
@@ -130,13 +125,8 @@ export function saveCode(sessionId: string, code: string): Promise<unknown> {
   return apiPut<unknown>(`/sessions/${sessionId}/code`, { code }).catch(() => null);
 }
 
-export function setSessionLanguage(
-  sessionId: string,
-  language: string,
-): Promise<unknown> {
-  return apiPut<unknown>(`/sessions/${sessionId}/language`, { language }).catch(
-    () => null,
-  );
+export function setSessionLanguage(sessionId: string, language: string): Promise<unknown> {
+  return apiPut<unknown>(`/sessions/${sessionId}/language`, { language }).catch(() => null);
 }
 
 export function endSession(sessionId: string): Promise<unknown> {

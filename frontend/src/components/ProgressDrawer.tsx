@@ -53,9 +53,7 @@ export function ProgressDrawer() {
           <div className="space-y-1.5">
             {byCategory.map(([cat, c]) => (
               <div key={cat} className="flex items-center gap-3 text-[12px]">
-                <span className="w-36 shrink-0 truncate text-text-dim">
-                  {categoryLabel(cat)}
-                </span>
+                <span className="w-36 shrink-0 truncate text-text-dim">{categoryLabel(cat)}</span>
                 <div className="h-1.5 flex-1 border border-line bg-bg-inset">
                   <div
                     className="h-full bg-amber-dim"

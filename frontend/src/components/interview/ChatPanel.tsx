@@ -66,7 +66,8 @@ export function ChatPanel() {
         ))}
         {streaming && items[items.length - 1]?.role !== "assistant" && (
           <div className="label text-amber-dim">
-            ▸ interviewer is typing<span className="cursor" />
+            ▸ interviewer is typing
+            <span className="cursor" />
           </div>
         )}
       </div>
