@@ -36,9 +36,7 @@ export function ProblemList() {
         <span className="label">
           {loading ? "loading…" : `${visible.length} problem${visible.length === 1 ? "" : "s"}`}
         </span>
-        <span className="text-[10px] text-text-faint">
-          ls -la ./problems<span className="cursor" />
-        </span>
+        <span className="text-[10px] text-text-faint">ls -la ./problems</span>
       </div>
 
       {error && (
@@ -68,12 +66,7 @@ export function ProblemList() {
       {!loading && !error && visible.length > 0 && (
         <div className="space-y-2">
           {visible.map((p, i) => (
-            <ProblemCard
-              key={p.id}
-              problem={p}
-              rating={attempts[p.id]?.rating}
-              index={i}
-            />
+            <ProblemCard key={p.id} problem={p} rating={attempts[p.id]?.rating} index={i} />
           ))}
         </div>
       )}
