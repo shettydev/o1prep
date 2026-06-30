@@ -25,7 +25,7 @@ export function Logo({
       {caret && <span className="caret" aria-hidden />}
       {sub && (
         <span
-          className="ml-[0.45em] font-mono text-[0.4em] font-semibold lowercase tracking-[0.2em] text-amber-dim"
+          className="ml-[0.35em] font-mono text-[0.6em] font-semibold lowercase tracking-[0.12em] text-amber-dim"
           aria-hidden
         >
           prep

@@ -178,10 +178,10 @@ body {
    (the prefers-reduced-motion block zeroes the animation → steady block). */
 .caret {
   display: inline-block;
-  width: 0.46em;
-  height: 0.86em;
-  margin-left: 0.1em;
-  transform: translateY(0.04em);
+  width: 0.4em;
+  height: 0.78em;
+  margin-left: 0.08em;
+  transform: translateY(0.02em);
   background: var(--amber);
   box-shadow: 0 0 8px var(--amber-glow);
   animation: blink 1.06s steps(1) infinite;

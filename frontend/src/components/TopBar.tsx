@@ -23,7 +23,7 @@ export function TopBar() {
     <header className="sticky top-0 z-40 flex items-center justify-between gap-4 border-b border-line bg-bg/90 px-4 py-2.5 backdrop-blur-sm sm:px-6">
       {/* Wordmark */}
       <div className="flex items-baseline gap-2">
-        <Logo className="text-2xl sm:text-[26px]" />
+        <Logo className="text-xl sm:text-2xl" />
         <span className="hidden text-[11px] text-text-faint sm:inline">interview://terminal</span>
       </div>
 
