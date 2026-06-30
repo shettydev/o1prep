@@ -5,4 +5,4 @@
 - [x] Add DB and move all problems to the db
 - [x] Include JS programming languages
 - [ ] Refactor UI/UX
-- [ ] New logo
+- [x] New logo

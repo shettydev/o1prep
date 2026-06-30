@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useProblems } from "@/store/problems";
 import { useAuth } from "@/store/auth";
 import { useUI } from "@/store/ui";
+import { Logo } from "@/components/Logo";
 
 /**
  * Global top bar for the landing view. Mode toggle + history/settings get fully
@@ -21,13 +22,9 @@ export function TopBar() {
   return (
     <header className="sticky top-0 z-40 flex items-center justify-between gap-4 border-b border-line bg-bg/90 px-4 py-2.5 backdrop-blur-sm sm:px-6">
       {/* Wordmark */}
-      <div className="flex items-baseline gap-2 select-none">
-        <span className="font-display glow-strong text-2xl leading-none text-amber sm:text-[28px]">
-          O(1)_PREP
-        </span>
-        <span className="hidden text-[11px] text-text-faint sm:inline">
-          interview://terminal
-        </span>
+      <div className="flex items-baseline gap-2">
+        <Logo className="text-2xl sm:text-[26px]" />
+        <span className="hidden text-[11px] text-text-faint sm:inline">interview://terminal</span>
       </div>
 
       <div className="flex items-center gap-1.5 sm:gap-2">
@@ -59,18 +56,10 @@ export function TopBar() {
           </span>
         </button>
 
-        <button
-          onClick={() => openPanel("history")}
-          className="tbtn"
-          title="Past interviews"
-        >
+        <button onClick={() => openPanel("history")} className="tbtn" title="Past interviews">
           ⟲<span className="hidden sm:inline"> history</span>
         </button>
-        <button
-          onClick={() => openPanel("settings")}
-          className="tbtn"
-          title="Engine settings"
-        >
+        <button onClick={() => openPanel("settings")} className="tbtn" title="Engine settings">
           ⚙<span className="hidden sm:inline"> settings</span>
         </button>
 

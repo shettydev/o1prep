@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAuth } from "@/store/auth";
 import { ApiError } from "@/lib/api";
+import { Logo } from "@/components/Logo";
 
 type Mode = "login" | "register";
 
@@ -45,8 +46,8 @@ export function AuthOverlay() {
     <div className="flex min-h-screen items-center justify-center p-6">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
-          <div className="font-display glow-strong text-4xl text-amber">O(1)_PREP</div>
-          <div className="mt-1 text-[11px] text-text-faint">
+          <Logo className="text-4xl" />
+          <div className="mt-2 text-[11px] text-text-faint">
             <span className="text-green">●</span> secure shell // {copy.sub}
           </div>
         </div>
