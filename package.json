@@ -9,7 +9,10 @@
     "dev": "pnpm --filter frontend dev",
     "build": "pnpm --filter frontend build",
     "start": "pnpm --filter frontend start",
-    "lint": "pnpm --filter frontend lint"
+    "lint": "pnpm --filter frontend lint",
+    "format": "prettier --write \"frontend/**/*.{ts,tsx,js,jsx,mjs,cjs,css,json,md}\"",
+    "format:py": "ruff check --fix backend/ && ruff format backend/",
+    "format:all": "pnpm run format && pnpm run format:py"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",
