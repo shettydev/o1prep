@@ -9,6 +9,7 @@ import { streamSSE } from "@/lib/sse";
 import { requestSettings } from "@/store/settings";
 import { Markdown } from "@/components/interview/Markdown";
 import { ResizeHandle } from "@/components/ResizeHandle";
+import { BootScreen } from "@/components/BootScreen";
 import { ProblemDetail } from "./ProblemDetail";
 
 const CHAT_MIN = 300;
@@ -135,20 +136,8 @@ function ResearchChat({ problemId }: { problemId: number }) {
 }
 
 export function StudyView({ problemId }: { problemId: number }) {
-  const router = useRouter();
   const [problem, setProblem] = useState<FullProblem | null>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
-  const [tab, setTab] = useState<"problem" | "chat">("problem");
-  const [chatWidth, setChatWidth] = useState(readChatWidth);
-
-  // Persist the chat width so it survives reloads.
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(CHAT_WIDTH_KEY, String(chatWidth));
-    } catch {
-      /* storage unavailable (private mode / quota) — width just won't persist */
-    }
-  }, [chatWidth]);
 
   useEffect(() => {
     let alive = true;
@@ -165,29 +154,37 @@ export function StudyView({ problemId }: { problemId: number }) {
     };
   }, [problemId]);
 
-  if (status === "loading") {
-    return (
-      <main className="flex min-h-screen items-center justify-center">
-        <div className="text-[13px] text-text-dim">
-          <span className="text-amber">$</span> loading problem
-          <span className="cursor" />
-        </div>
-      </main>
-    );
-  }
+  return (
+    <BootScreen active={status === "loading"} text="loading problem">
+      {status === "error" || !problem ? (
+        <main className="flex min-h-screen flex-col items-center justify-center gap-5">
+          <div className="border border-red/40 bg-red/5 px-4 py-3 text-[13px] text-red">
+            ✕ problem not found
+          </div>
+          <Link href="/" className="tbtn tbtn-amber">
+            ← back to problems
+          </Link>
+        </main>
+      ) : (
+        <StudyReady problem={problem} />
+      )}
+    </BootScreen>
+  );
+}
 
-  if (status === "error" || !problem) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-5">
-        <div className="border border-red/40 bg-red/5 px-4 py-3 text-[13px] text-red">
-          ✕ problem not found
-        </div>
-        <Link href="/" className="tbtn tbtn-amber">
-          ← back to problems
-        </Link>
-      </main>
-    );
-  }
+function StudyReady({ problem }: { problem: FullProblem }) {
+  const router = useRouter();
+  const [tab, setTab] = useState<"problem" | "chat">("problem");
+  const [chatWidth, setChatWidth] = useState(readChatWidth);
+
+  // Persist the chat width so it survives reloads.
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(CHAT_WIDTH_KEY, String(chatWidth));
+    } catch {
+      /* storage unavailable (private mode / quota) — width just won't persist */
+    }
+  }, [chatWidth]);
 
   return (
     <main className="flex h-screen flex-col">

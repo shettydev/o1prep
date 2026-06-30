@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useProblems } from "@/store/problems";
 import { useAuth } from "@/store/auth";
 import { useUI } from "@/store/ui";
@@ -17,7 +16,6 @@ export function TopBar() {
   const email = useAuth((s) => s.email);
   const signOut = useAuth((s) => s.logout);
   const openPanel = useUI((s) => s.open);
-  const [mode, setMode] = useState<"text" | "voice">("text");
 
   return (
     <header className="sticky top-0 z-40 flex items-center justify-between gap-4 border-b border-line bg-bg/90 px-4 py-2.5 backdrop-blur-sm sm:px-6">

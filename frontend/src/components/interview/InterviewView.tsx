@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useInterview } from "@/store/interview";
+import { BootScreen } from "@/components/BootScreen";
 import { InterviewTopBar } from "./InterviewTopBar";
 import { ChatPanel } from "./ChatPanel";
 import { EditorPanel } from "./EditorPanel";
@@ -29,33 +30,34 @@ export function InterviewView({
     return () => reset();
   }, [problemId, sessionId, init, resume, reset]);
 
-  if (status === "booting") {
-    return (
-      <main className="flex min-h-screen items-center justify-center">
-        <div className="text-[13px] text-text-dim">
-          <span className="text-amber">$</span> initializing interview session
-          <span className="cursor" />
-        </div>
-      </main>
-    );
-  }
-
-  if (status === "error") {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-5 p-8 text-center">
-        <div className="max-w-md border border-red/40 bg-red/5 p-5 text-[13px] text-red">
-          ✕ {error ?? "Failed to start the interview."}
-          <div className="mt-2 text-text-faint">
-            An AI provider must be configured on the backend to run interviews.
+  return (
+    <BootScreen active={status === "booting"} text="starting interview">
+      {status === "error" ? (
+        <main className="flex min-h-screen flex-col items-center justify-center gap-5 p-8 text-center">
+          <div className="max-w-md border border-red/40 bg-red/5 p-5 text-[13px] text-red">
+            ✕ {error ?? "Failed to start the interview."}
+            <div className="mt-2 text-text-faint">
+              An AI provider must be configured on the backend to run interviews.
+            </div>
           </div>
-        </div>
-        <Link href="/" className="tbtn tbtn-amber">
-          ← back to problems
-        </Link>
-      </main>
-    );
-  }
+          <Link href="/" className="tbtn tbtn-amber">
+            ← back to problems
+          </Link>
+        </main>
+      ) : (
+        <ReadyView mobileTab={mobileTab} setMobileTab={setMobileTab} />
+      )}
+    </BootScreen>
+  );
+}
 
+function ReadyView({
+  mobileTab,
+  setMobileTab,
+}: {
+  mobileTab: "chat" | "code";
+  setMobileTab: (t: "chat" | "code") => void;
+}) {
   return (
     <main className="flex h-screen flex-col">
       <InterviewTopBar />

@@ -360,6 +360,26 @@ kbd {
   margin: 1em 0;
 }
 
+/* Animated ellipsis for a still-loading boot line ("…" cycling). */
+.dots::after {
+  content: ".";
+  animation: dots 1.2s steps(1) infinite;
+}
+@keyframes dots {
+  0% {
+    content: ".";
+  }
+  33% {
+    content: "..";
+  }
+  66% {
+    content: "...";
+  }
+  100% {
+    content: ".";
+  }
+}
+
 /* Reveal-on-load stagger */
 @keyframes rise {
   from {
