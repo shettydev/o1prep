@@ -22,7 +22,7 @@ export function Logo({
       <span className="font-display glow text-amber" aria-hidden>
         O(1)
       </span>
-      {caret && <span className="caret" aria-hidden />}
+      {caret && <span className="caret" data-brand-caret aria-hidden />}
       {sub && (
         <span
           className="ml-[0.35em] font-mono text-[0.6em] font-semibold lowercase tracking-[0.12em] text-amber-dim"
