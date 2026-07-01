@@ -4,5 +4,5 @@
 - [x] Make it OSS friendly
 - [x] Add DB and move all problems to the db
 - [x] Include JS programming languages
-- [ ] Refactor UI/UX
+- [x] Refactor UI/UX
 - [x] New logo
