@@ -2,6 +2,7 @@ import { create } from "zustand";
 import type { EngineConfig, FullProblem, RunResult, TestResults } from "@/lib/types";
 import * as api from "@/lib/api";
 import { streamSSE } from "@/lib/sse";
+import { getVoiceSink } from "@/lib/voice/sink";
 import { requestSettings, useSettings } from "@/store/settings";
 
 export type ChatItem =
@@ -215,12 +216,18 @@ export const useInterview = create<InterviewState>((set, get) => ({
       await streamSSE(
         `/sessions/${sessionId}/start`,
         {},
-        { onContent: (full) => set((s) => ({ items: upsertAssistant(s.items, aid, full) })) },
+        {
+          onContent: (full, delta) => {
+            set((s) => ({ items: upsertAssistant(s.items, aid, full) }));
+            getVoiceSink()?.pushText(delta);
+          },
+        },
       );
     } catch (e) {
       const msg = e instanceof Error ? e.message : "stream error";
       set((s) => ({ items: upsertAssistant(s.items, aid, `_Error: ${msg}_`) }));
     } finally {
+      getVoiceSink()?.flush();
       set({ streaming: false });
     }
   },
@@ -237,12 +244,18 @@ export const useInterview = create<InterviewState>((set, get) => ({
       await streamSSE(
         `/sessions/${sessionId}/chat`,
         { message: text },
-        { onContent: (full) => set((s) => ({ items: upsertAssistant(s.items, aid, full) })) },
+        {
+          onContent: (full, delta) => {
+            set((s) => ({ items: upsertAssistant(s.items, aid, full) }));
+            getVoiceSink()?.pushText(delta);
+          },
+        },
       );
     } catch (e) {
       const msg = e instanceof Error ? e.message : "stream error";
       set((s) => ({ items: upsertAssistant(s.items, aid, `_Error: ${msg}_`) }));
     } finally {
+      getVoiceSink()?.flush();
       set({ streaming: false });
     }
   },
@@ -264,13 +277,17 @@ export const useInterview = create<InterviewState>((set, get) => ({
         {
           onTestResults: (tests) =>
             set((s) => ({ items: [...s.items, { id: nextId(), role: "tests", tests }] })),
-          onContent: (full) => set((s) => ({ items: upsertAssistant(s.items, aid, full) })),
+          onContent: (full, delta) => {
+            set((s) => ({ items: upsertAssistant(s.items, aid, full) }));
+            getVoiceSink()?.pushText(delta);
+          },
         },
       );
     } catch (e) {
       const msg = e instanceof Error ? e.message : "stream error";
       set((s) => ({ items: upsertAssistant(s.items, aid, `_Error: ${msg}_`) }));
     } finally {
+      getVoiceSink()?.flush();
       set({ streaming: false });
     }
   },

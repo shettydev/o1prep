@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useInterview } from "@/store/interview";
+import { useVoice } from "@/store/voice";
 
 function useTimer() {
   const [s, setS] = useState(0);
@@ -21,6 +22,8 @@ export function InterviewTopBar() {
   const toggleTutor = useInterview((s) => s.toggleTutor);
   const tutorOpen = useInterview((s) => s.tutorOpen);
   const end = useInterview((s) => s.end);
+  const voiceActive = useVoice((s) => s.active);
+  const toggleVoice = useVoice((s) => s.toggle);
   const time = useTimer();
 
   const leave = () => router.push("/");
@@ -38,6 +41,13 @@ export function InterviewTopBar() {
         <span className="truncate text-[13px] text-text">{title}</span>
       </div>
       <div className="flex items-center gap-2">
+        <button
+          onClick={toggleVoice}
+          className={`tbtn ${voiceActive ? "is-active" : ""}`}
+          title="Toggle voice mode"
+        >
+          {voiceActive ? "🎙 voice on" : "🎙 voice"}
+        </button>
         <button
           onClick={toggleTutor}
           className={`tbtn ${tutorOpen ? "is-active" : ""}`}
