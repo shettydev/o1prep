@@ -22,9 +22,12 @@ DATABASE_URL = os.environ.get(
 # random value in any real deployment.
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-change-me")
 
-# AI provider for text interviews and the tutor: 'claude' drives the locally
-# installed Claude Code CLI using your existing login (no API key); 'openai'
-# uses the OpenAI API. Voice mode always uses OpenAI Realtime regardless.
+# AI provider for text interviews, the tutor, and voice mode:
+#   'claude'     -> local Claude Code CLI using your existing login (no API key)
+#   'openai'     -> the OpenAI API (OPENAI_API_KEY)
+#   'openrouter' -> openrouter.ai, one key for many models (OPENROUTER_API_KEY)
+# Voice mode reuses the same text-streaming path, so it runs on whichever
+# provider is selected here (the STT -> LLM -> TTS pipeline calls this LLM).
 AI_PROVIDER = os.environ.get("AI_PROVIDER", "claude").strip().lower()
 
 # Claude Code CLI provider
@@ -37,6 +40,14 @@ CLAUDE_TIMEOUT = int(os.environ.get("CLAUDE_TIMEOUT", "180"))
 CHAT_MODEL = "gpt-4o"
 REALTIME_MODEL = "gpt-4o-realtime-preview"
 TRANSCRIPTION_MODEL = "gpt-4o-mini-transcribe"
+
+# OpenRouter (AI_PROVIDER=openrouter). One key, many models by slug; browse them
+# at https://openrouter.ai/models. SITE_URL/SITE_NAME are optional attribution
+# headers OpenRouter uses for its dashboard and model rankings.
+OPENROUTER_API_URL = "https://openrouter.ai/api/v1"
+OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "anthropic/claude-3.5-sonnet").strip()
+OPENROUTER_SITE_URL = os.environ.get("OPENROUTER_SITE_URL", "").strip()
+OPENROUTER_SITE_NAME = os.environ.get("OPENROUTER_SITE_NAME", "O(1) Prep").strip()
 
 # Chat parameters
 CHAT_TEMPERATURE = 0.7

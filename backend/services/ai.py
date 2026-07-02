@@ -14,12 +14,14 @@ Public API (unchanged from the original OpenAI-only module):
 import json
 
 import config
-from services.providers import claude_provider, openai_provider
+from services.providers import claude_provider, openai_provider, openrouter_provider
 
 
 def _provider():
     if config.AI_PROVIDER == "claude":
         return claude_provider
+    if config.AI_PROVIDER == "openrouter":
+        return openrouter_provider
     return openai_provider
 
 
