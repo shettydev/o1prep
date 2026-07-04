@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useInterview, type ChatItem } from "@/store/interview";
 import { Markdown } from "./Markdown";
 import { TestResults } from "./TestResults";
-import { VoiceControls } from "./VoiceControls";
+// TODO(voice): disabled pending a natural TTS provider (see InterviewTopBar).
+// import { VoiceControls } from "./VoiceControls";
 
 function MessageBlock({ item }: { item: ChatItem }) {
   if (item.role === "tests") {
@@ -73,7 +74,7 @@ export function ChatPanel() {
         )}
       </div>
 
-      <VoiceControls />
+      {/* TODO(voice): re-enable when neural TTS lands. <VoiceControls /> */}
 
       <div className="border-t border-line p-3">
         <textarea
