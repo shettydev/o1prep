@@ -34,7 +34,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col lg:h-screen lg:min-h-0 lg:overflow-hidden">
+    <main className="flex min-h-dvh flex-col lg:h-dvh lg:min-h-0 lg:overflow-hidden">
       <TopBar />
       {/* On desktop the page is pinned to the viewport and each panel scrolls
           on its own; on mobile it falls back to normal page scroll. */}
