@@ -35,12 +35,19 @@ def config_info():
     p = _provider()
     return {
         "provider": config.AI_PROVIDER,
-        "models": p.MODELS,
+        "models": p.models(),
         "default_model": p.default_model(),
         "supports_effort": p.SUPPORTS_EFFORT,
         "efforts": p.EFFORTS,
         "default_effort": p.default_effort(),
+        "supports_search": getattr(p, "SUPPORTS_SEARCH", False),
     }
+
+
+def search_models(query, limit=25):
+    """Bounded, provider-aware model search for the settings UI. For OpenRouter
+    this filters the live catalog; other providers filter their static list."""
+    return _provider().search_models(query, limit)
 
 
 def missing_client_message():

@@ -45,6 +45,8 @@ TRANSCRIPTION_MODEL = "gpt-4o-mini-transcribe"
 # at https://openrouter.ai/models. SITE_URL/SITE_NAME are optional attribution
 # headers OpenRouter uses for its dashboard and model rankings.
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1"
+# Public catalog endpoint (no API key required) used to populate the model list.
+OPENROUTER_MODELS_URL = "https://openrouter.ai/api/v1/models"
 OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "anthropic/claude-3.5-sonnet").strip()
 OPENROUTER_SITE_URL = os.environ.get("OPENROUTER_SITE_URL", "").strip()
 OPENROUTER_SITE_NAME = os.environ.get("OPENROUTER_SITE_NAME", "O(1) Prep").strip()

@@ -16,6 +16,19 @@ MODELS = [
 ]
 EFFORTS = []
 SUPPORTS_EFFORT = False
+# OpenAI's list is tiny and static, so the UI filters it client-side; no live
+# search endpoint is needed (unlike OpenRouter's ~300-model catalog).
+SUPPORTS_SEARCH = False
+
+
+def models():
+    return MODELS
+
+
+def search_models(query, limit=25):
+    q = (query or "").strip().lower()
+    hits = [m for m in MODELS if not q or q in m["id"].lower() or q in m["label"].lower()]
+    return hits[:limit]
 
 
 def default_model():

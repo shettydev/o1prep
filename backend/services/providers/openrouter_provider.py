@@ -4,42 +4,162 @@ OpenRouter exposes an OpenAI-compatible API, so this reuses the OpenAI SDK
 pointed at OpenRouter's base URL. The single OPENROUTER_API_KEY unlocks many
 underlying models (Anthropic, OpenAI, Google, Meta, ...) selectable by slug.
 
-Because both the text interviewer/tutor and voice mode stream through the same
-`ai.stream_chat` path, selecting AI_PROVIDER=openrouter makes the entire app —
-including the STT -> LLM -> TTS voice pipeline — OpenRouter-powered.
+Model list is fetched LIVE from OpenRouter's public /models catalog (no key
+needed) and cached in-process. The UI shows only a curated "popular few"; the
+full ~300+ catalog is searched server-side (see search_models) so the client
+never has to hold the whole list. If the catalog fetch fails we fall back to a
+small hardcoded seed so the app keeps working offline.
+
+Because the interviewer, tutor, and voice mode all stream through the same
+ai.stream_chat path, selecting OpenRouter makes the entire app model-agnostic.
 """
 
 import json
 import os
+import time
+
+import requests as http_requests
 
 import config
 
-# Curated models offered in the UI settings modal. OpenRouter has hundreds more
-# (see https://openrouter.ai/models); override the default via OPENROUTER_MODEL.
-# Reasoning-effort is model-specific on OpenRouter and not exposed here.
-MODELS = [
+# OpenRouter's public /models list carries no popularity ranking, so "popular"
+# is a curated, ordered allowlist of prominent slugs. It is resolved against the
+# live catalog (fresh names/context/pricing); slugs no longer offered drop off.
+POPULAR_SLUGS = [
+    "anthropic/claude-sonnet-5",
+    "anthropic/claude-3.7-sonnet",
+    "anthropic/claude-3.5-sonnet",
+    "anthropic/claude-3.5-haiku",
+    "openai/gpt-4o",
+    "openai/gpt-4o-mini",
+    "google/gemini-2.5-pro",
+    "google/gemini-2.5-flash",
+    "meta-llama/llama-3.3-70b-instruct",
+    "deepseek/deepseek-chat",
+    "mistralai/mistral-large",
+]
+
+# Offline fallback used only when the live catalog can't be fetched.
+SEED_MODELS = [
     {"id": "anthropic/claude-3.5-sonnet", "label": "Claude 3.5 Sonnet"},
     {"id": "openai/gpt-4o", "label": "GPT-4o"},
-    {"id": "openai/gpt-4o-mini", "label": "GPT-4o mini — faster"},
-    {"id": "google/gemini-2.0-flash-001", "label": "Gemini 2.0 Flash"},
+    {"id": "openai/gpt-4o-mini", "label": "GPT-4o mini"},
+    {"id": "google/gemini-2.5-flash", "label": "Gemini 2.5 Flash"},
     {"id": "meta-llama/llama-3.3-70b-instruct", "label": "Llama 3.3 70B"},
 ]
+
 EFFORTS = []
 SUPPORTS_EFFORT = False
+SUPPORTS_SEARCH = True
+
+CATALOG_TTL = 3600  # seconds
+_catalog_cache = {"ts": 0.0, "models": None}  # models: list[dict] | None
 
 
-def default_model():
-    return config.OPENROUTER_MODEL
+def _fetch_catalog():
+    resp = http_requests.get(config.OPENROUTER_MODELS_URL, timeout=10)
+    resp.raise_for_status()
+    return resp.json().get("data", [])
+
+
+def catalog():
+    """The live OpenRouter model catalog, cached with a TTL. Returns [] if it
+    has never been fetched successfully (callers then use SEED_MODELS)."""
+    now = time.time()
+    fresh = _catalog_cache["models"] is not None and now - _catalog_cache["ts"] <= CATALOG_TTL
+    if not fresh:
+        try:
+            _catalog_cache["models"] = _fetch_catalog()
+            _catalog_cache["ts"] = now
+        except Exception:
+            # Keep any stale cache; only fall through to [] if we never had one.
+            if _catalog_cache["models"] is None:
+                return []
+    return _catalog_cache["models"] or []
+
+
+def _price_per_million(pricing):
+    # OpenRouter prices are per-token USD strings; surface $/1M tokens for the UI.
+    try:
+        prompt = round(float(pricing.get("prompt", 0)) * 1_000_000, 2)
+        completion = round(float(pricing.get("completion", 0)) * 1_000_000, 2)
+        return {"prompt": prompt, "completion": completion}
+    except (TypeError, ValueError):
+        return None
+
+
+def _to_option(m):
+    return {
+        "id": m["id"],
+        "label": m.get("name") or m["id"],
+        "context_length": m.get("context_length"),
+        "pricing": _price_per_million(m.get("pricing") or {}),
+    }
+
+
+def models():
+    """The curated 'popular few', resolved against the live catalog."""
+    cat = catalog()
+    if not cat:
+        return SEED_MODELS
+    by_id = {m["id"]: m for m in cat}
+    out = [_to_option(by_id[slug]) for slug in POPULAR_SLUGS if slug in by_id]
+    # Always surface the configured default, even if it's not in the curated set.
+    if config.OPENROUTER_MODEL in by_id and not any(o["id"] == config.OPENROUTER_MODEL for o in out):
+        out.insert(0, _to_option(by_id[config.OPENROUTER_MODEL]))
+    return out or SEED_MODELS
+
+
+def search_models(query, limit=25):
+    """Substring search over the live catalog, ranked prefix/family-first and
+    bounded to `limit` so the client never receives the whole list. An empty
+    query returns the curated popular few."""
+    q = (query or "").strip().lower()
+    cat = catalog()
+    if not cat:
+        return [m for m in SEED_MODELS if not q or q in m["id"].lower() or q in m["label"].lower()][:limit]
+    if not q:
+        return models()
+
+    scored = []
+    for m in cat:
+        mid = m["id"].lower()
+        name = (m.get("name") or "").lower()
+        if q not in mid and q not in name:
+            continue
+        if mid.startswith(q) or name.startswith(q):
+            score = 2
+        elif q in mid.rsplit("/", 1)[-1] or q in name:
+            score = 1
+        else:
+            score = 0
+        scored.append((score, m))
+    scored.sort(key=lambda t: (-t[0], t[1]["id"]))
+    return [_to_option(m) for _, m in scored[:limit]]
 
 
 def default_effort():
     return None
 
 
+def default_model():
+    cat = catalog()
+    if cat and any(m["id"] == config.OPENROUTER_MODEL for m in cat):
+        return config.OPENROUTER_MODEL
+    # Self-heal: the configured default was retired — fall back to the first
+    # curated model that still exists (or the configured value when offline).
+    ms = models()
+    return ms[0]["id"] if ms else config.OPENROUTER_MODEL
+
+
 def valid_model(model):
-    # Accept any curated model, plus whatever the deployment configured as the
-    # default (so OPENROUTER_MODEL can point at a slug not in the short list).
-    return model == config.OPENROUTER_MODEL or any(m["id"] == model for m in MODELS)
+    if not model:
+        return False
+    cat = catalog()
+    if cat:
+        return any(m["id"] == model for m in cat)
+    # Offline: accept the configured default or any seed slug.
+    return model == config.OPENROUTER_MODEL or any(s["id"] == model for s in SEED_MODELS)
 
 
 def _extra_headers():
@@ -104,5 +224,5 @@ def get_client(model=None, effort=None):
     api_key = os.environ.get("OPENROUTER_API_KEY", "")
     if not api_key:
         return None
-    m = model if valid_model(model) else config.OPENROUTER_MODEL
+    m = model if valid_model(model) else default_model()
     return OpenRouterClient(api_key, m)

@@ -49,6 +49,18 @@ MODELS = [
 ]
 EFFORTS = ["low", "medium", "high", "max"]
 SUPPORTS_EFFORT = True
+# Fixed three-model list, filtered client-side; no live search endpoint needed.
+SUPPORTS_SEARCH = False
+
+
+def models():
+    return MODELS
+
+
+def search_models(query, limit=25):
+    q = (query or "").strip().lower()
+    hits = [m for m in MODELS if not q or q in m["id"].lower() or q in m["label"].lower()]
+    return hits[:limit]
 
 
 def available():
