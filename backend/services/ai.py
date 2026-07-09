@@ -14,12 +14,14 @@ Public API (unchanged from the original OpenAI-only module):
 import json
 
 import config
-from services.providers import claude_provider, openai_provider
+from services.providers import claude_provider, openai_provider, openrouter_provider
 
 
 def _provider():
     if config.AI_PROVIDER == "claude":
         return claude_provider
+    if config.AI_PROVIDER == "openrouter":
+        return openrouter_provider
     return openai_provider
 
 
@@ -33,12 +35,19 @@ def config_info():
     p = _provider()
     return {
         "provider": config.AI_PROVIDER,
-        "models": p.MODELS,
+        "models": p.models(),
         "default_model": p.default_model(),
         "supports_effort": p.SUPPORTS_EFFORT,
         "efforts": p.EFFORTS,
         "default_effort": p.default_effort(),
+        "supports_search": getattr(p, "SUPPORTS_SEARCH", False),
     }
+
+
+def search_models(query, limit=25):
+    """Bounded, provider-aware model search for the settings UI. For OpenRouter
+    this filters the live catalog; other providers filter their static list."""
+    return _provider().search_models(query, limit)
 
 
 def missing_client_message():

@@ -5,6 +5,7 @@ import type { EngineConfig } from "@/lib/types";
 import { useSettings } from "@/store/settings";
 import { useUI } from "@/store/ui";
 import { Modal } from "./Modal";
+import { ModelCombobox } from "./ModelCombobox";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -53,13 +54,12 @@ function SettingsForm({ config, onClose }: { config: EngineConfig; onClose: () =
         </Field>
 
         <Field label="model">
-          <select value={model} onChange={(e) => setModel(e.target.value)} className={selectClass}>
-            {config.models.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.label}
-              </option>
-            ))}
-          </select>
+          <ModelCombobox
+            value={model}
+            onChange={setModel}
+            options={config.models}
+            supportsSearch={config.supports_search}
+          />
         </Field>
 
         {config.supports_effort && config.efforts.length > 0 && (

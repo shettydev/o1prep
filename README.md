@@ -3,10 +3,10 @@
 <div align="center">
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue?logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![Next.js](https://img.shields.io/badge/next.js-16-000000?logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![PostgreSQL](https://img.shields.io/badge/postgres-16-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Powered by GPT-4o](https://img.shields.io/badge/powered%20by-GPT--4o-412991?logo=openai&logoColor=white)](https://platform.openai.com/)
+[![AI: Claude / OpenAI / OpenRouter](https://img.shields.io/badge/AI-Claude%20%2F%20OpenAI%20%2F%20OpenRouter-ffb000)]()
 [![Self-hostable](https://img.shields.io/badge/self--hostable-brightgreen?logo=docker&logoColor=white)]()
-[![Voice support](https://img.shields.io/badge/voice-WebRTC-blueviolet?logo=googlemeet&logoColor=white)]()
 
 </div>
 
@@ -19,7 +19,7 @@ Most interview platforms are puzzle grinders. O(1) Prep puts you in a real inter
 - **A back-and-forth, not a quiz** - the interviewer follows up, pushes back on your reasoning, and adds constraints mid-session just like a real one would
 - **Feedback that actually tells you something** - you get written scores and specific critique on your approach, code quality, communication, and tradeoffs - not just pass/fail
 - **Your own account** - sign in and your sessions, history, and code are saved to your account in the app's database; self-host it and the data stays on infrastructure you control
-- **Practice out loud** - voice mode lets you talk through your solution the way you would in an actual interview
+- **Bring your own engine** - runs on your local Claude Code CLI by default (no API key), or point it at OpenAI or OpenRouter (one key, hundreds of models)
 - **150+ problems grounded in real engineering** - each one has a real-world scenario, not just "given an array..."
 
 ---
@@ -38,12 +38,14 @@ python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Copy `backend/.env.example` to `backend/.env` and set your values (database URL, a secret key, and your OpenAI key):
+Copy `backend/.env.example` to `backend/.env` and set your values. By default the AI engine is your local **Claude Code CLI** — no API key, just run `claude` once to sign in. Set `AI_PROVIDER` to `openai` or `openrouter` to use those instead (see `.env.example` for their keys).
 
 ```
 DATABASE_URL=postgresql+psycopg://o1prep:o1prep@localhost:5433/o1prep
 SECRET_KEY=change-me
-OPENAI_API_KEY=sk-your-key-here
+AI_PROVIDER=claude              # claude (default) | openai | openrouter
+# OPENAI_API_KEY=sk-...         # only when AI_PROVIDER=openai
+# OPENROUTER_API_KEY=sk-or-...  # only when AI_PROVIDER=openrouter
 ```
 
 Create the schema, load the problems, and run — all from `backend/`:
@@ -64,20 +66,20 @@ API. In a second terminal:
 
 ```bash
 cd frontend
-npm install
-npm run dev                           # http://localhost:3000
+pnpm install
+pnpm dev                              # http://localhost:3000
 ```
 
 Open **http://localhost:3000**. The dev server proxies `/api/*` to Flask on
 `127.0.0.1:5000` (see `frontend/next.config.ts`), so the session cookie stays
 same-origin and auth works with no CORS setup. Point it elsewhere with
-`API_ORIGIN=http://host:port npm run dev`.
+`API_ORIGIN=http://host:port pnpm dev`.
 
 > On macOS, the AirPlay Receiver squats on port 5000 over IPv6 — the proxy
 > targets `127.0.0.1` (IPv4) specifically to avoid it. If you change the Flask
 > port, update `API_ORIGIN`.
 
-> **Prerequisites:** Python 3.11+, Node.js 20+, Docker (for PostgreSQL), a paid OpenAI API key, and a modern browser (Chrome/Firefox/Safari).
+> **Prerequisites:** Python 3.11+, Node.js 20+ and [pnpm](https://pnpm.io), Docker (for PostgreSQL), an AI engine (the Claude Code CLI needs no key; OpenAI/OpenRouter need an API key), and a modern browser (Chrome/Firefox/Safari).
 
 ---
 
@@ -138,7 +140,7 @@ Read a problem fully and chat with an AI tutor before you practice - useful when
 
 ![Study mode with problem details and research chat](docs/screenshots/StudyMode.png)
 
-Two resizable panels side by side. The left panel has the full problem - scenario, constraints, examples, key skills, and follow-up challenges. The right panel is a tutor chat where you can ask anything about the problem without being handed the solution.
+Two panels side by side — drag the divider to resize the tutor chat, and its width is remembered. The left panel has the full problem - scenario, constraints, examples, key skills, and follow-up challenges. The right panel is a tutor chat where you can ask anything about the problem without being handed the solution.
 
 Good things to ask the tutor:
 
@@ -154,7 +156,7 @@ When you're ready, go back and hit **Practice** to start the interview.
 
 ![Interview mode with chat, code editor, test results, and tutor sidebar](docs/screenshots/PracticeAndEvaluateResult.png)
 
-Three panels: the interviewer chat on the left, your code editor in the center, and an optional tutor sidebar on the right. All dividers are draggable.
+Three panels: the interviewer chat on the left, your code editor in the center, and an optional tutor sidebar on the right. On a narrow screen, tabs switch between the chat and the editor.
 
 The interview runs like a real one - you'll clarify the problem, talk through your approach, then implement. The interviewer watches what you submit and responds to it. You can submit code multiple times; each submission gets reviewed.
 
@@ -178,27 +180,15 @@ The interviewer gives a structured debrief with a hire/no-hire rating, scores ac
 
 ## Voice Interviews
 
-Practice talking through your solution the way you actually would in an interview.
+> **Status: temporarily unavailable in the web client.** Voice mode is being reworked to route through a natural-sounding neural TTS provider — the browser's built-in speech synthesis sounded too robotic for a realistic interview. The pipeline (browser speech-to-text → your chosen LLM → text-to-speech) is in place behind the scenes and will return once a good TTS voice is wired in.
 
-![Voice interview mode with live transcript banner](docs/screenshots/VoiceModeToEmulateRealInterviews.png)
-
-Switch to **Voice** mode in the toggle before starting. Once the interview begins, allow microphone access and wait for the connection. Your speech is transcribed live, the interviewer responds through your speakers, and everything is saved to your history just like a text session.
-
-You can still write and submit code while in voice mode - just click **Submit Code** as normal.
-
-### Troubleshooting
-
-**Mic access denied** - Go to browser site settings for `localhost`, allow microphone, then reload.
-
-**No audio from interviewer** - Check system audio output. Audio routes through the browser.
-
-**Connection drops** - End the session and start a new one. Your previous session is preserved in History.
+The intent: switch to **Voice** mode before starting and talk through your solution out loud — your speech is transcribed live, the interviewer replies through your speakers, and the whole session is saved to your history just like a text one, all while you can still write and **Submit Code**.
 
 ---
 
 ## Code Editor & Execution
 
-Multi-language editor (Python or JavaScript, picked from the language selector) with syntax highlighting, auto-closing brackets, line numbers, and smart indentation. Switching language loads that language's starter code and runs against its test suite. Your code is auto-saved every 2 seconds - you won't lose it if you navigate away.
+A CodeMirror editor (Python, JavaScript, or TypeScript, picked from the language selector) with syntax highlighting, auto-closing brackets, line numbers, and smart indentation. Switching language loads that language's starter code and runs against its test suite. Your code is auto-saved as you type - you won't lose it if you navigate away.
 
 | Button    | What it does                                                       |
 | --------- | ------------------------------------------------------------------ |
@@ -313,11 +303,11 @@ Each category shows a progress bar and lists the problems you've attempted with 
 
 ## FAQ
 
-**Do I need a paid OpenAI account?**
-Yes. The interviewer uses GPT-4o, which requires a paid API key. Voice mode additionally uses the Realtime API.
+**Do I need a paid AI account?**
+Not necessarily. The default engine is your local **Claude Code CLI**, which runs on your existing Claude sign-in with no separate API key. If you prefer, set `AI_PROVIDER=openai` or `openrouter` and supply that key instead.
 
 **How much does each interview cost?**
-Roughly $0.10-$0.50 per text session depending on length. Voice sessions cost more due to Realtime API audio pricing.
+On the default Claude CLI engine it draws on your Claude usage rather than a per-call charge. On OpenAI or OpenRouter it's pay-per-token — roughly $0.10-$0.50 per text session depending on length and the model you pick.
 
 **Can I use other programming languages?**
 Yes. Pick Python or JavaScript from the language selector in the editor; the code
@@ -325,6 +315,9 @@ runner and test harness support both. JavaScript runs through Node.js (install
 it, or set `NODE_BIN`). TypeScript is also wired up (via `tsx`/`TS_CMD`).
 Problems are translated per language, so the selector offers whichever languages
 a given problem has been authored for.
+
+**Can I pick a different model?**
+Yes. The **Settings** (gear) menu lets you choose the model and reasoning effort for new interviews and tutor chats. On OpenRouter you can search its live catalog of hundreds of models; on Claude and OpenAI you pick from that provider's list.
 
 **What happens if I close the browser mid-interview?**
 The session is auto-saved every time you send a message or submit code. Open History to resume from where you left off.
@@ -336,7 +329,7 @@ Yes. Multiple sessions on the same problem are tracked separately. The status do
 That's what makes it useful. Vague feedback doesn't help you improve. The debrief is written the way a hiring committee would actually talk about your performance.
 
 **Where is my data stored?**
-In the application's PostgreSQL database, scoped to your account. If you self-host, that database runs on infrastructure you control. Your messages and code are sent to OpenAI's API to power the interviewer.
+In the application's PostgreSQL database, scoped to your account. If you self-host, that database runs on infrastructure you control. Your messages and code are sent to your configured AI provider (Claude, OpenAI, or OpenRouter) to power the interviewer.
 
 **Can I add my own problems?**
 Yes - see [CONTRIBUTING.md](CONTRIBUTING.md) for the full problem YAML format.
@@ -353,4 +346,4 @@ This project is a fork of [codingprep](https://github.com/amrutha97/codingprep) 
 
 ## Contact
 
-Questions or feedback? Reach out on [LinkedIn](https://github.com/shettydev).
+Questions or feedback? Reach out on [LinkedIn](https://www.linkedin.com/in/shettydev/).

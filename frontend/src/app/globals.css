@@ -80,6 +80,18 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* On large screens the app shell pins to the viewport (lg:h-dvh) and each panel
+   scrolls on its own, so the document itself must never scroll. Without this the
+   reserved gutter renders as a dead scrollbar track and sub-pixel rounding of the
+   viewport-height shell leaves a thin strip of empty space below the fold. On
+   small screens the page still scrolls normally. */
+@media (min-width: 64rem) {
+  html,
+  body {
+    overflow: hidden;
+  }
+}
+
 /* During the cold-boot caret flight the logo holds an empty (invisible) caret
    slot — the travelling cursor IS the only caret on screen until it lands. */
 html.caret-flying .caret {
