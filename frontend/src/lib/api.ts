@@ -1,6 +1,7 @@
 import type {
   EngineConfig,
   FullProblem,
+  ModelOption,
   ProblemSummary,
   RunResult,
   SessionDetail,
@@ -91,6 +92,17 @@ export function logout(): Promise<{ success: boolean }> {
 
 export function getConfig(): Promise<EngineConfig> {
   return apiGet<EngineConfig>("/config");
+}
+
+/**
+ * Search the provider's model catalog. For OpenRouter this hits the live
+ * ~300-model catalog server-side and returns a bounded result set, so the
+ * client never holds the whole list. An empty query returns the popular few.
+ */
+export async function searchModels(query: string, limit = 25): Promise<ModelOption[]> {
+  const q = encodeURIComponent(query);
+  const res = await apiGet<{ models: ModelOption[] }>(`/models/search?q=${q}&limit=${limit}`);
+  return res.models;
 }
 
 export function getProblem(id: number, language?: string): Promise<FullProblem> {

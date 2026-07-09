@@ -101,6 +101,9 @@ export interface LanguageMeta {
 export interface ModelOption {
   id: string;
   label: string;
+  /** Present for OpenRouter models fetched from the live catalog. */
+  context_length?: number | null;
+  pricing?: { prompt: number; completion: number } | null;
 }
 
 export interface EngineConfig {
@@ -110,6 +113,8 @@ export interface EngineConfig {
   supports_effort: boolean;
   efforts: string[];
   default_effort: string;
+  /** True when the provider backs a live /api/models/search (OpenRouter). */
+  supports_search: boolean;
   languages: LanguageMeta[];
   default_language: string;
 }
