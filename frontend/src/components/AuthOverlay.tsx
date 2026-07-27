@@ -14,6 +14,7 @@ export function AuthOverlay() {
   const [mode, setMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -70,9 +71,19 @@ export function AuthOverlay() {
           </label>
 
           <label className="block">
-            <span className="label">password</span>
+            <span className="flex items-center justify-between">
+              <span className="label">password</span>
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="text-[11px] text-amber-dim underline-offset-2 hover:text-amber hover:underline cursor-pointer"
+                aria-pressed={showPassword}
+              >
+                {showPassword ? "hide" : "show"}
+              </button>
+            </span>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete={mode === "login" ? "current-password" : "new-password"}
