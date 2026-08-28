@@ -29,7 +29,7 @@ Most interview platforms are puzzle grinders. O(1) Prep puts you in a real inter
 The repository is a monorepo: the Python API lives in **`backend/`**, the web client in **`frontend/`**, and shared infrastructure (`docker-compose.yml`) at the root.
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/shettydev/o1prep.git
 cd o1prep
 docker compose up -d                  # start PostgreSQL (from the repo root)
 
